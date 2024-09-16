@@ -5,21 +5,33 @@
 # - reset the game
 # - handle the shineness
 
+direction: right
+
 # Systems
 classes: {
-  Component: {
+  Entity: {
+    width: 800
     style: {
       stroke-width: 0
-      fill: "#44C7B1"
+      fill: "#FFD700" # orange yellow
+      border-radius: 5
+    }
+  }
+
+  Component: {
+    width: 600
+    style: {
+      stroke-width: 0
+      fill: "#44C7B1" # pastel green
       border-radius: 5
     }
   }
 
   System: {
+    width: 1000
     style: {
       stroke-width: 0
-      # sky blue
-      fill: "#87CEEB"
+      fill: "#87CEEB" # sky blue
       border-radius: 5
     }
   }
@@ -28,6 +40,7 @@ classes: {
 # Entity & Components
 PlayerEntity: {
   label: Player
+  class: Entity
 
   CameraComponent: {
     class: Component
@@ -50,10 +63,12 @@ PlayerEntity: {
 
 WashableEntity: {
   label: Washable
+  class: Entity
 }
 
 WashablePartEntity: {
   label: WashablePart
+  class: Entity
 
   DirtyMapComponent: {
     class: Component
@@ -71,12 +86,11 @@ WashablePartEntity: {
   }
 }
 
-ClientEntity: {
-  label: Client
-}
+Client
 
 GameEntity: {
   label: Game
+  class: Entity
 
   GameStateComponent: {
     class: Component
@@ -154,7 +168,7 @@ Systems: {
 }
 
 # Relationships
-ClientEntity -> Systems.InteractionSystem
+Client -> Systems.InteractionSystem
 Systems.InteractionSystem -> GameEntity.EventQueueComponent
 Systems.EventSystem <- GameEntity.EventQueueComponent
 Systems.EventSystem -> GameEntity.GameStateComponent
@@ -167,6 +181,6 @@ Systems.CalcaulationSystem <- WashablePartEntity.DirtyMapComponent
 Systems.CalcaulationSystem -> GameEntity.GameStateComponent
 Systems.RenderSystem <- GameEntity.CanvasComponent
 Systems.RenderSystem <- WashablePartEntity.RenderComponent
-ClientEntity <- Systems.RenderSystem
+Client <- Systems.RenderSystem
 Systems.FeedbackSystem <- GameEntity.GameStateComponent
-ClientEntity <- Systems.FeedbackSystem
+Client <- Systems.FeedbackSystem
