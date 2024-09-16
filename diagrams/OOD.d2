@@ -1,0 +1,57 @@
+# Define classes and their relationships
+GameRoot: {
+  shape: class
+
+  status: playing | completed
+
+  resetWashable(): void
+}
+
+Player: {
+  shape: class
+
+  position: Vec3
+  front: Vec3
+  up: Vec3
+
+  startGame(GameRoot game_root): void
+  clean(Washable washable, Vec3 origin, Vec3 direction): void
+  rotateCamera(Camera camera, Vec3 axis, float angle): void
+}
+
+Washable: {
+  shape: class
+
+  parts: "WashablePart[]"
+
+  getTotalCompleteness(): float
+}
+
+WashablePart: {
+  shape: class
+
+  completeness: float
+  shininess: float
+}
+
+UiModule: {
+  shape: class
+
+  setTotalCompleteness(float completeness): void
+  setIsGameCompleted(bool is_completed): void
+
+  resetGame(): void
+}
+
+RenderManager: {
+  shape: class
+}
+
+# Inheritance relationships
+
+# Associations (e.g., Player has a reference to Camera)
+GameRoot -> Player
+GameRoot -> Washable
+GameRoot -> UiModule
+GameRoot -> RenderManager
+Washable -> WashablePart

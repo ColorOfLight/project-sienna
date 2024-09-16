@@ -1,0 +1,61 @@
+# Systems
+classes: {
+  RenderSystem: {
+    style: {
+      stroke-width: 0
+      fill: "#44C7B1"
+      border-radius: 5
+    }
+  }
+
+  CleaningSystem: {
+    style: {
+      stroke-width: 0
+      # Blue
+      fill: "#4A90E2"
+      border-radius: 5
+    }
+  }
+
+  GameStatusSystem: {
+    style: {
+      stroke-width: 0
+      # Grey
+      fill: "#9B9B9B"
+      border-radius: 5
+    }
+  }
+}
+
+# Entity & Components
+Entities: {
+  PlayerEntity: {
+    label: Player
+
+    CameraComponent: {
+      class: RenderSystem
+      shape: class
+
+      - up: Vec3
+    }
+  }
+
+  WashableEntity: {
+    label: Washable
+  }
+
+  WashablePartEntity: {
+    label: WashablePart
+  }
+
+  # Relationships
+  WashableEntity <- WashablePartEntity
+}
+
+# Systems
+Systems: {
+  CleaningSystem: {
+    class: CleaningSystem
+    shape: class
+  }
+}
