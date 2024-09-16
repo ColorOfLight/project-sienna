@@ -1,6 +1,13 @@
+# TODO
+# - implement graphical elements & rendering
+# - handle game complete
+# - hanlde moving the camera
+# - reset the game
+# - handle the shineness
+
 # Systems
 classes: {
-  RenderSystem: {
+  Component: {
     style: {
       stroke-width: 0
       fill: "#44C7B1"
@@ -8,54 +15,158 @@ classes: {
     }
   }
 
-  CleaningSystem: {
+  System: {
     style: {
       stroke-width: 0
-      # Blue
-      fill: "#4A90E2"
-      border-radius: 5
-    }
-  }
-
-  GameStatusSystem: {
-    style: {
-      stroke-width: 0
-      # Grey
-      fill: "#9B9B9B"
+      # sky blue
+      fill: "#87CEEB"
       border-radius: 5
     }
   }
 }
 
 # Entity & Components
-Entities: {
-  PlayerEntity: {
-    label: Player
+PlayerEntity: {
+  label: Player
 
-    CameraComponent: {
-      class: RenderSystem
-      shape: class
+  CameraComponent: {
+    class: Component
+    shape: class
 
-      - up: Vec3
-    }
+    + position: Vec3
+    + front: Vec3
+    + up: Vec3
   }
 
-  WashableEntity: {
-    label: Washable
-  }
+  CleanerComponent: {
+    class: Component
+    shape: class
 
-  WashablePartEntity: {
-    label: WashablePart
+    + active: bool
+    + radius: float
+    + screenPoint: Vec2i
   }
-
-  # Relationships
-  WashableEntity <- WashablePartEntity
 }
+
+WashableEntity: {
+  label: Washable
+}
+
+WashablePartEntity: {
+  label: WashablePart
+
+  DirtyMapComponent: {
+    class: Component
+    shape: class
+
+    + cleanness: float
+    + texture: "float[][]"
+  }
+
+  RenderComponent: {
+    class: Component
+    shape: class
+
+    # TODO
+  }
+}
+
+ClientEntity: {
+  label: Client
+}
+
+GameEntity: {
+  label: Game
+
+  GameStateComponent: {
+    class: Component
+    shape: class
+
+    + state: playing | completed
+    + completeness: float
+  }
+
+  EventQueueComponent: {
+    class: Component
+    shape: class
+
+    + events: "Event[]"
+  }
+
+  CanvasComponent: {
+    class: Component
+    shape: class
+
+    + width: int
+    + height: int
+  }
+}
+
+# Relationships
+WashablePartEntity -> WashableEntity: included
 
 # Systems
 Systems: {
-  CleaningSystem: {
-    class: CleaningSystem
+  InteractionSystem: {
+    class: System
     shape: class
+
+    + startGame(EventQueueComponent): void
+    + pointDown(EventQueueComponent): void
+    + pointMove(EventQueueComponent): void
+    + pointUp(EventQueueComponent): void
+  }
+
+  EventSystem: {
+    class: System
+    shape: class
+
+    + consumeEvents(EventQueueComponent, GameStateComponent, CleanerComponent): void
+  }
+
+  CleaningSystem: {
+    class: System
+    shape: class
+
+    + clean(CleanerComponent, CameraComponent, DirtyMapComponent\[\]): void
+  }
+
+  CalcaulationSystem: {
+    class: System
+    shape: class
+
+    + calculateCompleteness(DirtyMapComponent\[\], GameStateComponent): void
+  }
+
+  RenderSystem: {
+    class: System
+    shape: class
+
+    + render(CanvasComponent, RenderComponent\[\]): void
+  }
+
+  FeedbackSystem: {
+    class: System
+    shape: class
+
+    + setTotalCompleteness(GameStateComponent): void
   }
 }
+
+# Relationships
+ClientEntity -> Systems.InteractionSystem
+Systems.InteractionSystem -> GameEntity.EventQueueComponent
+Systems.EventSystem <- GameEntity.EventQueueComponent
+Systems.EventSystem -> GameEntity.GameStateComponent
+Systems.EventSystem -> PlayerEntity.CleanerComponent
+Systems.CleaningSystem <- PlayerEntity.CleanerComponent
+Systems.CleaningSystem <- PlayerEntity.CameraComponent
+Systems.CleaningSystem <- WashablePartEntity.RenderComponent
+Systems.CleaningSystem -> WashablePartEntity.DirtyMapComponent
+Systems.CalcaulationSystem <- WashablePartEntity.DirtyMapComponent
+Systems.CalcaulationSystem -> GameEntity.GameStateComponent
+Systems.RenderSystem <- GameEntity.CanvasComponent
+Systems.RenderSystem <- WashablePartEntity.RenderComponent
+ClientEntity <- Systems.RenderSystem
+Systems.FeedbackSystem <- GameEntity.GameStateComponent
+ClientEntity <- Systems.FeedbackSystem
