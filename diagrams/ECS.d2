@@ -1,13 +1,11 @@
 # TODO
 # - implement graphical elements & rendering
 # - handle game complete
-# - hanlde moving the camera
 # - reset the game
 # - handle the shineness
 
 direction: right
 
-# Systems
 classes: {
   Entity: {
     width: 800
@@ -28,7 +26,7 @@ classes: {
   }
 
   System: {
-    width: 800
+    width: 1000
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -46,6 +44,25 @@ classes: {
   }
 }
 
+vars: {
+  vRenderUniformComponent: {
+    class: Component
+    shape: class
+
+    + uniform_block_name: string
+    + uniform_buffer_id: uint
+  }
+
+  vRenderTextureComponent: {
+    class: Component
+    shape: class
+
+    + texture_id: uint
+    + width: int
+    + height: int
+  }
+}
+
 # Entity & Components
 PlayerEntity: {
   label: Player
@@ -60,6 +77,10 @@ PlayerEntity: {
     + up: Vec3
   }
 
+  RenderUniformComponent: {
+    ...${vRenderUniformComponent}
+  }
+
   CleanerComponent: {
     class: Component
     shape: class
@@ -71,6 +92,13 @@ PlayerEntity: {
 WashableEntity: {
   label: Washable
   class: Entity
+
+  RenderMaterialComponent: {
+    class: Component
+    shape: class
+
+    + shader_program_id: uint
+  }
 }
 
 WashablePartEntity: {
@@ -85,11 +113,29 @@ WashablePartEntity: {
     + texture: "float[][]"
   }
 
-  RenderComponent: {
+  TransformComponent: {
     class: Component
     shape: class
 
-    # TODO
+    + position: Vec3
+    + scale: Vec3
+    + rotation: Vec3
+  }
+
+  RenderTextureComponent: {
+    ...${vRenderTextureComponent}
+  }
+
+  RenderUniformComponent: {
+    ...${vRenderUniformComponent}
+  }
+
+  RenderGeometryComponent: {
+    class: Component
+    shape: class
+
+    + vertices: "vector<float * 8>"
+    + indices: "vector<uint>"
   }
 }
 
@@ -145,14 +191,6 @@ GameEntity: {
     + state: playing | completed
     + completeness: float
   }
-
-  CanvasComponent: {
-    class: Component
-    shape: class
-
-    + width: int
-    + height: int
-  }
 }
 
 # Relationships
@@ -170,7 +208,7 @@ Systems: {
     shape: class
 
     + syncInput(ClientInput): Input
-    + consumeEvent(ClientEvent): GameState
+    + consumeEvent(ClientEvent): ClientEvent, GameState
   }
 
   TransformSystem: {
@@ -198,7 +236,8 @@ Systems: {
     class: System
     shape: class
 
-    + render(Canvas, Render\[\]): void
+    + updatePlayerUniform(Camera): RenderUniform
+    + render(RenderGeometry, RenderMaterial, RenderUniform\[\], RenderTexture): void
   }
 
   FeedbackSystem: {
@@ -224,13 +263,23 @@ Systems.TransformSystem -> PlayerEntity.CameraComponent
 Systems.CleanSystem <- GameEntity.InputComponent
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CameraComponent
-Systems.CleanSystem <- WashablePartEntity.RenderComponent
+Systems.CleanSystem <- WashablePartEntity.RenderTextureComponent
 Systems.CleanSystem -> WashablePartEntity.DirtyMapComponent
 
+# CalculateSystem
 Systems.CalculateSystem <- WashablePartEntity.DirtyMapComponent
 Systems.CalculateSystem -> GameEntity.GameStateComponent
-Systems.RenderSystem <- GameEntity.CanvasComponent
-Systems.RenderSystem <- WashablePartEntity.RenderComponent
+
+# RenderSystem
+Systems.RenderSystem <- PlayerEntity.CameraComponent
+Systems.RenderSystem -> PlayerEntity.RenderUniformComponent
+Systems.RenderSystem <- WashablePartEntity.RenderGeometryComponent
+Systems.RenderSystem <- WashableEntity.RenderMaterialComponent
+Systems.RenderSystem <- WashablePartEntity.RenderUniformComponent
+Systems.RenderSystem <- WashablePartEntity.RenderTextureComponent
+Systems.RenderSystem <- PlayerEntity.RenderUniformComponent
 Client.Canvas <- Systems.RenderSystem
+
+# FeedbackSystem
 Systems.FeedbackSystem <- GameEntity.GameStateComponent
 Client.ClientFunctions <- Systems.FeedbackSystem
