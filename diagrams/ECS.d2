@@ -35,6 +35,15 @@ classes: {
       border-radius: 5
     }
   }
+
+  ClientInterface: {
+    width: 600
+    style: {
+      stroke-width: 0
+      fill: "#FFA07A" # light salmon
+      border-radius: 5
+    }
+  }
 }
 
 # Entity & Components
@@ -86,11 +95,48 @@ WashablePartEntity: {
   }
 }
 
-Client
+Client: {
+  ClientInputComponent: {
+    class: Component
+    shape: class
+
+    + pressedKeyMap: "{[W|A|S|D]: boolean}"
+    + isPointerDown: boolean
+    + pointerPosition: "[number, number]"
+  }
+
+  ClientEventComponent: {
+    class: Component
+    shape: class
+
+    + reset: boolean
+  }
+
+  Canvas: {
+    class: ClientInterface
+    shape: class
+  }
+
+  ClientFunctions: {
+    class: ClientInterface
+    shape: class
+
+    setTotalCompleteness: void
+  }
+}
 
 GameEntity: {
   label: Game
   class: Entity
+
+  InputComponent: {
+    class: Component
+    shape: class
+
+    + pressedKeyMap: "struct {[enum:WASD]: bool}"
+    + isPointerDown: bool
+    + pointerPosition: Vec2i
+  }
 
   GameStateComponent: {
     class: Component
@@ -100,7 +146,7 @@ GameEntity: {
     + completeness: float
   }
 
-  EventQueueComponent: {
+  EventComponent: {
     class: Component
     shape: class
 
@@ -121,21 +167,19 @@ WashablePartEntity -> WashableEntity: included
 
 # Systems
 Systems: {
-  InteractSystem: {
+  ClientSyncSystem: {
     class: System
     shape: class
 
-    + startGame(EventQueueComponent): void
-    + pointDown(EventQueueComponent): void
-    + pointMove(EventQueueComponent): void
-    + pointUp(EventQueueComponent): void
+    + syncInput(ClientInputComponent, InputComponent): void
+    + consumeEvent(ClientEventComponent, GameStateComponent): void
   }
 
   EventSystem: {
     class: System
     shape: class
 
-    + consumeEvents(EventQueueComponent, GameStateComponent, CleanerComponent): void
+    + consumeEvents(EventComponent, GameStateComponent, CleanerComponent): void
   }
 
   CleanSystem: {
@@ -150,6 +194,13 @@ Systems: {
     shape: class
 
     + calculateCompleteness(DirtyMapComponent\[\], GameStateComponent): void
+  }
+
+  TransformSystem: {
+    class: System
+    shape: class
+
+    + transform(CameraComponent): void
   }
 
   RenderSystem: {
@@ -168,9 +219,11 @@ Systems: {
 }
 
 # Relationships
-Client -> Systems.InteractSystem
-Systems.InteractSystem -> GameEntity.EventQueueComponent
-Systems.EventSystem <- GameEntity.EventQueueComponent
+Client.ClientInputComponent -> Systems.ClientSyncSystem
+Client.ClientEventComponent <-> Systems.ClientSyncSystem
+Systems.ClientSyncSystem -> GameEntity.InputComponent
+Systems.ClientSyncSystem -> GameEntity.GameStateComponent
+Systems.EventSystem <- GameEntity.EventComponent
 Systems.EventSystem -> GameEntity.GameStateComponent
 Systems.EventSystem -> PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
@@ -181,6 +234,6 @@ Systems.CalculateSystem <- WashablePartEntity.DirtyMapComponent
 Systems.CalculateSystem -> GameEntity.GameStateComponent
 Systems.RenderSystem <- GameEntity.CanvasComponent
 Systems.RenderSystem <- WashablePartEntity.RenderComponent
-Client <- Systems.RenderSystem
+Client.Canvas <- Systems.RenderSystem
 Systems.FeedbackSystem <- GameEntity.GameStateComponent
-Client <- Systems.FeedbackSystem
+Client.ClientFunctions <- Systems.FeedbackSystem
