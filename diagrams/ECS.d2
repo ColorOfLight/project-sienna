@@ -96,6 +96,8 @@ WashablePartEntity: {
 }
 
 Client: {
+  label: Client (web browser)
+
   ClientInputComponent: {
     class: Component
     shape: class
@@ -146,13 +148,6 @@ GameEntity: {
     + completeness: float
   }
 
-  EventComponent: {
-    class: Component
-    shape: class
-
-    + events: "Event[]"
-  }
-
   CanvasComponent: {
     class: Component
     shape: class
@@ -175,11 +170,11 @@ Systems: {
     + consumeEvent(ClientEventComponent, GameStateComponent): void
   }
 
-  EventSystem: {
+  TransformSystem: {
     class: System
     shape: class
 
-    + consumeEvents(EventComponent, GameStateComponent, CleanerComponent): void
+    + transform(InputComponent, CameraComponent): void
   }
 
   CleanSystem: {
@@ -194,13 +189,6 @@ Systems: {
     shape: class
 
     + calculateCompleteness(DirtyMapComponent\[\], GameStateComponent): void
-  }
-
-  TransformSystem: {
-    class: System
-    shape: class
-
-    + transform(CameraComponent): void
   }
 
   RenderSystem: {
@@ -218,14 +206,17 @@ Systems: {
   }
 }
 
-# Relationships
+# -- Relationships --#
+# ClientSyncSystem
 Client.ClientInputComponent -> Systems.ClientSyncSystem
 Client.ClientEventComponent <-> Systems.ClientSyncSystem
 Systems.ClientSyncSystem -> GameEntity.InputComponent
 Systems.ClientSyncSystem -> GameEntity.GameStateComponent
-Systems.EventSystem <- GameEntity.EventComponent
-Systems.EventSystem -> GameEntity.GameStateComponent
-Systems.EventSystem -> PlayerEntity.CleanerComponent
+
+# TransformSystem
+Systems.TransformSystem <- GameEntity.InputComponent
+Systems.TransformSystem -> PlayerEntity.CameraComponent
+
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CameraComponent
 Systems.CleanSystem <- WashablePartEntity.RenderComponent
