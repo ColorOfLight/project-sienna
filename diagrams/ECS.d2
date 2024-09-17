@@ -28,7 +28,7 @@ classes: {
   }
 
   System: {
-    width: 1000
+    width: 800
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -160,47 +160,52 @@ WashablePartEntity -> WashableEntity: included
 
 # Systems
 Systems: {
+  description: |md
+    - "Component" is omitted for parameters and return types
+    - Return types will be turned into return parameters in real code
+  |
+
   ClientSyncSystem: {
     class: System
     shape: class
 
-    + syncInput(ClientInputComponent, InputComponent): void
-    + consumeEvent(ClientEventComponent, GameStateComponent): void
+    + syncInput(ClientInput): Input
+    + consumeEvent(ClientEvent): GameState
   }
 
   TransformSystem: {
     class: System
     shape: class
 
-    + transform(InputComponent, CameraComponent): void
+    + transform(Input): Camera
   }
 
   CleanSystem: {
     class: System
     shape: class
 
-    + clean(InputComponent, CleanerComponent, CameraComponent, RenderComponent, DirtyMapComponent\[\]): void
+    + clean(Input, Cleaner, Camera, Render): "DirtyMap[]"
   }
 
   CalculateSystem: {
     class: System
     shape: class
 
-    + calculateCompleteness(DirtyMapComponent\[\], GameStateComponent): void
+    + calculateCompleteness(DirtyMap\[\]): GameState
   }
 
   RenderSystem: {
     class: System
     shape: class
 
-    + render(CanvasComponent, RenderComponent\[\]): void
+    + render(Canvas, Render\[\]): void
   }
 
   FeedbackSystem: {
     class: System
     shape: class
 
-    + setTotalCompleteness(GameStateComponent): void
+    + setTotalCompleteness(GameState): void
   }
 }
 
