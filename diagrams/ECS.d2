@@ -64,9 +64,7 @@ PlayerEntity: {
     class: Component
     shape: class
 
-    + active: bool
     + radius: float
-    + screenPoint: Vec2i
   }
 }
 
@@ -181,7 +179,7 @@ Systems: {
     class: System
     shape: class
 
-    + clean(CleanerComponent, CameraComponent, DirtyMapComponent\[\]): void
+    + clean(InputComponent, CleanerComponent, CameraComponent, RenderComponent, DirtyMapComponent\[\]): void
   }
 
   CalculateSystem: {
@@ -217,10 +215,13 @@ Systems.ClientSyncSystem -> GameEntity.GameStateComponent
 Systems.TransformSystem <- GameEntity.InputComponent
 Systems.TransformSystem -> PlayerEntity.CameraComponent
 
+# CleanSystem
+Systems.CleanSystem <- GameEntity.InputComponent
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CameraComponent
 Systems.CleanSystem <- WashablePartEntity.RenderComponent
 Systems.CleanSystem -> WashablePartEntity.DirtyMapComponent
+
 Systems.CalculateSystem <- WashablePartEntity.DirtyMapComponent
 Systems.CalculateSystem -> GameEntity.GameStateComponent
 Systems.RenderSystem <- GameEntity.CanvasComponent
