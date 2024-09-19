@@ -44,21 +44,29 @@ classes: {
 }
 
 vars: {
-  vRenderUniformComponent: {
+  vGrUniformComponent: {
     class: Component
     shape: class
+    label: GrUniformComponent
 
     + uniform_block_name: string
     + uniform_buffer_id: uint
   }
 
-  vRenderTextureComponent: {
+  vGrTextureComponent: {
     class: Component
     shape: class
+    label: GrTextureComponent
 
     + texture_id: uint
     + width: int
     + height: int
+  }
+
+  vGrFrom: {
+    style: {
+      stroke-dash: 3
+    }
   }
 }
 
@@ -66,6 +74,14 @@ vars: {
 PlayerEntity: {
   label: Player
   class: Entity
+
+  CleanerComponent: {
+    class: Component
+    shape: class
+
+    + ray_radius: float
+    + hitting_radius: float
+  }
 
   CameraComponent: {
     class: Component
@@ -76,16 +92,12 @@ PlayerEntity: {
     + up: Vec3
   }
 
-  RenderUniformComponent: {
-    ...${vRenderUniformComponent}
+  CameraGrUniformComponent: {
+    ...${vGrUniformComponent}
   }
 
-  CleanerComponent: {
-    class: Component
-    shape: class
-
-    + ray_radius: float
-    + hitting_radius: float
+  CameraComponent -> CameraGrUniformComponent: data to {
+    ...${vGrFrom}
   }
 }
 
@@ -93,7 +105,7 @@ WashableEntity: {
   label: Washable
   class: Entity
 
-  RenderMaterialComponent: {
+  GrMaterialComponent: {
     class: Component
     shape: class
 
@@ -114,6 +126,10 @@ WashablePartEntity: {
     + area: float
   }
 
+  DirtGrTextureComponent: {
+    ...${vGrTextureComponent}
+  }
+
   TransformComponent: {
     class: Component
     shape: class
@@ -123,6 +139,10 @@ WashablePartEntity: {
     + rotation: Vec3
   }
 
+  TransformGrUniformComponent: {
+    ...${vGrUniformComponent}
+  }
+
   CleanMarkComponent: {
     class: Component
     shape: class
@@ -130,20 +150,20 @@ WashablePartEntity: {
     + marks: "vector<{Vec2i, float}>" # texture_coodrs, radius
   }
 
-  RenderTextureComponent: {
-    ...${vRenderTextureComponent}
-  }
-
-  RenderUniformComponent: {
-    ...${vRenderUniformComponent}
-  }
-
-  RenderGeometryComponent: {
+  GrGeometryComponent: {
     class: Component
     shape: class
 
     + vertices: "vector<float * 8>"
     + indices: "vector<uint>"
+  }
+
+  DirtMapComponent -> DirtGrTextureComponent: data to {
+    ...${vGrFrom}
+  }
+
+  TransformComponent -> TransformGrUniformComponent: data to {
+    ...${vGrFrom}
   }
 }
 
@@ -234,12 +254,20 @@ Systems: {
     + clean(CleanMark): "DirtMap"
   }
 
+  GrSyncSystem: {
+    class: System
+    shape: class
+
+    + updateCameraUniform(Camera): GrUniform
+    + updateTransformUniform(Transform): GrUniform
+    + updateDirtTexture(DirtMap): GrTexture
+  }
+
   RenderSystem: {
     class: System
     shape: class
 
-    + updatePlayerUniform(Camera): RenderUniform
-    + render(RenderGeometry, RenderMaterial, RenderUniform\[\], RenderTexture): void
+    + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
   }
 
   CalculateSystem: {
@@ -276,15 +304,21 @@ Systems.CleanSystem <- WashablePartEntity.TransformComponent
 Systems.CleanSystem <-> WashablePartEntity.CleanMarkComponent
 Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 
+# GrSyncSystem
+Systems.GrSyncSystem <- PlayerEntity.CameraComponent
+Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
+Systems.GrSyncSystem <- WashablePartEntity.TransformComponent
+Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
+Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
+Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
+
 # RenderSystem
-Systems.RenderSystem <- PlayerEntity.CameraComponent
-Systems.RenderSystem -> PlayerEntity.RenderUniformComponent
-Systems.RenderSystem <- WashablePartEntity.RenderGeometryComponent
-Systems.RenderSystem <- WashableEntity.RenderMaterialComponent
-Systems.RenderSystem <- WashablePartEntity.RenderUniformComponent
-Systems.RenderSystem <- WashablePartEntity.RenderTextureComponent
-Systems.RenderSystem <- PlayerEntity.RenderUniformComponent
 Client.Canvas <- Systems.RenderSystem
+Systems.RenderSystem <- WashablePartEntity.GrGeometryComponent
+Systems.RenderSystem <- WashableEntity.GrMaterialComponent
+Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
+Systems.RenderSystem <- WashablePartEntity.TransformGrUniformComponent
+Systems.RenderSystem <- WashablePartEntity.DirtGrTextureComponent
 
 # CalculateSystem
 Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
