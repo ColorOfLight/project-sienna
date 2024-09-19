@@ -84,7 +84,8 @@ PlayerEntity: {
     class: Component
     shape: class
 
-    + radius: float
+    + ray_radius: float
+    + hitting_radius: float
   }
 }
 
@@ -110,6 +111,7 @@ WashablePartEntity: {
 
     + cleanness: float
     + texture: "float[][]"
+    + area: float
   }
 
   TransformComponent: {
@@ -119,6 +121,13 @@ WashablePartEntity: {
     + position: Vec3
     + scale: Vec3
     + rotation: Vec3
+  }
+
+  CleanMarkComponent: {
+    class: Component
+    shape: class
+
+    + marks: "vector<{Vec2i, float}>" # texture_coodrs, radius
   }
 
   RenderTextureComponent: {
@@ -221,14 +230,8 @@ Systems: {
     class: System
     shape: class
 
-    + clean(Input, Cleaner, Camera, Render): "DirtMap[]"
-  }
-
-  CalculateSystem: {
-    class: System
-    shape: class
-
-    + calculateCompleteness(DirtMap\[\]): GameState
+    + markToClean(Input, Cleaner, Camera, Transform\[\]): "CleanMark[]"
+    + clean(CleanMark): "DirtMap"
   }
 
   RenderSystem: {
@@ -237,6 +240,13 @@ Systems: {
 
     + updatePlayerUniform(Camera): RenderUniform
     + render(RenderGeometry, RenderMaterial, RenderUniform\[\], RenderTexture): void
+  }
+
+  CalculateSystem: {
+    class: System
+    shape: class
+
+    + calculateCompleteness(DirtMap\[\]): GameState
   }
 
   FeedbackSystem: {
@@ -262,12 +272,9 @@ Systems.TransformSystem -> PlayerEntity.CameraComponent
 Systems.CleanSystem <- GameEntity.InputComponent
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CameraComponent
-Systems.CleanSystem <- WashablePartEntity.RenderTextureComponent
+Systems.CleanSystem <- WashablePartEntity.TransformComponent
+Systems.CleanSystem <-> WashablePartEntity.CleanMarkComponent
 Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
-
-# CalculateSystem
-Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
-Systems.CalculateSystem -> GameEntity.GameStateComponent
 
 # RenderSystem
 Systems.RenderSystem <- PlayerEntity.CameraComponent
@@ -278,6 +285,10 @@ Systems.RenderSystem <- WashablePartEntity.RenderUniformComponent
 Systems.RenderSystem <- WashablePartEntity.RenderTextureComponent
 Systems.RenderSystem <- PlayerEntity.RenderUniformComponent
 Client.Canvas <- Systems.RenderSystem
+
+# CalculateSystem
+Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
+Systems.CalculateSystem -> GameEntity.GameStateComponent
 
 # FeedbackSystem
 Systems.FeedbackSystem <- GameEntity.GameStateComponent
