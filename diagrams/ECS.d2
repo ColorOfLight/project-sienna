@@ -239,6 +239,13 @@ Systems: {
     + consumeEvent(ClientEvent): ClientEvent, GameState
   }
 
+  ManageSystem: {
+    class: System
+    shape: class
+
+    + resetGame(): Input, GameState, Camera, Cleaner, DirtMap, Transform, CleanMark
+  }
+
   TransformSystem: {
     class: System
     shape: class
@@ -291,6 +298,15 @@ Client.ClientInputComponent -> Systems.ClientSyncSystem
 Client.ClientEventComponent <-> Systems.ClientSyncSystem
 Systems.ClientSyncSystem -> GameEntity.InputComponent
 Systems.ClientSyncSystem -> GameEntity.GameStateComponent
+
+# ManageSystem
+Systems.ManageSystem <- GameEntity.InputComponent
+Systems.ManageSystem <- GameEntity.GameStateComponent
+Systems.ManageSystem <- PlayerEntity.CameraComponent
+Systems.ManageSystem <- PlayerEntity.CleanerComponent
+Systems.ManageSystem <- WashablePartEntity.DirtMapComponent
+Systems.ManageSystem <- WashablePartEntity.TransformComponent
+Systems.ManageSystem <- WashablePartEntity.CleanMarkComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
