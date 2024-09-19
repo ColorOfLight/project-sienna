@@ -25,7 +25,7 @@ classes: {
   }
 
   System: {
-    width: 1000
+    width: 1200
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -218,6 +218,13 @@ GameEntity: {
     + pointerPosition: Vec2i
   }
 
+  EventComponent: {
+    class: Component
+    shape: class
+
+    + reset: bool
+  }
+
   GameStateComponent: {
     class: Component
     shape: class
@@ -242,14 +249,14 @@ Systems: {
     shape: class
 
     + syncInput(ClientInput): Input
-    + consumeEvent(ClientEvent): ClientEvent, GameState
+    + consumeEvent(ClientEvent): ClientEvent, Event
   }
 
   ManageSystem: {
     class: System
     shape: class
 
-    + resetGame(): Input, GameState, Camera, Cleaner, DirtMap, Transform, CleanMark
+    + resetGame(Event): Input, GameState, Camera, Cleaner, DirtMap, Transform, CleanMark, Event
   }
 
   TransformSystem: {
@@ -303,9 +310,10 @@ Systems: {
 Client.ClientInputComponent -> Systems.ClientSyncSystem
 Client.ClientEventComponent <-> Systems.ClientSyncSystem
 Systems.ClientSyncSystem -> GameEntity.InputComponent
-Systems.ClientSyncSystem -> GameEntity.GameStateComponent
+Systems.ClientSyncSystem -> GameEntity.EventComponent
 
 # ManageSystem
+Systems.ManageSystem <-> GameEntity.EventComponent
 Systems.ManageSystem <- GameEntity.InputComponent
 Systems.ManageSystem <- GameEntity.GameStateComponent
 Systems.ManageSystem <- PlayerEntity.CameraComponent
