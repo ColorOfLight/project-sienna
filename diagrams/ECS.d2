@@ -1,5 +1,4 @@
 # TODO
-# - implement graphical elements & rendering
 # - handle game complete
 # - reset the game
 # - handle the shineness
@@ -105,7 +104,7 @@ WashablePartEntity: {
   label: WashablePart
   class: Entity
 
-  DirtyMapComponent: {
+  DirtMapComponent: {
     class: Component
     shape: class
 
@@ -222,14 +221,14 @@ Systems: {
     class: System
     shape: class
 
-    + clean(Input, Cleaner, Camera, Render): "DirtyMap[]"
+    + clean(Input, Cleaner, Camera, Render): "DirtMap[]"
   }
 
   CalculateSystem: {
     class: System
     shape: class
 
-    + calculateCompleteness(DirtyMap\[\]): GameState
+    + calculateCompleteness(DirtMap\[\]): GameState
   }
 
   RenderSystem: {
@@ -264,10 +263,10 @@ Systems.CleanSystem <- GameEntity.InputComponent
 Systems.CleanSystem <- PlayerEntity.CleanerComponent
 Systems.CleanSystem <- PlayerEntity.CameraComponent
 Systems.CleanSystem <- WashablePartEntity.RenderTextureComponent
-Systems.CleanSystem -> WashablePartEntity.DirtyMapComponent
+Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 
 # CalculateSystem
-Systems.CalculateSystem <- WashablePartEntity.DirtyMapComponent
+Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
 Systems.CalculateSystem -> GameEntity.GameStateComponent
 
 # RenderSystem
