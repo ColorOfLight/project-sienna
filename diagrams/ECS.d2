@@ -90,6 +90,7 @@ PlayerEntity: {
     + position: Vec3
     + front: Vec3
     + up: Vec3
+    + needs_update: bool
   }
 
   CameraGrUniformComponent: {
@@ -124,6 +125,7 @@ WashablePartEntity: {
     + cleanness: float
     + texture: "float[][]"
     + area: float
+    + needs_update: bool
   }
 
   DirtGrTextureComponent: {
@@ -137,6 +139,7 @@ WashablePartEntity: {
     + position: Vec3
     + scale: Vec3
     + rotation: Vec3
+    + needs_update: bool
   }
 
   TransformGrUniformComponent: {
@@ -156,6 +159,9 @@ WashablePartEntity: {
 
     + vertices: "vector<float * 8>"
     + indices: "vector<uint>"
+    + vao_id: uint
+    + vbo_id: uint
+    + ebo_id: unit
   }
 
   DirtMapComponent -> DirtGrTextureComponent: data to {
