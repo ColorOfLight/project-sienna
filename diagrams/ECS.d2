@@ -90,6 +90,7 @@ PlayerEntity: {
     + position: Vec3
     + front: Vec3
     + up: Vec3
+    + fov_radian: float
     + needs_update: bool
   }
 
@@ -123,7 +124,7 @@ WashablePartEntity: {
     shape: class
 
     + cleanness: float
-    + texture: "float[][]"
+    + dirt_map: "float[][]"
     + area: float
     + needs_update: bool
   }
@@ -213,9 +214,9 @@ GameEntity: {
     class: Component
     shape: class
 
-    + pressedKeyMap: "struct {[enum:WASD]: bool}"
-    + isPointerDown: bool
-    + pointerPosition: Vec2i
+    + pressed_key_map: "struct {[enum:WASD]: bool}"
+    + is_pointer_down: bool
+    + pointer_position: Vec2i
   }
 
   EventComponent: {
