@@ -1,0 +1,104 @@
+# General patterns
+*.swp
+*.swo
+*.tmp
+*~
+*.bak
+*.orig
+.DS_Store
+
+# CMake generated files
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+/install_manifest.txt
+/build/
+/build-*/
+
+# Visual Studio Code workspace files
+.vscode/
+*.code-workspace
+
+# QtCreator CMake project files
+CMakeLists.txt.user
+
+# Mac OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*.appledouble
+.AppleDouble
+.LSOverride
+Icon
+ehthumbs.db
+Thumbs.db
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.libs
+*.a
+*.lib
+*.dll
+*.dylib
+*.so
+*.so.*
+*.d
+*.dSYM/
+*.exe
+*.out
+*.app
+*.i
+
+# Executable files and debugging files
+*.exe
+*.out
+*.app
+*.log
+*.dmp
+*.stackdump
+*.pid
+*.seed
+
+# IDE specific files
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# Windows specific files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Linux specific files
+*.lock
+*~
+
+# Backup files
+*.bak
+*.old
+*.orig
+*.tmp
+*.log
+*.swp
+*.swo
+*~
+
+# Python virtual environments
+venv/
+__pycache__/
+*.pyc
+
+# Exclude Assets
+!assets/**/*
