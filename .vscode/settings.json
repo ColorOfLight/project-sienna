@@ -1,0 +1,6 @@
+{
+  "cmake.sourceDirectory": "${workspaceFolder}/cpps",
+  "cmake.environment": {
+    "EMSDK": "${workspaceFolder}/emsdk"
+  }
+}
