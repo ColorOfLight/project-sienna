@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "./EventComponent.h"
-#include "./GameStateComponent.h"
-#include "./InputComponent.h"
+#include "./Component/EventComponent.h"
+#include "./Component/GameStateComponent.h"
+#include "./Component/InputComponent.h"
 
 class GameEntity {
  public:

@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include "./CleanMarkComponent.h"
-#include "./DirtMapComponent.h"
-#include "./GrGeometryComponent.h"
-#include "./GrTextureComponent.h"
-#include "./GrUniformComponent.h"
-#include "./TransformComponent.h"
+#include "./Component/CleanMarkComponent.h"
+#include "./Component/DirtMapComponent.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./Component/TransformComponent.h"
 
 class WashablePartEntity {
  public:

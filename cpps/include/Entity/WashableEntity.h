@@ -26,7 +26,7 @@
 
 #include <vector>
 
-#include "./GrMaterialComponent.h"
+#include "./Component/GrMaterialComponent.h"
 #include "./WashablePartEntity.h"
 
 class WashableEntity {

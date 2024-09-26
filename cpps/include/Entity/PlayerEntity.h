@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "./CameraComponent.h"
-#include "./CleanerComponent.h"
-#include "./GrUniformComponent.h"
+#include "./Component/CameraComponent.h"
+#include "./Component/CleanerComponent.h"
+#include "./Component/GrUniformComponent.h"
 
 class PlayerEntity {
  public:
