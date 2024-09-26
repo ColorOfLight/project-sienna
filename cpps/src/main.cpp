@@ -60,8 +60,9 @@ int main() {
 
   auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
                                                           float delta_time) {
-    // main loop
     ClientSyncSystem::syncInput(std::ref(*game_entity.get().input_component));
+    ClientSyncSystem::consumeEvent(
+        std::ref(*game_entity.get().event_component));
   };
 
   static_main_loop = main_loop;

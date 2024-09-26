@@ -51,3 +51,16 @@ void ClientSyncSystem::syncInput(
   input_component.get().pointer_position.x = pointer_position[0].as<float>();
   input_component.get().pointer_position.y = pointer_position[1].as<float>();
 }
+
+void ClientSyncSystem::consumeEvent(
+    std::reference_wrapper<EventComponent> event_component) {
+  emscripten::val client_event_component =
+      emscripten::val::global("ClientEventComponent");
+
+  bool is_reset = client_event_component["reset"].as<bool>();
+
+  if (is_reset) {
+    event_component.get().reset = true;
+    client_event_component.set("reset", false);
+  }
+}

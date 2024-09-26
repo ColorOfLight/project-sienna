@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/InputComponent.h"
 
@@ -34,8 +32,5 @@ class ClientSyncSystem {
   static void syncInput(std::reference_wrapper<InputComponent> input_component);
 
   static void consumeEvent(
-      std::reference_wrapper<ClientEventComponent> client_event_component,
-      std::reference_wrapper<EventComponent> event_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<EventComponent> event_component);
 };

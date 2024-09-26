@@ -2046,6 +2046,13 @@ function dbg(...args) {
       __emval_decref(handle);
     };
 
+  var __emval_set_property = (handle, key, value) => {
+      handle = Emval.toValue(handle);
+      key = Emval.toValue(key);
+      value = Emval.toValue(value);
+      handle[key] = value;
+    };
+
   
   var __emval_take_value = (type, arg) => {
       type = requireRegisteredType(type, '_emval_take_value');
@@ -3162,6 +3169,8 @@ var wasmImports = {
   _emval_new_cstring: __emval_new_cstring,
   /** @export */
   _emval_run_destructors: __emval_run_destructors,
+  /** @export */
+  _emval_set_property: __emval_set_property,
   /** @export */
   _emval_take_value: __emval_take_value,
   /** @export */
