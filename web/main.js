@@ -1,22 +1,40 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import { setupCounter } from './counter.js'
+const ClientInputComponent = {
+  pressedKeyMap: {
+    'W': false,
+    'A': false,
+    'S': false,
+    'D': false
+  },
+  isPointerDown: false,
+  pointerPosition: [0, 0],
+};
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const ClientEventComponent = {
+  reset: false,
+};
 
-setupCounter(document.querySelector('#counter'))
+window.addEventListener('keydown', (event) => {
+  ClientInputComponent.pressedKeyMap[event.key.toUpperCase()] = true;
+});
+
+window.addEventListener('keyup', (event) => {
+  ClientInputComponent.pressedKeyMap[event.key.toUpperCase()] = false;
+});
+
+window.addEventListener('pointerdown', (event) => {
+  ClientInputComponent.isPointerDown = true;
+  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+});
+
+window.addEventListener('pointerup', (event) => {
+  ClientInputComponent.isPointerDown = false;
+  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+});
+
+window.addEventListener('pointermove', (event) => {
+  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+  ClientEventComponent.reset = true;
+});
