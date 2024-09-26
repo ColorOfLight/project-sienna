@@ -24,21 +24,16 @@
 
 #pragma once
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
-#include "./Component/EventComponent.h"
-#include "./Component/InputComponent.h"
+#include <vector>
 
-class ClientSyncSystem {
-  static void syncInput(
-      std::reference_wrapper<const ClientInputComponent> client_input_component,
-      std::reference_wrapper<InputComponent> input_component) {
-    // TODO: implement in source file
-  }
+#include "./Component/DirtMapComponent.h"
+#include "./Component/GameStateComponent.h"
 
-  static void consumeEvent(
-      std::reference_wrapper<ClientEventComponent> client_event_component,
-      std::reference_wrapper<EventComponent> event_component) {
+class CalculateSystem {
+  static void calculateCompleteness(
+      std::vector<std::reference_wrapper<const DirtMapComponent>>
+          dirt_map_components,
+      std::reference_wrapper<GameStateComponent> game_state_component) {
     // TODO: implement in source file
   }
 };

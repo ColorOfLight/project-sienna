@@ -24,21 +24,13 @@
 
 #pragma once
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
-#include "./Component/EventComponent.h"
+#include "./Component/CameraComponent.h"
 #include "./Component/InputComponent.h"
 
-class ClientSyncSystem {
-  static void syncInput(
-      std::reference_wrapper<const ClientInputComponent> client_input_component,
-      std::reference_wrapper<InputComponent> input_component) {
-    // TODO: implement in source file
-  }
-
-  static void consumeEvent(
-      std::reference_wrapper<ClientEventComponent> client_event_component,
-      std::reference_wrapper<EventComponent> event_component) {
+class TransformSystem {
+  static void transformCamera(
+      std::reference_wrapper<const InputComponent> input_component,
+      std::reference_wrapper<CameraComponent> camera_component) {
     // TODO: implement in source file
   }
 };

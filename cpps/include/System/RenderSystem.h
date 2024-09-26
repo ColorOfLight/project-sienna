@@ -24,21 +24,20 @@
 
 #pragma once
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
-#include "./Component/EventComponent.h"
-#include "./Component/InputComponent.h"
+#include <vector>
 
-class ClientSyncSystem {
-  static void syncInput(
-      std::reference_wrapper<const ClientInputComponent> client_input_component,
-      std::reference_wrapper<InputComponent> input_component) {
-    // TODO: implement in source file
-  }
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrMaterialComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
 
-  static void consumeEvent(
-      std::reference_wrapper<ClientEventComponent> client_event_component,
-      std::reference_wrapper<EventComponent> event_component) {
+class RenderSystem {
+  static void render(
+      std::reference_wrapper<const GrGeometryComponent> gr_geometry_component,
+      std::reference_wrapper<const GrMaterialComponent> gr_material_component,
+      std::vector<std::reference_wrapper<const GrUniformComponent>>
+          gr_uniform_components,
+      std::reference_wrapper<const GrTextureComponent> gr_texture_component) {
     // TODO: implement in source file
   }
 };

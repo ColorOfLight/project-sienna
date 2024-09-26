@@ -24,21 +24,28 @@
 
 #pragma once
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
-#include "./Component/EventComponent.h"
-#include "./Component/InputComponent.h"
+#include "./Component/CameraComponent.h"
+#include "./Component/DirtMapComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./Component/TransformComponent.h"
 
-class ClientSyncSystem {
-  static void syncInput(
-      std::reference_wrapper<const ClientInputComponent> client_input_component,
-      std::reference_wrapper<InputComponent> input_component) {
+class GrSyncSystem {
+  static void updateCameraUniform(
+      std::reference_wrapper<const CameraComponent> camera_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
     // TODO: implement in source file
   }
 
-  static void consumeEvent(
-      std::reference_wrapper<ClientEventComponent> client_event_component,
-      std::reference_wrapper<EventComponent> event_component) {
+  static void updateTransformUniform(
+      std::reference_wrapper<const TransformComponent> transform_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+    // TODO: implement in source file
+  }
+
+  static void updateDirtTexture(
+      std::reference_wrapper<const DirtMapComponent> dirt_map_component,
+      std::reference_wrapper<GrTextureComponent> gr_texture_component) {
     // TODO: implement in source file
   }
 };
