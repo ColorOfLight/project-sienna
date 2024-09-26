@@ -25,7 +25,7 @@
 #include <GLES3/gl3.h>
 #include <emscripten.h>
 
-#include <functional>
+#include <memory>
 
 #include "./Component/ClientEventComponent.h"
 #include "./Component/ClientInputComponent.h"
