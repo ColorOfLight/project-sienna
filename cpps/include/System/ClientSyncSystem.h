@@ -31,11 +31,7 @@
 
 class ClientSyncSystem {
  public:
-  static void syncInput(
-      std::reference_wrapper<const ClientInputComponent> client_input_component,
-      std::reference_wrapper<InputComponent> input_component) {
-    // TODO: implement in source file
-  }
+  static void syncInput(std::reference_wrapper<InputComponent> input_component);
 
   static void consumeEvent(
       std::reference_wrapper<ClientEventComponent> client_event_component,

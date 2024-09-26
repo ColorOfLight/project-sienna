@@ -22,35 +22,32 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./System/ClientSyncSystem.h"
 
-#include <map>
+#include <emscripten/val.h>
 
-enum class InputKey {
-  W = 0,
-  A = 1,
-  S = 2,
-  D = 3,
-};
+void ClientSyncSystem::syncInput(
+    std::reference_wrapper<InputComponent> input_component) {
+  emscripten::val client_input_component =
+      emscripten::val::global("ClientInputComponent");
 
-struct PointerPosition {
-  float x;
-  float y;
-};
+  emscripten::val pressed_key_map = client_input_component["pressedKeyMap"];
 
-class InputComponent {
- public:
-  InputComponent() {
-    pressed_key_map[InputKey::W] = false;
-    pressed_key_map[InputKey::A] = false;
-    pressed_key_map[InputKey::S] = false;
-    pressed_key_map[InputKey::D] = false;
-    is_pointer_down = false;
-    pointer_position.x = 0;
-    pointer_position.y = 0;
-  }
+  input_component.get().pressed_key_map[InputKey::W] =
+      pressed_key_map["W"].as<bool>();
+  input_component.get().pressed_key_map[InputKey::A] =
+      pressed_key_map["A"].as<bool>();
+  input_component.get().pressed_key_map[InputKey::S] =
+      pressed_key_map["S"].as<bool>();
+  input_component.get().pressed_key_map[InputKey::D] =
+      pressed_key_map["D"].as<bool>();
 
-  std::map<InputKey, bool> pressed_key_map;
-  bool is_pointer_down;
-  PointerPosition pointer_position;
-};
+  emscripten::val is_pointer_down = client_input_component["isPointerDown"];
+
+  input_component.get().is_pointer_down = is_pointer_down.as<bool>();
+
+  emscripten::val pointer_position = client_input_component["pointerPosition"];
+
+  input_component.get().pointer_position.x = pointer_position[0].as<float>();
+  input_component.get().pointer_position.y = pointer_position[1].as<float>();
+}
