@@ -28,6 +28,7 @@
 #include "./Component/InputComponent.h"
 
 class TransformSystem {
+ public:
   static void transformCamera(
       std::reference_wrapper<const InputComponent> input_component,
       std::reference_wrapper<CameraComponent> camera_component) {

@@ -30,6 +30,7 @@
 #include "./Component/InputComponent.h"
 
 class ClientSyncSystem {
+ public:
   static void syncInput(
       std::reference_wrapper<const ClientInputComponent> client_input_component,
       std::reference_wrapper<InputComponent> input_component) {

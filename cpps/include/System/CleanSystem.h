@@ -34,6 +34,7 @@
 #include "./Component/TransformComponent.h"
 
 class CleanSystem {
+ public:
   static void markToClean(
       std::reference_wrapper<const InputComponent> input_component,
       std::reference_wrapper<const CameraComponent> camera_component,

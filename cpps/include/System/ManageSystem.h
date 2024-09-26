@@ -34,6 +34,7 @@
 #include "./Component/TransformComponent.h"
 
 class ManageSystem {
+ public:
   static void resetGame(
       std::reference_wrapper<EventComponent> event_component,
       std::reference_wrapper<CameraComponent> camera_component,

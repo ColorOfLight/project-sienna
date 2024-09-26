@@ -30,6 +30,7 @@
 #include "./Component/GameStateComponent.h"
 
 class CalculateSystem {
+ public:
   static void calculateCompleteness(
       std::vector<std::reference_wrapper<const DirtMapComponent>>
           dirt_map_components,

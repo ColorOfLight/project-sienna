@@ -31,6 +31,7 @@
 #include "./Component/TransformComponent.h"
 
 class GrSyncSystem {
+ public:
   static void updateCameraUniform(
       std::reference_wrapper<const CameraComponent> camera_component,
       std::reference_wrapper<GrUniformComponent> gr_uniform_component) {

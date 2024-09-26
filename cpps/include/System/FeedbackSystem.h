@@ -29,6 +29,7 @@
 #include "./Component/GameStateComponent.h"
 
 class FeedbackSystem {
+ public:
   static void setTotalCompleteness(
       std::reference_wrapper<const GameStateComponent> game_state_component) {
     // TODO: implement in source file

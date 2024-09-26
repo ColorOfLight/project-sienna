@@ -32,6 +32,7 @@
 #include "./Component/GrUniformComponent.h"
 
 class RenderSystem {
+ public:
   static void render(
       std::reference_wrapper<const GrGeometryComponent> gr_geometry_component,
       std::reference_wrapper<const GrMaterialComponent> gr_material_component,
