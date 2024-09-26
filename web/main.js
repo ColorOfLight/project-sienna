@@ -38,3 +38,6 @@ window.addEventListener('pointermove', (event) => {
 document.getElementById('reset').addEventListener('click', () => {
   ClientEventComponent.reset = true;
 });
+
+window.ClientInputComponent = ClientInputComponent;
+window.ClientEventComponent = ClientEventComponent;
