@@ -22,19 +22,22 @@
  * SOFTWARE.
  */
 
+#pragma once
+
+#include <iostream>
+
 #include "./Component/ClientEventComponent.h"
 #include "./Component/ClientInputComponent.h"
-#include "./Entity/GameEntity.h"
-#include "./System/ClientSyncSystem.h"
+#include "./Component/EventComponent.h"
+#include "./Component/InputComponent.h"
 
-int main() {
-  auto game_entity = std::make_unique<GameEntity>();
+class ClientSyncSystem {
+ public:
+  static void syncInput(
+      std::reference_wrapper<const ClientInputComponent> client_input_component,
+      std::reference_wrapper<InputComponent> input_component) {
+    // TODO: implement
 
-  auto client_input_component = std::make_unique<ClientInputComponent>();
-  auto client_event_component = std::make_unique<InputComponent>();
-
-  ClientSyncSystem::syncInput(std::cref(*client_input_component),
-                              std::ref(*game_entity->input_component));
-
-  return 0;
-}
+    std::cout << "Syncing input" << std::endl;
+  }
+};
