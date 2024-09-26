@@ -33,7 +33,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
   set(CUSTOM_LINK_FLAGS "-03")
 endif()
 
-set_target_properties(Cleansweep PROPERTIES LINK_FLAGS "-sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sALLOW_MEMORY_GROWTH=1 ${CUSTOM_LINK_FLAGS}")
+set_target_properties(Cleansweep PROPERTIES LINK_FLAGS "-sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sALLOW_MEMORY_GROWTH=1 -lembind ${CUSTOM_LINK_FLAGS}")
 target_compile_definitions(Cleansweep PRIVATE TARGET_EMSCRIPTEN)
 
 # NOTE: Activate when using assets

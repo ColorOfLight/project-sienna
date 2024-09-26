@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <functional>
+#include <memory>
 
 #include "./Component/GameStateComponent.h"
 

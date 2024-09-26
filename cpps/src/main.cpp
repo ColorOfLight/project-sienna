@@ -25,7 +25,7 @@
 #include <GLES3/gl3.h>
 #include <emscripten.h>
 
-#include <functional>
+#include <memory>
 
 #include "./Component/ClientEventComponent.h"
 #include "./Component/ClientInputComponent.h"
@@ -54,19 +54,15 @@ void renderFrame() {
 }
 
 int main() {
-  auto client_input_component = std::make_unique<ClientInputComponent>();
-  auto client_event_component = std::make_unique<ClientEventComponent>();
   auto game_entity = std::make_unique<GameEntity>();
   auto player_entity = std::make_unique<PlayerEntity>();
   auto washable_entity = std::make_unique<WashableEntity>();
 
-  auto main_loop = [client_input_component = std::ref(*client_input_component),
-                    client_event_component = std::ref(*client_event_component),
-                    game_entity = std::ref(*game_entity)](float elapsed_time,
+  auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
                                                           float delta_time) {
-    // main loop
-    ClientSyncSystem::syncInput(client_input_component,
-                                std::ref(*game_entity.get().input_component));
+    ClientSyncSystem::syncInput(std::ref(*game_entity.get().input_component));
+    ClientSyncSystem::consumeEvent(
+        std::ref(*game_entity.get().event_component));
   };
 
   static_main_loop = main_loop;

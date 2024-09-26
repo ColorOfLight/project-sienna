@@ -34,8 +34,8 @@ enum class InputKey {
 };
 
 struct PointerPosition {
-  int x;
-  int y;
+  float x;
+  float y;
 };
 
 class InputComponent {
