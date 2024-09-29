@@ -50,6 +50,11 @@ void ClientSyncSystem::syncInput(
 
   input_component.get().pointer_position.x = pointer_position[0].as<float>();
   input_component.get().pointer_position.y = pointer_position[1].as<float>();
+
+  emscripten::val canvas_size = client_input_component["canvasSize"];
+
+  input_component.get().canvas_size.width = canvas_size[0].as<int>();
+  input_component.get().canvas_size.height = canvas_size[1].as<int>();
 }
 
 void ClientSyncSystem::consumeEvent(
