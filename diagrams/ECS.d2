@@ -107,11 +107,22 @@ WashableEntity: {
   label: Washable
   class: Entity
 
+  MaterialComponent: {
+    class: Component
+    shape: class
+
+    + material_type: "enum:PHONG"
+  }
+
   GrMaterialComponent: {
     class: Component
     shape: class
 
     + shader_program_id: uint
+  }
+
+  MaterialComponent -> GrMaterialComponent: data to {
+    ...${vGrFrom}
   }
 }
 
@@ -154,12 +165,18 @@ WashablePartEntity: {
     + marks: "vector<{Vec2i, float}>" # texture_coodrs, radius
   }
 
-  GrGeometryComponent: {
+  GeometryComponent: {
     class: Component
     shape: class
 
     + vertices: "vector<float * 8>"
     + indices: "vector<uint>"
+  }
+
+  GrGeometryComponent: {
+    class: Component
+    shape: class
+
     + vao_id: uint
     + vbo_id: uint
     + ebo_id: unit
@@ -170,6 +187,10 @@ WashablePartEntity: {
   }
 
   TransformComponent -> TransformGrUniformComponent: data to {
+    ...${vGrFrom}
+  }
+
+  GeometryComponent -> GrGeometryComponent: data to {
     ...${vGrFrom}
   }
 }
@@ -245,6 +266,7 @@ Systems: {
   description: |md
     - "Component" is omitted for parameters and return types
     - Return types will be turned into return parameters in real code
+    - Relationships for GrSyncSystem are omitted for simplicity
   |
 
   ClientSyncSystem: {
@@ -281,6 +303,8 @@ Systems: {
     class: System
     shape: class
 
+    + updateGeometry(Geometry): GrGeometry
+    + updateMaterial(Material): GrMaterial
     + updateCameraUniform(Camera): GrUniform
     + updateTransformUniform(Transform): GrUniform
     + updateDirtTexture(DirtMap): GrTexture
@@ -339,12 +363,17 @@ Systems.CleanSystem <-> WashablePartEntity.CleanMarkComponent
 Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 
 # GrSyncSystem
-Systems.GrSyncSystem <- PlayerEntity.CameraComponent
-Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
-Systems.GrSyncSystem <- WashablePartEntity.TransformComponent
-Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
-Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
-Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
+# - Relationships for GrSyncSystme are omitted for simplicity
+# Systems.GrSyncSystem <- WashablePartEntity.GeometryComponent
+# Systems.GrSyncSystem -> WashablePartEntity.GrGeometryComponent
+# Systems.GrSyncSystem <- WashableEntity.MaterialComponent
+# Systems.GrSyncSystem -> WashableEntity.GrMaterialComponent
+# Systems.GrSyncSystem <- PlayerEntity.CameraComponent
+# Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
+# Systems.GrSyncSystem <- WashablePartEntity.TransformComponent
+# Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
+# Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
+# Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
