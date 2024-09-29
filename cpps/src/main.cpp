@@ -31,6 +31,7 @@
 #include "./Entity/PlayerEntity.h"
 #include "./Entity/WashableEntity.h"
 #include "./System/ClientSyncSystem.h"
+#include "./System/RenderSystem.h"
 
 static std::function<void(float, float)> static_main_loop;
 static double start_time = emscripten_get_now();
@@ -38,7 +39,7 @@ static double prev_time = start_time;
 
 void renderFrame() {
   // TODO: activate after init GL context
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   double current_time = emscripten_get_now();
   float elapsed_time = static_cast<float>(current_time - start_time);
@@ -55,6 +56,8 @@ int main() {
   auto game_entity = std::make_unique<GameEntity>();
   auto player_entity = std::make_unique<PlayerEntity>();
   auto washable_entity = std::make_unique<WashableEntity>();
+
+  RenderSystem::initContext();
 
   auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
                                                           float delta_time) {

@@ -22,25 +22,27 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./System/RenderSystem.h"
 
-#include <vector>
+#include <GLES3/gl3.h>  // OpenGL ES 3.0 for WebGL 2.0
+#include <emscripten/html5.h>
 
-#include "./Component/GrGeometryComponent.h"
-#include "./Component/GrMaterialComponent.h"
-#include "./Component/GrTextureComponent.h"
-#include "./Component/GrUniformComponent.h"
+void RenderSystem::initContext() {
+  EmscriptenWebGLContextAttributes attr;
+  emscripten_webgl_init_context_attributes(&attr);
+  attr.majorVersion = 2;  // WebGL 2.0
+  attr.minorVersion = 0;
 
-class RenderSystem {
- public:
-  static void initContext();
-
-  static void render(
-      std::reference_wrapper<const GrGeometryComponent> gr_geometry_component,
-      std::reference_wrapper<const GrMaterialComponent> gr_material_component,
-      std::vector<std::reference_wrapper<const GrUniformComponent>>
-          gr_uniform_components,
-      std::reference_wrapper<const GrTextureComponent> gr_texture_component) {
-    // TODO: implement in source file
+  EMSCRIPTEN_WEBGL_CONTEXT_HANDLE context =
+      emscripten_webgl_create_context("#canvas", &attr);
+  if (!context) {
+    throw std::runtime_error("Failed to create WebGL context!");
   }
-};
+
+  emscripten_webgl_make_context_current(context);
+
+  glEnable(GL_DEPTH_TEST);
+
+  // TODO: replace with actual clear color
+  glClearColor(0.1, 0.1, 0.1, 1);
+}
