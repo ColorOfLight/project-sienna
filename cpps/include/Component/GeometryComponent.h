@@ -26,19 +26,13 @@
 
 #include <vector>
 
-class GrGeometryComponent {
+class GeometryComponent {
  public:
-  GrGeometryComponent() {
-    vao_id = 0;
-    vbo_id = 0;
-    ebo_id = 0;
+  GeometryComponent() {
+    vertices = std::vector<float>();
+    indices = std::vector<unsigned int>();
   }
 
-  ~GrGeometryComponent() {
-    // TODO: delete buffers
-  }
-
-  unsigned int vao_id;
-  unsigned int vbo_id;
-  unsigned int ebo_id;
+  std::vector<float> vertices;
+  std::vector<unsigned int> indices;
 };

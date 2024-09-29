@@ -24,21 +24,11 @@
 
 #pragma once
 
-#include <vector>
+enum class MaterialType { PHONG };
 
-class GrGeometryComponent {
+class MaterialComponent {
  public:
-  GrGeometryComponent() {
-    vao_id = 0;
-    vbo_id = 0;
-    ebo_id = 0;
-  }
+  MaterialComponent() { material_type = MaterialType::PHONG; }
 
-  ~GrGeometryComponent() {
-    // TODO: delete buffers
-  }
-
-  unsigned int vao_id;
-  unsigned int vbo_id;
-  unsigned int ebo_id;
+  MaterialType material_type;
 };

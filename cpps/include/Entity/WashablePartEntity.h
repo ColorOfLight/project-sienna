@@ -26,6 +26,7 @@
 
 #include "./Component/CleanMarkComponent.h"
 #include "./Component/DirtMapComponent.h"
+#include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
@@ -36,6 +37,7 @@ class WashablePartEntity {
   WashablePartEntity() {
     clean_mark_component = std::make_unique<CleanMarkComponent>();
     dirt_map_component = std::make_unique<DirtMapComponent>();
+    geometry_component = std::make_unique<GeometryComponent>();
     gr_geometry_component = std::make_unique<GrGeometryComponent>();
     gr_texture_component = std::make_unique<GrTextureComponent>();
     gr_uniform_component = std::make_unique<GrUniformComponent>();
@@ -44,6 +46,7 @@ class WashablePartEntity {
 
   std::unique_ptr<CleanMarkComponent> clean_mark_component;
   std::unique_ptr<DirtMapComponent> dirt_map_component;
+  std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
   std::unique_ptr<GrTextureComponent> gr_texture_component;
   std::unique_ptr<GrUniformComponent> gr_uniform_component;
