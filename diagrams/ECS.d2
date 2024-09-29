@@ -184,6 +184,7 @@ Client: {
     + pressedKeyMap: "{[W|A|S|D]: boolean}"
     + isPointerDown: boolean
     + pointerPosition: "[number, number]"
+    + canvasSize: "[number, number]"
   }
 
   ClientEventComponent: {
@@ -216,7 +217,8 @@ GameEntity: {
 
     + pressed_key_map: "struct {[enum:WASD]: bool}"
     + is_pointer_down: bool
-    + pointer_position: [float, float]
+    + pointer_position: "[float, float]"
+    + canvas_size: "[int, int]"
   }
 
   EventComponent: {
@@ -288,6 +290,7 @@ Systems: {
     class: System
     shape: class
 
+    + initContext(InputComponent): void
     + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
   }
 
@@ -345,6 +348,7 @@ Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
+Systems.RenderSystem <- GameEntity.InputComponent
 Systems.RenderSystem <- WashablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- WashableEntity.GrMaterialComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
