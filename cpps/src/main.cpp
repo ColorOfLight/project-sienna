@@ -27,8 +27,6 @@
 
 #include <memory>
 
-#include "./Component/ClientEventComponent.h"
-#include "./Component/ClientInputComponent.h"
 #include "./Entity/GameEntity.h"
 #include "./Entity/PlayerEntity.h"
 #include "./Entity/WashableEntity.h"
