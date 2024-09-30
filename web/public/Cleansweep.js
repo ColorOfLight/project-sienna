@@ -3512,6 +3512,10 @@ function dbg(...args) {
       GLctx.bindBuffer(target, GL.buffers[buffer]);
     };
 
+  var _glBindBufferBase = (target, index, buffer) => {
+      GLctx.bindBufferBase(target, index, GL.buffers[buffer]);
+    };
+
   var _glBindVertexArray = (vao) => {
       GLctx.bindVertexArray(GL.vaos[vao]);
     };
@@ -3616,6 +3620,12 @@ function dbg(...args) {
         GLctx.deleteVertexArray(GL.vaos[id]);
         GL.vaos[id] = null;
       }
+    };
+
+  var _glDrawElements = (mode, count, type, indices) => {
+  
+      GLctx.drawElements(mode, count, type, indices);
+  
     };
 
   var _glEnable = (x0) => GLctx.enable(x0);
@@ -3723,6 +3733,10 @@ function dbg(...args) {
       }
     };
 
+  var _glGetUniformBlockIndex = (program, uniformBlockName) => {
+      return GLctx.getUniformBlockIndex(GL.programs[program], UTF8ToString(uniformBlockName));
+    };
+
   var _glLinkProgram = (program) => {
       program = GL.programs[program];
       GLctx.linkProgram(program);
@@ -3736,6 +3750,20 @@ function dbg(...args) {
       var source = GL.getSource(shader, count, string, length);
   
       GLctx.shaderSource(GL.shaders[shader], source);
+    };
+
+  var _glUniformBlockBinding = (program, uniformBlockIndex, uniformBlockBinding) => {
+      program = GL.programs[program];
+  
+      GLctx.uniformBlockBinding(program, uniformBlockIndex, uniformBlockBinding);
+    };
+
+  var _glUseProgram = (program) => {
+      program = GL.programs[program];
+      GLctx.useProgram(program);
+      // Record the currently active program so that we can access the uniform
+      // mapping table of that program.
+      GLctx.currentProgram = program;
     };
 
   var _glVertexAttribPointer = (index, size, type, normalized, stride, ptr) => {
@@ -3868,6 +3896,8 @@ var wasmImports = {
   /** @export */
   glBindBuffer: _glBindBuffer,
   /** @export */
+  glBindBufferBase: _glBindBufferBase,
+  /** @export */
   glBindVertexArray: _glBindVertexArray,
   /** @export */
   glBufferData: _glBufferData,
@@ -3890,6 +3920,8 @@ var wasmImports = {
   /** @export */
   glDeleteVertexArrays: _glDeleteVertexArrays,
   /** @export */
+  glDrawElements: _glDrawElements,
+  /** @export */
   glEnable: _glEnable,
   /** @export */
   glEnableVertexAttribArray: _glEnableVertexAttribArray,
@@ -3906,9 +3938,15 @@ var wasmImports = {
   /** @export */
   glGetShaderiv: _glGetShaderiv,
   /** @export */
+  glGetUniformBlockIndex: _glGetUniformBlockIndex,
+  /** @export */
   glLinkProgram: _glLinkProgram,
   /** @export */
   glShaderSource: _glShaderSource,
+  /** @export */
+  glUniformBlockBinding: _glUniformBlockBinding,
+  /** @export */
+  glUseProgram: _glUseProgram,
   /** @export */
   glVertexAttribPointer: _glVertexAttribPointer,
   /** @export */
