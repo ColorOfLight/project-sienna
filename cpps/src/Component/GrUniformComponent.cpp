@@ -22,16 +22,15 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrUniformComponent.h"
 
-#include <string>
+#include <GLES3/gl3.h>
 
-class GrUniformComponent {
- public:
-  GrUniformComponent(std::string uniform_block_name);
+GrUniformComponent::GrUniformComponent(std::string uniform_block_name)
+    : uniform_block_name(uniform_block_name) {
+  glGenBuffers(1, &uniform_buffer_id);
+}
 
-  ~GrUniformComponent();
-
-  std::string uniform_block_name;
-  unsigned int uniform_buffer_id;
-};
+GrUniformComponent::~GrUniformComponent() {
+  glDeleteBuffers(1, &uniform_buffer_id);
+}

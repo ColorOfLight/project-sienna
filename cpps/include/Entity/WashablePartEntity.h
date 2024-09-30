@@ -44,7 +44,8 @@ class WashablePartEntity {
     geometry_component = std::make_unique<GeometryComponent>();
     gr_geometry_component = std::make_unique<GrGeometryComponent>();
     gr_texture_component = std::make_unique<GrTextureComponent>();
-    gr_uniform_component = std::make_unique<GrUniformComponent>();
+    gr_transform_uniform_component =
+        std::make_unique<GrUniformComponent>("ModelBlock");
     transform_component = std::make_unique<TransformComponent>();
   }
 
@@ -56,6 +57,6 @@ class WashablePartEntity {
   std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
   std::unique_ptr<GrTextureComponent> gr_texture_component;
-  std::unique_ptr<GrUniformComponent> gr_uniform_component;
+  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
 };
