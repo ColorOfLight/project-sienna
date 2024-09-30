@@ -32,7 +32,7 @@ class DirtMapComponent {
     cleanness = 1.0f;
     dirt_map = std::vector<std::vector<float>>();
     area = 0.0f;
-    needs_update = false;
+    needs_update = true;
   }
 
   float cleanness;

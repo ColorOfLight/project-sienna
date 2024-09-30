@@ -33,7 +33,7 @@ class CameraComponent {
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f, 0.0f);
     fov_radian = glm::radians(55.0f);
-    needs_update = false;
+    needs_update = true;
   }
 
   CameraComponent(float fov_radian) {
@@ -41,7 +41,7 @@ class CameraComponent {
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f, 0.0f);
     this->fov_radian = fov_radian;
-    needs_update = false;
+    needs_update = true;
   }
 
   glm::vec3 position;
