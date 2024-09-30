@@ -26,6 +26,7 @@
 #include <emscripten.h>
 
 #include <memory>
+#include <vector>
 
 #include "./Entity/GameEntity.h"
 #include "./Entity/PlayerEntity.h"
@@ -60,20 +61,31 @@ int main() {
   auto player_entity = std::make_unique<PlayerEntity>();
   auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
 
-  for (const auto& washable_part : washable_entity->washable_part_entities) {
-    GrSyncSystem::updateGeometry(
-        std::cref(*washable_part.get()->geometry_component),
-        std::ref(*washable_part.get()->gr_geometry_component));
-  }
-
   GrSyncSystem::updateMaterial(
       std::cref(*washable_entity->material_component),
       std::ref(*washable_entity->gr_material_component));
 
+  auto render_items = std::vector<RenderItem>();
+  for (const auto& washable_part : washable_entity->washable_part_entities) {
+    GrSyncSystem::updateGeometry(
+        std::cref(*washable_part.get()->geometry_component),
+        std::ref(*washable_part.get()->gr_geometry_component));
+
+    render_items.push_back({
+        .gr_geometry_component =
+            std::cref(*washable_part.get()->gr_geometry_component),
+        .gr_uniform_components =
+            std::vector<std::reference_wrapper<const GrUniformComponent>>({
+                std::cref(*player_entity.get()->gr_camera_uniform_component),
+                std::cref(*washable_part.get()->gr_transform_uniform_component),
+            }),
+    });
+  }
+
   auto main_loop = [game_entity = std::ref(game_entity),
                     player_entity = std::ref(player_entity),
-                    washable_entity = std::ref(washable_entity)](
-                       float elapsed_time, float delta_time) {
+                    washable_entity = std::ref(washable_entity),
+                    render_items](float elapsed_time, float delta_time) {
     ClientSyncSystem::syncInput(std::ref(*game_entity.get()->input_component));
     ClientSyncSystem::consumeEvent(
         std::ref(*game_entity.get()->event_component));
@@ -89,6 +101,9 @@ int main() {
           std::ref(*washable_part->transform_component),
           std::ref(*washable_part->gr_transform_uniform_component));
     }
+
+    RenderSystem::render(
+        std::cref(*washable_entity.get()->gr_material_component), render_items);
   };
 
   static_main_loop = main_loop;

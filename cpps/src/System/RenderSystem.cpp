@@ -46,3 +46,33 @@ void RenderSystem::initContext() {
   // TODO: replace with actual clear color
   glClearColor(0.1, 0.1, 0.1, 1);
 }
+
+void RenderSystem::render(
+    std::reference_wrapper<const GrMaterialComponent> gr_material_component,
+    const std::vector<RenderItem>& render_items) {
+  GLuint shader_program_id = gr_material_component.get().shader_program_id;
+
+  glUseProgram(shader_program_id);
+
+  for (const auto& render_item : render_items) {
+    const auto& gr_geometry_component = render_item.gr_geometry_component;
+    const auto& gr_uniform_components = render_item.gr_uniform_components;
+
+    glBindVertexArray(gr_geometry_component.get().vao_id);
+
+    int uniform_binging_point = 0;
+    for (const auto& gr_uniform_component : gr_uniform_components) {
+      glBindBufferBase(GL_UNIFORM_BUFFER, uniform_binging_point,
+                       gr_uniform_component.get().uniform_buffer_id);
+      unsigned int block_index = glGetUniformBlockIndex(
+          shader_program_id,
+          gr_uniform_component.get().uniform_block_name.c_str());
+      glUniformBlockBinding(shader_program_id, block_index,
+                            uniform_binging_point);
+      uniform_binging_point++;
+    }
+
+    glDrawElements(GL_TRIANGLES, gr_geometry_component.get().vertex_count,
+                   GL_UNSIGNED_INT, 0);
+  }
+}
