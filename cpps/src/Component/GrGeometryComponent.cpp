@@ -22,18 +22,20 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrGeometryComponent.h"
 
-#include <vector>
+#include <GLES3/gl3.h>
 
-class GrGeometryComponent {
- public:
-  GrGeometryComponent();
+GrGeometryComponent::GrGeometryComponent() {
+  glGenVertexArrays(1, &vao_id);
+  glGenBuffers(1, &vbo_id);
+  glGenBuffers(1, &ebo_id);
 
-  ~GrGeometryComponent();
+  vertex_count = 0;
+}
 
-  unsigned int vao_id;
-  unsigned int vbo_id;
-  unsigned int ebo_id;
-  int vertex_count;
-};
+GrGeometryComponent ::~GrGeometryComponent() {
+  glDeleteVertexArrays(1, &vao_id);
+  glDeleteBuffers(1, &vbo_id);
+  glDeleteBuffers(1, &ebo_id);
+}

@@ -31,6 +31,7 @@
 #include "./Entity/PlayerEntity.h"
 #include "./Entity/WashableEntity.h"
 #include "./System/ClientSyncSystem.h"
+#include "./System/GrSyncSystem.h"
 #include "./System/RenderSystem.h"
 
 static std::function<void(float, float)> static_main_loop;
@@ -53,11 +54,17 @@ void renderFrame() {
 }
 
 int main() {
+  RenderSystem::initContext();
+
   auto game_entity = std::make_unique<GameEntity>();
   auto player_entity = std::make_unique<PlayerEntity>();
   auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
 
-  RenderSystem::initContext();
+  for (const auto& washable_part : washable_entity->washable_part_entities) {
+    GrSyncSystem::updateGeometry(
+        std::cref(*washable_part.get()->geometry_component),
+        std::ref(*washable_part.get()->gr_geometry_component));
+  }
 
   auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
                                                           float delta_time) {
