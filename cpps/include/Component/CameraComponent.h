@@ -30,13 +30,19 @@ class CameraComponent {
  public:
   CameraComponent() {
     position = glm::vec3(1.0f, 1.0f, 3.0f);
-    front = glm::vec3(0.0f, 0.0f, -1.0f);
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
+    front = glm::normalize(-position);
+
+    glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 right = glm::normalize(glm::cross(front, world_up));
+
+    up = glm::normalize(glm::cross(right, front));
     fovy = glm::radians(55.0f);
     needs_update = true;
   }
 
   CameraComponent(float fovy) {
+    // TODO: integrate with the default constructor
+
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f, 0.0f);
