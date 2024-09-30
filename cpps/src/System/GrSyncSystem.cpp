@@ -26,6 +26,8 @@
 
 #include <GLES3/gl3.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "./shader/utils.h"
 
 void GrSyncSystem::updateGeometry(
@@ -139,4 +141,66 @@ void GrSyncSystem::updateMaterial(
   glDeleteShader(fragment_shader_id);
 
   gr_material_component.get().shader_program_id = shader_program_id;
+}
+
+void GrSyncSystem::updateTransformUniform(
+    std::reference_wrapper<TransformComponent> transform_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+  if (!transform_component.get().needs_update) {
+    return;
+  }
+
+  const auto& scale = transform_component.get().scale;
+  const auto& rotation = transform_component.get().rotation;
+  const auto& translation = transform_component.get().translation;
+
+  glm::mat4 model_matrix = glm::mat4(1.0f);
+  model_matrix = glm::scale(model_matrix, scale);
+  model_matrix = model_matrix * glm::mat4_cast(rotation);
+  model_matrix = glm::translate(model_matrix, translation);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(model_matrix), &model_matrix,
+               GL_STATIC_DRAW);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+  transform_component.get().needs_update = false;
+}
+
+void GrSyncSystem::updateCameraUniform(
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+  if (!camera_component.get().needs_update) {
+    return;
+  }
+
+  struct CameraUniformData {
+    glm::mat4 view_matrix;
+    glm::mat4 projection_matrix;
+    alignas(16) glm::vec3 eye;
+  };
+
+  const auto& front = camera_component.get().front;
+  const auto& up = camera_component.get().up;
+  const auto& position = camera_component.get().position;
+  const auto fovy = camera_component.get().fovy;
+  float aspect_ratio =
+      static_cast<float>(input_component.get().canvas_size.width) /
+      input_component.get().canvas_size.height;
+
+  CameraUniformData camera_uniform_data = {
+      .view_matrix = glm::lookAt(position, position + front, up),
+      .projection_matrix = glm::perspective(fovy, aspect_ratio, 0.1f, 100.0f),
+      .eye = position,
+  };
+
+  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(camera_uniform_data),
+               &camera_uniform_data, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+  camera_component.get().needs_update = false;
 }

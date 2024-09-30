@@ -70,11 +70,25 @@ int main() {
       std::cref(*washable_entity->material_component),
       std::ref(*washable_entity->gr_material_component));
 
-  auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
-                                                          float delta_time) {
-    ClientSyncSystem::syncInput(std::ref(*game_entity.get().input_component));
+  auto main_loop = [game_entity = std::ref(game_entity),
+                    player_entity = std::ref(player_entity),
+                    washable_entity = std::ref(washable_entity)](
+                       float elapsed_time, float delta_time) {
+    ClientSyncSystem::syncInput(std::ref(*game_entity.get()->input_component));
     ClientSyncSystem::consumeEvent(
-        std::ref(*game_entity.get().event_component));
+        std::ref(*game_entity.get()->event_component));
+
+    GrSyncSystem::updateCameraUniform(
+        std::cref(*game_entity.get()->input_component),
+        std::ref(*player_entity.get()->camera_component),
+        std::ref(*player_entity.get()->gr_camera_uniform_component));
+
+    for (const auto& washable_part :
+         washable_entity.get()->washable_part_entities) {
+      GrSyncSystem::updateTransformUniform(
+          std::ref(*washable_part->transform_component),
+          std::ref(*washable_part->gr_transform_uniform_component));
+    }
   };
 
   static_main_loop = main_loop;

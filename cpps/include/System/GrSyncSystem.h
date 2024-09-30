@@ -31,6 +31,7 @@
 #include "./Component/GrMaterialComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
+#include "./Component/InputComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
 
@@ -45,16 +46,13 @@ class GrSyncSystem {
       std::reference_wrapper<GrMaterialComponent> gr_material_component);
 
   static void updateCameraUniform(
-      std::reference_wrapper<const CameraComponent> camera_component,
-      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<const InputComponent> input_component,
+      std::reference_wrapper<CameraComponent> camera_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
   static void updateTransformUniform(
-      std::reference_wrapper<const TransformComponent> transform_component,
-      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<TransformComponent> transform_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
   static void updateDirtTexture(
       std::reference_wrapper<const DirtMapComponent> dirt_map_component,
