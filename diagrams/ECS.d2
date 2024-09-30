@@ -90,7 +90,7 @@ PlayerEntity: {
     + position: Vec3
     + front: Vec3
     + up: Vec3
-    + fov_radian: float
+    + fovy: float
     + needs_update: bool
   }
 
@@ -306,7 +306,7 @@ Systems: {
 
     + updateGeometry(Geometry): GrGeometry
     + updateMaterial(Material): GrMaterial
-    + updateCameraUniform(Camera): GrUniform
+    + updateCameraUniform(Input, Camera): GrUniform
     + updateTransformUniform(Transform): GrUniform
     + updateDirtTexture(DirtMap): GrTexture
   }
@@ -369,9 +369,9 @@ Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 # Systems.GrSyncSystem -> WashablePartEntity.GrGeometryComponent
 # Systems.GrSyncSystem <- WashableEntity.MaterialComponent
 # Systems.GrSyncSystem -> WashableEntity.GrMaterialComponent
-# Systems.GrSyncSystem <- PlayerEntity.CameraComponent
+# Systems.GrSyncSystem <-> PlayerEntity.CameraComponent
 # Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
-# Systems.GrSyncSystem <- WashablePartEntity.TransformComponent
+# Systems.GrSyncSystem <-> WashablePartEntity.TransformComponent
 # Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
 # Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
 # Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
