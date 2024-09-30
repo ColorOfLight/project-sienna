@@ -55,7 +55,7 @@ void renderFrame() {
 int main() {
   auto game_entity = std::make_unique<GameEntity>();
   auto player_entity = std::make_unique<PlayerEntity>();
-  auto washable_entity = std::make_unique<WashableEntity>();
+  auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
 
   RenderSystem::initContext();
 

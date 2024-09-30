@@ -24,15 +24,26 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
 #include <vector>
+
+struct Vertex {
+  glm::vec3 position;
+  glm::vec3 normal;
+  glm::vec2 tex_coords;
+};
+
+enum class GeometryPreset { PLANE };
 
 class GeometryComponent {
  public:
   GeometryComponent() {
-    vertices = std::vector<float>();
+    vertices = std::vector<Vertex>();
     indices = std::vector<unsigned int>();
   }
 
-  std::vector<float> vertices;
+  GeometryComponent(GeometryPreset preset);
+
+  std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
 };

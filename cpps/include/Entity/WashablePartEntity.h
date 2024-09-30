@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "./Component/CleanMarkComponent.h"
 #include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
@@ -31,6 +33,8 @@
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/TransformComponent.h"
+
+enum class WashablePartPreset { CUBE_PART };
 
 class WashablePartEntity {
  public:
@@ -43,6 +47,9 @@ class WashablePartEntity {
     gr_uniform_component = std::make_unique<GrUniformComponent>();
     transform_component = std::make_unique<TransformComponent>();
   }
+
+  WashablePartEntity(WashablePartPreset preset, glm::vec3 scale,
+                     glm::quat rotation, glm::vec3 translation);
 
   std::unique_ptr<CleanMarkComponent> clean_mark_component;
   std::unique_ptr<DirtMapComponent> dirt_map_component;
