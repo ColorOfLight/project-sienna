@@ -24,13 +24,19 @@
 
 #pragma once
 
-#include <limits>
+#include "./Component/MaterialComponent.h"
+#include "./shader/sources.h"
 
-class GrMaterialComponent {
- public:
-  GrMaterialComponent();
+inline const char* getVertexShaderSource(MaterialType material_type) {
+  return shader_source::basic_vertex.c_str();
+};
 
-  ~GrMaterialComponent();
-
-  unsigned int shader_program_id;
+inline const char* getFragmentShaderSource(MaterialType material_type) {
+  switch (material_type) {
+    case MaterialType::TEXTURE_TEST:
+      return shader_source::texture_test_fragment.c_str();
+    default:
+      throw std::runtime_error(
+          "ERROR::SHADER::FRAGMENT::INVALID_MATERIAL_TYPE\n");
+  }
 };

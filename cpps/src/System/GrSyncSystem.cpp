@@ -26,6 +26,8 @@
 
 #include <GLES3/gl3.h>
 
+#include "./shader/utils.h"
+
 void GrSyncSystem::updateGeometry(
     std::reference_wrapper<const GeometryComponent> geometry_component,
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component) {
@@ -80,4 +82,61 @@ void GrSyncSystem::updateGeometry(
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void GrSyncSystem::updateMaterial(
+    std::reference_wrapper<const MaterialComponent> material_component,
+    std::reference_wrapper<GrMaterialComponent> gr_material_component) {
+  int success;
+  char info_log[512];
+
+  auto material_type = material_component.get().material_type;
+
+  const char* vertex_shader_source = getVertexShaderSource(material_type);
+  const char* fragment_shader_source = getFragmentShaderSource(material_type);
+
+  // Compile the vertex shader
+  GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertex_shader_id, 1, &vertex_shader_source, nullptr);
+  glCompileShader(vertex_shader_id);
+
+  // Check for vertex shader compile errors
+  glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertex_shader_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  // Compile the fragment shader
+  GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragment_shader_id, 1, &fragment_shader_source, nullptr);
+  glCompileShader(fragment_shader_id);
+
+  // Check for fragment shader compile errors
+  glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragment_shader_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  // Link shaders to create a shader program
+  GLuint shader_program_id = glCreateProgram();
+  glAttachShader(shader_program_id, vertex_shader_id);
+  glAttachShader(shader_program_id, fragment_shader_id);
+  glLinkProgram(shader_program_id);
+
+  // Check for linking errors
+  glGetProgramiv(shader_program_id, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(shader_program_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::PROGRAM::LINKING_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  glDeleteShader(vertex_shader_id);
+  glDeleteShader(fragment_shader_id);
+
+  gr_material_component.get().shader_program_id = shader_program_id;
 }

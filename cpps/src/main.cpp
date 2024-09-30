@@ -66,6 +66,10 @@ int main() {
         std::ref(*washable_part.get()->gr_geometry_component));
   }
 
+  GrSyncSystem::updateMaterial(
+      std::cref(*washable_entity->material_component),
+      std::ref(*washable_entity->gr_material_component));
+
   auto main_loop = [game_entity = std::ref(*game_entity)](float elapsed_time,
                                                           float delta_time) {
     ClientSyncSystem::syncInput(std::ref(*game_entity.get().input_component));

@@ -24,11 +24,11 @@
 
 #pragma once
 
-enum class MaterialType { PHONG };
+enum class MaterialType { TEXTURE_TEST, PHONG };
 
 class MaterialComponent {
  public:
-  MaterialComponent() { material_type = MaterialType::PHONG; }
+  MaterialComponent() { material_type = MaterialType::TEXTURE_TEST; }
 
   MaterialType material_type;
 };

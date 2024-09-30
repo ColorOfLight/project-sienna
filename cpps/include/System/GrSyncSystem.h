@@ -42,9 +42,7 @@ class GrSyncSystem {
 
   static void updateMaterial(
       std::reference_wrapper<const MaterialComponent> material_component,
-      std::reference_wrapper<GrMaterialComponent> gr_material_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<GrMaterialComponent> gr_material_component);
 
   static void updateCameraUniform(
       std::reference_wrapper<const CameraComponent> camera_component,
