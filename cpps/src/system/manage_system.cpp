@@ -22,16 +22,19 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./system/manage_system.h"
 
-#include "./Component/CameraComponent.h"
-#include "./Component/InputComponent.h"
+namespace manage_system {
 
-class TransformSystem {
- public:
-  static void transformCamera(
-      std::reference_wrapper<const InputComponent> input_component,
-      std::reference_wrapper<CameraComponent> camera_component) {
-    // TODO: implement in source file
-  }
-};
+void resetGame(std::reference_wrapper<EventComponent> event_component,
+               std::reference_wrapper<CameraComponent> camera_component,
+               std::reference_wrapper<CleanMarkComponent> clean_mark_component,
+               std::reference_wrapper<CleanerComponent> cleaner_component,
+               std::reference_wrapper<DirtMapComponent> dirt_map_component,
+               std::reference_wrapper<GameStateComponent> game_state_component,
+               std::reference_wrapper<InputComponent> input_component,
+               std::reference_wrapper<TransformComponent> transform_component) {
+  // TODO: implement in source file
+}
+
+}  // namespace manage_system

@@ -22,16 +22,14 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./system/transform_system.h"
 
-#include <memory>
+namespace transform_system {
 
-#include "./Component/GameStateComponent.h"
+void transformCamera(
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component) {
+  // TODO: implement in source file
+}
 
-class FeedbackSystem {
- public:
-  static void setTotalCompleteness(
-      std::reference_wrapper<const GameStateComponent> game_state_component) {
-    // TODO: implement in source file
-  }
-};
+}  // namespace transform_system

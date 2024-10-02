@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-#include "./System/ClientSyncSystem.h"
+#include "./system/client_sync_system.h"
 
 #include <emscripten/val.h>
 
-void ClientSyncSystem::syncInput(
-    std::reference_wrapper<InputComponent> input_component) {
+namespace client_sync_system {
+
+void syncInput(std::reference_wrapper<InputComponent> input_component) {
   emscripten::val client_input_component =
       emscripten::val::global("ClientInputComponent");
 
@@ -57,8 +58,7 @@ void ClientSyncSystem::syncInput(
   input_component.get().canvas_size.height = canvas_size[1].as<int>();
 }
 
-void ClientSyncSystem::consumeEvent(
-    std::reference_wrapper<EventComponent> event_component) {
+void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
   emscripten::val client_event_component =
       emscripten::val::global("ClientEventComponent");
 
@@ -76,3 +76,5 @@ void ClientSyncSystem::consumeEvent(
     client_event_component.set("changeCanvasSize", false);
   }
 }
+
+}  // namespace client_sync_system

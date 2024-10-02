@@ -22,12 +22,14 @@
  * SOFTWARE.
  */
 
-#include "./System/RenderSystem.h"
+#include "./system/render_system.h"
 
 #include <GLES3/gl3.h>  // OpenGL ES 3.0 for WebGL 2.0
 #include <emscripten/html5.h>
 
-void RenderSystem::initContext() {
+namespace render_system {
+
+void initContext() {
   EmscriptenWebGLContextAttributes attr;
   emscripten_webgl_init_context_attributes(&attr);
   attr.majorVersion = 2;  // WebGL 2.0
@@ -47,7 +49,7 @@ void RenderSystem::initContext() {
   glClearColor(0.1, 0.1, 0.1, 1);
 }
 
-void RenderSystem::changeViewportSize(
+void changeViewportSize(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component) {
   if (event_component.get().change_canvas_size) {
@@ -61,7 +63,7 @@ void RenderSystem::changeViewportSize(
   }
 }
 
-void RenderSystem::render(
+void render(
     std::reference_wrapper<const GrMaterialComponent> gr_material_component,
     const std::vector<RenderItem>& render_items) {
   GLuint shader_program_id = gr_material_component.get().shader_program_id;
@@ -90,3 +92,5 @@ void RenderSystem::render(
                    GL_UNSIGNED_INT, 0);
   }
 }
+
+}  // namespace render_system
