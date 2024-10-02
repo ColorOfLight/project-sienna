@@ -28,7 +28,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "./shader/utils.h"
+#include "./shader/util.h"
 
 namespace gr_sync_system {
 

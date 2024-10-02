@@ -25,7 +25,7 @@
 #pragma once
 
 #include "./Component/MaterialComponent.h"
-#include "./shader/sources.h"
+#include "./shader/source.h"
 
 inline const char* getVertexShaderSource(MaterialType material_type) {
   return shader_source::basic_vertex.c_str();
