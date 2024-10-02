@@ -383,6 +383,7 @@ Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 Client.Canvas <- Systems.RenderSystem
 Systems.RenderSystem <- GameEntity.InputComponent
 Systems.RenderSystem <-> GameEntity.EventComponent
+Systems.RenderSystem -> PlayerEntity.CameraComponent
 Systems.RenderSystem <- WashablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- WashableEntity.GrMaterialComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
