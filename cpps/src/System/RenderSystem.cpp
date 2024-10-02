@@ -47,6 +47,20 @@ void RenderSystem::initContext() {
   glClearColor(0.1, 0.1, 0.1, 1);
 }
 
+void RenderSystem::changeViewportSize(
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<EventComponent> event_component) {
+  if (event_component.get().change_canvas_size) {
+    int canvas_width = input_component.get().canvas_size.width;
+    int canvas_height = input_component.get().canvas_size.height;
+
+    emscripten_set_canvas_element_size("#canvas", canvas_width, canvas_height);
+    glViewport(0, 0, canvas_width, canvas_height);
+
+    event_component.get().change_canvas_size = false;
+  }
+}
+
 void RenderSystem::render(
     std::reference_wrapper<const GrMaterialComponent> gr_material_component,
     const std::vector<RenderItem>& render_items) {

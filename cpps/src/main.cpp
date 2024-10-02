@@ -90,6 +90,10 @@ int main() {
     ClientSyncSystem::consumeEvent(
         std::ref(*game_entity.get()->event_component));
 
+    RenderSystem::changeViewportSize(
+        std::cref(*game_entity.get()->input_component),
+        std::ref(*game_entity.get()->event_component));
+
     GrSyncSystem::updateCameraUniform(
         std::cref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component),
