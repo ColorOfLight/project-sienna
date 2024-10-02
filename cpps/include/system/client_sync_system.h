@@ -27,10 +27,10 @@
 #include "./Component/EventComponent.h"
 #include "./Component/InputComponent.h"
 
-class ClientSyncSystem {
- public:
-  static void syncInput(std::reference_wrapper<InputComponent> input_component);
+namespace client_sync_system {
 
-  static void consumeEvent(
-      std::reference_wrapper<EventComponent> event_component);
-};
+void syncInput(std::reference_wrapper<InputComponent> input_component);
+
+void consumeEvent(std::reference_wrapper<EventComponent> event_component);
+
+}  // namespace client_sync_system

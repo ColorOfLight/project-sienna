@@ -22,28 +22,15 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./system/calculate_system.h"
 
-#include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
-#include "./Component/EventComponent.h"
-#include "./Component/GameStateComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/TransformComponent.h"
+namespace calculate_system {
 
-class ManageSystem {
- public:
-  static void resetGame(
-      std::reference_wrapper<EventComponent> event_component,
-      std::reference_wrapper<CameraComponent> camera_component,
-      std::reference_wrapper<CleanMarkComponent> clean_mark_component,
-      std::reference_wrapper<CleanerComponent> cleaner_component,
-      std::reference_wrapper<DirtMapComponent> dirt_map_component,
-      std::reference_wrapper<GameStateComponent> game_state_component,
-      std::reference_wrapper<InputComponent> input_component,
-      std::reference_wrapper<TransformComponent> transform_component) {
-    // TODO: implement in source file
-  }
-};
+void calculateCompleteness(
+    std::vector<std::reference_wrapper<const DirtMapComponent>>
+        dirt_map_components,
+    std::reference_wrapper<GameStateComponent> game_state_component) {
+  // TODO: implement in source file
+}
+
+}  // namespace calculate_system

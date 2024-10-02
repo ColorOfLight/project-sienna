@@ -24,30 +24,38 @@
 
 #pragma once
 
-#include <vector>
-
-#include "./Component/EventComponent.h"
+#include "./Component/CameraComponent.h"
+#include "./Component/DirtMapComponent.h"
+#include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrMaterialComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
+#include "./Component/MaterialComponent.h"
+#include "./Component/TransformComponent.h"
 
-struct RenderItem {
-  std::reference_wrapper<const GrGeometryComponent> gr_geometry_component;
-  std::vector<std::reference_wrapper<const GrUniformComponent>>
-      gr_uniform_components;
-};
+namespace gr_sync_system {
 
-class RenderSystem {
- public:
-  static void initContext();
+void updateGeometry(
+    std::reference_wrapper<const GeometryComponent> geometry_component,
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
 
-  static void changeViewportSize(
-      std::reference_wrapper<const InputComponent> input_component,
-      std::reference_wrapper<EventComponent> event_component);
+void updateMaterial(
+    std::reference_wrapper<const MaterialComponent> material_component,
+    std::reference_wrapper<GrMaterialComponent> gr_material_component);
 
-  static void render(
-      std::reference_wrapper<const GrMaterialComponent> gr_material_component,
-      const std::vector<RenderItem>& render_items);
-};
+void updateCameraUniform(
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component);
+
+void updateTransformUniform(
+    std::reference_wrapper<TransformComponent> transform_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component);
+
+void updateDirtTexture(
+    std::reference_wrapper<const DirtMapComponent> dirt_map_component,
+    std::reference_wrapper<GrTextureComponent> gr_texture_component);
+
+}  // namespace gr_sync_system

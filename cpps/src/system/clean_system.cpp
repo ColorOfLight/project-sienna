@@ -22,33 +22,25 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./system/clean_system.h"
 
-#include <vector>
+namespace clean_system {
 
-#include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/TransformComponent.h"
+void markToClean(
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<const CameraComponent> camera_component,
+    std::reference_wrapper<const CleanerComponent> cleaner_component,
+    std::vector<std::reference_wrapper<const TransformComponent>>
+        transform_components,
+    std::vector<std::reference_wrapper<const CleanMarkComponent>>
+        clean_mark_components) {
+  // TODO: implement in source file
+}
 
-class CleanSystem {
- public:
-  static void markToClean(
-      std::reference_wrapper<const InputComponent> input_component,
-      std::reference_wrapper<const CameraComponent> camera_component,
-      std::reference_wrapper<const CleanerComponent> cleaner_component,
-      std::vector<std::reference_wrapper<const TransformComponent>>
-          transform_components,
-      std::vector<std::reference_wrapper<const CleanMarkComponent>>
-          clean_mark_components) {
-    // TODO: implement in source file
-  }
+void clean(
+    std::reference_wrapper<const CleanMarkComponent> clean_mark_component,
+    std::reference_wrapper<DirtMapComponent> dirt_map_component) {
+  // TODO: implement in source file
+}
 
-  static void clean(
-      std::reference_wrapper<const CleanMarkComponent> clean_mark_component,
-      std::reference_wrapper<DirtMapComponent> dirt_map_component) {
-    // TODO: implement in source file
-  }
-};
+}  // namespace clean_system
