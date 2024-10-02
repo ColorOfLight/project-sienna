@@ -28,15 +28,10 @@
 
 class GrUniformComponent {
  public:
-  GrUniformComponent() {
-    uniform_block_name = "";
-    uniform_block_buffer_id = 0;
-  }
+  GrUniformComponent(std::string uniform_block_name);
 
-  ~GrUniformComponent() {
-    // TODO: delete buffer
-  }
+  ~GrUniformComponent();
 
   std::string uniform_block_name;
-  unsigned int uniform_block_buffer_id;
+  unsigned int uniform_buffer_id;
 };

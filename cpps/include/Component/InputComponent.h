@@ -38,6 +38,11 @@ struct PointerPosition {
   float y;
 };
 
+struct CanvasSize {
+  int width;
+  int height;
+};
+
 class InputComponent {
  public:
   InputComponent() {
@@ -48,9 +53,12 @@ class InputComponent {
     is_pointer_down = false;
     pointer_position.x = 0;
     pointer_position.y = 0;
+    canvas_size.width = 0;
+    canvas_size.height = 0;
   }
 
   std::map<InputKey, bool> pressed_key_map;
   bool is_pointer_down;
   PointerPosition pointer_position;
+  CanvasSize canvas_size;
 };

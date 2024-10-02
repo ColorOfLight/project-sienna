@@ -24,25 +24,11 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+enum class MaterialType { TEXTURE_TEST, PHONG };
 
-class TransformComponent {
+class MaterialComponent {
  public:
-  TransformComponent() {
-    scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    needs_update = true;
-  }
+  MaterialComponent() { material_type = MaterialType::TEXTURE_TEST; }
 
-  TransformComponent(glm::vec3 scale, glm::quat rotation, glm::vec3 translation)
-      : scale(scale), rotation(rotation), translation(translation) {
-    needs_update = true;
-  }
-
-  glm::vec3 scale;
-  glm::quat rotation;
-  glm::vec3 translation;
-  bool needs_update;
+  MaterialType material_type;
 };

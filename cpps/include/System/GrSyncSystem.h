@@ -26,23 +26,33 @@
 
 #include "./Component/CameraComponent.h"
 #include "./Component/DirtMapComponent.h"
+#include "./Component/GeometryComponent.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrMaterialComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
+#include "./Component/InputComponent.h"
+#include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
 
 class GrSyncSystem {
  public:
+  static void updateGeometry(
+      std::reference_wrapper<const GeometryComponent> geometry_component,
+      std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
+
+  static void updateMaterial(
+      std::reference_wrapper<const MaterialComponent> material_component,
+      std::reference_wrapper<GrMaterialComponent> gr_material_component);
+
   static void updateCameraUniform(
-      std::reference_wrapper<const CameraComponent> camera_component,
-      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<const InputComponent> input_component,
+      std::reference_wrapper<CameraComponent> camera_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
   static void updateTransformUniform(
-      std::reference_wrapper<const TransformComponent> transform_component,
-      std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-    // TODO: implement in source file
-  }
+      std::reference_wrapper<TransformComponent> transform_component,
+      std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
   static void updateDirtTexture(
       std::reference_wrapper<const DirtMapComponent> dirt_map_component,

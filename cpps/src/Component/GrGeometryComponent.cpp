@@ -22,8 +22,20 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrGeometryComponent.h"
 
-class ClientInputComponent {
-  // TODO: Implement with emscripten API
-};
+#include <GLES3/gl3.h>
+
+GrGeometryComponent::GrGeometryComponent() {
+  glGenVertexArrays(1, &vao_id);
+  glGenBuffers(1, &vbo_id);
+  glGenBuffers(1, &ebo_id);
+
+  vertex_count = 0;
+}
+
+GrGeometryComponent ::~GrGeometryComponent() {
+  glDeleteVertexArrays(1, &vao_id);
+  glDeleteBuffers(1, &vbo_id);
+  glDeleteBuffers(1, &ebo_id);
+}

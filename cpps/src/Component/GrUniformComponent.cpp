@@ -22,8 +22,15 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrUniformComponent.h"
 
-class ClientEventComponent {
-  // TODO: Implement with emscripten API
-};
+#include <GLES3/gl3.h>
+
+GrUniformComponent::GrUniformComponent(std::string uniform_block_name)
+    : uniform_block_name(uniform_block_name) {
+  glGenBuffers(1, &uniform_buffer_id);
+}
+
+GrUniformComponent::~GrUniformComponent() {
+  glDeleteBuffers(1, &uniform_buffer_id);
+}

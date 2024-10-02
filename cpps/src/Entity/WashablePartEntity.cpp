@@ -22,27 +22,25 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Entity/WashablePartEntity.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
+                                       glm::vec3 scale, glm::quat rotation,
+                                       glm::vec3 translation) {
+  clean_mark_component = std::make_unique<CleanMarkComponent>();
+  dirt_map_component = std::make_unique<DirtMapComponent>();
+  gr_geometry_component = std::make_unique<GrGeometryComponent>();
+  gr_texture_component = std::make_unique<GrTextureComponent>();
+  gr_transform_uniform_component =
+      std::make_unique<GrUniformComponent>("ModelBlock");
 
-class TransformComponent {
- public:
-  TransformComponent() {
-    scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    needs_update = true;
+  transform_component =
+      std::make_unique<TransformComponent>(scale, rotation, translation);
+
+  if (preset == WashablePartPreset::CUBE_PART) {
+    geometry_component =
+        std::make_unique<GeometryComponent>(GeometryPreset::PLANE);
+  } else {
+    throw std::invalid_argument("Invalid washable part preset");
   }
-
-  TransformComponent(glm::vec3 scale, glm::quat rotation, glm::vec3 translation)
-      : scale(scale), rotation(rotation), translation(translation) {
-    needs_update = true;
-  }
-
-  glm::vec3 scale;
-  glm::quat rotation;
-  glm::vec3 translation;
-  bool needs_update;
-};
+}

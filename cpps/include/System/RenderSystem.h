@@ -26,19 +26,28 @@
 
 #include <vector>
 
+#include "./Component/EventComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrMaterialComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
+#include "./Component/InputComponent.h"
+
+struct RenderItem {
+  std::reference_wrapper<const GrGeometryComponent> gr_geometry_component;
+  std::vector<std::reference_wrapper<const GrUniformComponent>>
+      gr_uniform_components;
+};
 
 class RenderSystem {
  public:
+  static void initContext();
+
+  static void changeViewportSize(
+      std::reference_wrapper<const InputComponent> input_component,
+      std::reference_wrapper<EventComponent> event_component);
+
   static void render(
-      std::reference_wrapper<const GrGeometryComponent> gr_geometry_component,
       std::reference_wrapper<const GrMaterialComponent> gr_material_component,
-      std::vector<std::reference_wrapper<const GrUniformComponent>>
-          gr_uniform_components,
-      std::reference_wrapper<const GrTextureComponent> gr_texture_component) {
-    // TODO: implement in source file
-  }
+      const std::vector<RenderItem>& render_items);
 };

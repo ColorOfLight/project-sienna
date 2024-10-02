@@ -22,27 +22,16 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrMaterialComponent.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <GLES3/gl3.h>
 
-class TransformComponent {
- public:
-  TransformComponent() {
-    scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    needs_update = true;
+GrMaterialComponent::GrMaterialComponent() {
+  shader_program_id = std::numeric_limits<unsigned int>::max();
+}
+
+GrMaterialComponent::~GrMaterialComponent() {
+  if (shader_program_id != std::numeric_limits<unsigned int>::max()) {
+    glDeleteProgram(shader_program_id);
   }
-
-  TransformComponent(glm::vec3 scale, glm::quat rotation, glm::vec3 translation)
-      : scale(scale), rotation(rotation), translation(translation) {
-    needs_update = true;
-  }
-
-  glm::vec3 scale;
-  glm::quat rotation;
-  glm::vec3 translation;
-  bool needs_update;
-};
+}

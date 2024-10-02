@@ -90,7 +90,7 @@ PlayerEntity: {
     + position: Vec3
     + front: Vec3
     + up: Vec3
-    + fov_radian: float
+    + fovy: float
     + needs_update: bool
   }
 
@@ -107,11 +107,22 @@ WashableEntity: {
   label: Washable
   class: Entity
 
+  MaterialComponent: {
+    class: Component
+    shape: class
+
+    + material_type: "enum:PHONG"
+  }
+
   GrMaterialComponent: {
     class: Component
     shape: class
 
     + shader_program_id: uint
+  }
+
+  MaterialComponent -> GrMaterialComponent: data to {
+    ...${vGrFrom}
   }
 }
 
@@ -137,9 +148,9 @@ WashablePartEntity: {
     class: Component
     shape: class
 
-    + position: Vec3
     + scale: Vec3
     + rotation: Vec3
+    + translation: Vec3
     + needs_update: bool
   }
 
@@ -154,15 +165,22 @@ WashablePartEntity: {
     + marks: "vector<{Vec2i, float}>" # texture_coodrs, radius
   }
 
+  GeometryComponent: {
+    class: Component
+    shape: class
+
+    + vertices: "vector<Vertex>"
+    + indices: "vector<uint>"
+  }
+
   GrGeometryComponent: {
     class: Component
     shape: class
 
-    + vertices: "vector<float * 8>"
-    + indices: "vector<uint>"
     + vao_id: uint
     + vbo_id: uint
     + ebo_id: unit
+    + vertex_count: int
   }
 
   DirtMapComponent -> DirtGrTextureComponent: data to {
@@ -170,6 +188,10 @@ WashablePartEntity: {
   }
 
   TransformComponent -> TransformGrUniformComponent: data to {
+    ...${vGrFrom}
+  }
+
+  GeometryComponent -> GrGeometryComponent: data to {
     ...${vGrFrom}
   }
 }
@@ -184,6 +206,7 @@ Client: {
     + pressedKeyMap: "{[W|A|S|D]: boolean}"
     + isPointerDown: boolean
     + pointerPosition: "[number, number]"
+    + canvasSize: "[number, number]"
   }
 
   ClientEventComponent: {
@@ -191,6 +214,7 @@ Client: {
     shape: class
 
     + reset: boolean
+    + changeCanvasSize: "[number, number]"
   }
 
   Canvas: {
@@ -216,7 +240,8 @@ GameEntity: {
 
     + pressed_key_map: "struct {[enum:WASD]: bool}"
     + is_pointer_down: bool
-    + pointer_position: [float, float]
+    + pointer_position: "[float, float]"
+    + canvas_size: "[int, int]"
   }
 
   EventComponent: {
@@ -224,6 +249,7 @@ GameEntity: {
     shape: class
 
     + reset: bool
+    + change_canvas_size: bool
   }
 
   GameStateComponent: {
@@ -243,6 +269,7 @@ Systems: {
   description: |md
     - "Component" is omitted for parameters and return types
     - Return types will be turned into return parameters in real code
+    - Relationships for GrSyncSystem are omitted for simplicity
   |
 
   ClientSyncSystem: {
@@ -279,7 +306,9 @@ Systems: {
     class: System
     shape: class
 
-    + updateCameraUniform(Camera): GrUniform
+    + updateGeometry(Geometry): GrGeometry
+    + updateMaterial(Material): GrMaterial
+    + updateCameraUniform(Input, Camera): GrUniform
     + updateTransformUniform(Transform): GrUniform
     + updateDirtTexture(DirtMap): GrTexture
   }
@@ -288,6 +317,8 @@ Systems: {
     class: System
     shape: class
 
+    + initContext(InputComponent): void
+    + changeViewportSize(Input, Event): Event
     + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
   }
 
@@ -336,15 +367,22 @@ Systems.CleanSystem <-> WashablePartEntity.CleanMarkComponent
 Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 
 # GrSyncSystem
-Systems.GrSyncSystem <- PlayerEntity.CameraComponent
-Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
-Systems.GrSyncSystem <- WashablePartEntity.TransformComponent
-Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
-Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
-Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
+# - Relationships for GrSyncSystme are omitted for simplicity
+# Systems.GrSyncSystem <- WashablePartEntity.GeometryComponent
+# Systems.GrSyncSystem -> WashablePartEntity.GrGeometryComponent
+# Systems.GrSyncSystem <- WashableEntity.MaterialComponent
+# Systems.GrSyncSystem -> WashableEntity.GrMaterialComponent
+# Systems.GrSyncSystem <-> PlayerEntity.CameraComponent
+# Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
+# Systems.GrSyncSystem <-> WashablePartEntity.TransformComponent
+# Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
+# Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
+# Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
+Systems.RenderSystem <- GameEntity.InputComponent
+Systems.RenderSystem <-> GameEntity.EventComponent
 Systems.RenderSystem <- WashablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- WashableEntity.GrMaterialComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent

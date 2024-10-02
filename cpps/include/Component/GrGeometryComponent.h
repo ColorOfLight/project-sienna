@@ -28,21 +28,12 @@
 
 class GrGeometryComponent {
  public:
-  GrGeometryComponent() {
-    vertices = std::vector<float>();
-    indices = std::vector<unsigned int>();
-    vao_id = 0;
-    vbo_id = 0;
-    ebo_id = 0;
-  }
+  GrGeometryComponent();
 
-  ~GrGeometryComponent() {
-    // TODO: delete buffers
-  }
+  ~GrGeometryComponent();
 
-  std::vector<float> vertices;
-  std::vector<unsigned int> indices;
   unsigned int vao_id;
   unsigned int vbo_id;
   unsigned int ebo_id;
+  int vertex_count;
 };

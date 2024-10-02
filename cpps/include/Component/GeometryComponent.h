@@ -25,24 +25,25 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <vector>
 
-class TransformComponent {
+struct Vertex {
+  glm::vec3 position;
+  glm::vec3 normal;
+  glm::vec2 tex_coords;
+};
+
+enum class GeometryPreset { PLANE };
+
+class GeometryComponent {
  public:
-  TransformComponent() {
-    scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    needs_update = true;
+  GeometryComponent() {
+    vertices = std::vector<Vertex>();
+    indices = std::vector<unsigned int>();
   }
 
-  TransformComponent(glm::vec3 scale, glm::quat rotation, glm::vec3 translation)
-      : scale(scale), rotation(rotation), translation(translation) {
-    needs_update = true;
-  }
+  GeometryComponent(GeometryPreset preset);
 
-  glm::vec3 scale;
-  glm::quat rotation;
-  glm::vec3 translation;
-  bool needs_update;
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
 };

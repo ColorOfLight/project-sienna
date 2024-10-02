@@ -24,28 +24,39 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "./Component/CleanMarkComponent.h"
 #include "./Component/DirtMapComponent.h"
+#include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/TransformComponent.h"
+
+enum class WashablePartPreset { CUBE_PART };
 
 class WashablePartEntity {
  public:
   WashablePartEntity() {
     clean_mark_component = std::make_unique<CleanMarkComponent>();
     dirt_map_component = std::make_unique<DirtMapComponent>();
+    geometry_component = std::make_unique<GeometryComponent>();
     gr_geometry_component = std::make_unique<GrGeometryComponent>();
     gr_texture_component = std::make_unique<GrTextureComponent>();
-    gr_uniform_component = std::make_unique<GrUniformComponent>();
+    gr_transform_uniform_component =
+        std::make_unique<GrUniformComponent>("ModelBlock");
     transform_component = std::make_unique<TransformComponent>();
   }
 
+  WashablePartEntity(WashablePartPreset preset, glm::vec3 scale,
+                     glm::quat rotation, glm::vec3 translation);
+
   std::unique_ptr<CleanMarkComponent> clean_mark_component;
   std::unique_ptr<DirtMapComponent> dirt_map_component;
+  std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
   std::unique_ptr<GrTextureComponent> gr_texture_component;
-  std::unique_ptr<GrUniformComponent> gr_uniform_component;
+  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
 };

@@ -50,6 +50,11 @@ void ClientSyncSystem::syncInput(
 
   input_component.get().pointer_position.x = pointer_position[0].as<float>();
   input_component.get().pointer_position.y = pointer_position[1].as<float>();
+
+  emscripten::val canvas_size = client_input_component["canvasSize"];
+
+  input_component.get().canvas_size.width = canvas_size[0].as<int>();
+  input_component.get().canvas_size.height = canvas_size[1].as<int>();
 }
 
 void ClientSyncSystem::consumeEvent(
@@ -58,9 +63,16 @@ void ClientSyncSystem::consumeEvent(
       emscripten::val::global("ClientEventComponent");
 
   bool is_reset = client_event_component["reset"].as<bool>();
+  bool change_canvas_size =
+      client_event_component["changeCanvasSize"].as<bool>();
 
   if (is_reset) {
     event_component.get().reset = true;
     client_event_component.set("reset", false);
+  }
+
+  if (change_canvas_size) {
+    event_component.get().change_canvas_size = true;
+    client_event_component.set("changeCanvasSize", false);
   }
 }

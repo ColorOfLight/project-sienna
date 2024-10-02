@@ -24,25 +24,19 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "./Component/MaterialComponent.h"
+#include "./shader/sources.h"
 
-class TransformComponent {
- public:
-  TransformComponent() {
-    scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    needs_update = true;
+inline const char* getVertexShaderSource(MaterialType material_type) {
+  return shader_source::basic_vertex.c_str();
+};
+
+inline const char* getFragmentShaderSource(MaterialType material_type) {
+  switch (material_type) {
+    case MaterialType::TEXTURE_TEST:
+      return shader_source::texture_test_fragment.c_str();
+    default:
+      throw std::runtime_error(
+          "ERROR::SHADER::FRAGMENT::INVALID_MATERIAL_TYPE\n");
   }
-
-  TransformComponent(glm::vec3 scale, glm::quat rotation, glm::vec3 translation)
-      : scale(scale), rotation(rotation), translation(translation) {
-    needs_update = true;
-  }
-
-  glm::vec3 scale;
-  glm::quat rotation;
-  glm::vec3 translation;
-  bool needs_update;
 };

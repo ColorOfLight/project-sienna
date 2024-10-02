@@ -33,10 +33,11 @@ class PlayerEntity {
   PlayerEntity() {
     camera_component = std::make_unique<CameraComponent>();
     cleaner_component = std::make_unique<CleanerComponent>();
-    gr_uniform_component = std::make_unique<GrUniformComponent>();
+    gr_camera_uniform_component =
+        std::make_unique<GrUniformComponent>("CameraBlock");
   }
 
   std::unique_ptr<CameraComponent> camera_component;
   std::unique_ptr<CleanerComponent> cleaner_component;
-  std::unique_ptr<GrUniformComponent> gr_uniform_component;
+  std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
 };

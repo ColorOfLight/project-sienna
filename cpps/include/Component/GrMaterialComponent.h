@@ -24,9 +24,13 @@
 
 #pragma once
 
+#include <limits>
+
 class GrMaterialComponent {
  public:
-  GrMaterialComponent() { shader_program_id = 0; }
+  GrMaterialComponent();
+
+  ~GrMaterialComponent();
 
   unsigned int shader_program_id;
 };

@@ -29,24 +29,30 @@
 class CameraComponent {
  public:
   CameraComponent() {
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
-    front = glm::vec3(0.0f, 0.0f, -1.0f);
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
-    fov_radian = glm::radians(55.0f);
-    needs_update = false;
+    position = glm::vec3(1.0f, 1.0f, 3.0f);
+    front = glm::normalize(-position);
+
+    glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 right = glm::normalize(glm::cross(front, world_up));
+
+    up = glm::normalize(glm::cross(right, front));
+    fovy = glm::radians(55.0f);
+    needs_update = true;
   }
 
-  CameraComponent(float fov_radian) {
+  CameraComponent(float fovy) {
+    // TODO: integrate with the default constructor
+
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     front = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f, 0.0f);
-    this->fov_radian = fov_radian;
-    needs_update = false;
+    this->fovy = fovy;
+    needs_update = true;
   }
 
   glm::vec3 position;
   glm::vec3 front;
   glm::vec3 up;
-  float fov_radian;
+  float fovy;
   bool needs_update;
 };
