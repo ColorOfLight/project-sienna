@@ -154,10 +154,12 @@ void GrSyncSystem::updateTransformUniform(
   const auto& rotation = transform_component.get().rotation;
   const auto& translation = transform_component.get().translation;
 
+  // Order matters: scale -> rotate -> translate
+  // Due to right multiplication of matrices
   glm::mat4 model_matrix = glm::mat4(1.0f);
-  model_matrix = glm::scale(model_matrix, scale);
-  model_matrix = model_matrix * glm::mat4_cast(rotation);
   model_matrix = glm::translate(model_matrix, translation);
+  model_matrix = model_matrix * glm::mat4_cast(rotation);
+  model_matrix = glm::scale(model_matrix, scale);
 
   glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
   glBufferData(GL_UNIFORM_BUFFER, sizeof(model_matrix), &model_matrix,
