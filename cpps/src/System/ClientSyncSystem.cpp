@@ -63,9 +63,16 @@ void ClientSyncSystem::consumeEvent(
       emscripten::val::global("ClientEventComponent");
 
   bool is_reset = client_event_component["reset"].as<bool>();
+  bool change_canvas_size =
+      client_event_component["changeCanvasSize"].as<bool>();
 
   if (is_reset) {
     event_component.get().reset = true;
     client_event_component.set("reset", false);
+  }
+
+  if (change_canvas_size) {
+    event_component.get().change_canvas_size = true;
+    client_event_component.set("changeCanvasSize", false);
   }
 }

@@ -26,7 +26,11 @@
 
 class EventComponent {
  public:
-  EventComponent() { reset = false; }
+  EventComponent() {
+    reset = false;
+    change_canvas_size = false;
+  }
 
   bool reset;
+  bool change_canvas_size;
 };

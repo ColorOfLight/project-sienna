@@ -1,5 +1,7 @@
 const canvas = document.getElementById('canvas');
 
+const getCanvasSize = () => [canvas.clientWidth * window.devicePixelRatio, canvas.clientHeight * window.devicePixelRatio];
+
 const ClientInputComponent = {
   pressedKeyMap: {
     'W': false,
@@ -9,11 +11,12 @@ const ClientInputComponent = {
   },
   isPointerDown: false,
   pointerPosition: [0, 0],
-  canvasSize: [canvas.clientWidth * window.devicePixelRatio, canvas.clientHeight * window.devicePixelRatio],
+  canvasSize: getCanvasSize(),
 };
 
 const ClientEventComponent = {
   reset: false,
+  changeCanvasSize: false,
 };
 
 window.addEventListener('keydown', (event) => {
@@ -40,6 +43,17 @@ window.addEventListener('pointermove', (event) => {
 
 document.getElementById('reset').addEventListener('click', () => {
   ClientEventComponent.reset = true;
+});
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  ClientEventComponent.changeCanvasSize = true;
+  ClientInputComponent.canvasSize = getCanvasSize();
+});
+
+window.addEventListener('resize', () => {
+  ClientEventComponent.changeCanvasSize = true;
+  ClientInputComponent.canvasSize = getCanvasSize();
 });
 
 window.ClientInputComponent = ClientInputComponent;
