@@ -27,6 +27,7 @@
 #include <string>
 
 namespace shader_source {
+
 inline const std::string basic_vertex = R"(#version 300 es
     precision mediump float;
 
@@ -76,4 +77,49 @@ inline const std::string texture_test_fragment = R"(#version 300 es
         FragColor = vec4(v_texCoord, 0.0, 1.0);
     }
 )";
+
+inline const std::string phong_fragment = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform CameraBlock
+    {
+        mat4 u_camera_viewMatrix;
+        mat4 u_camera_projectionMatrix;
+        vec3 u_camera_eye;
+    };
+
+    vec3 g_material_color = vec3(1.0, 0.0, 0.0);
+    float g_material_diffuse = 0.5;
+    float g_material_specular = 0.5;
+    float g_material_alpha = 64.0;
+
+    vec3 g_ambient_color = vec3(1.0, 1.0, 1.0);
+    float g_ambient_intensity = 0.1;
+
+    vec3 g_directional_color = vec3(1.0, 1.0, 1.0);
+    vec3 g_directional_direction = vec3(-1.0, -2.0, -1.0);
+    float g_directional_intensity = 1.0;
+
+    in vec3 v_normal;
+    in vec3 v_position;
+
+    out vec4 FragColor;
+
+    void main()
+    {
+        vec3 ambientColor = g_material_color * g_ambient_color * g_ambient_intensity * g_material_diffuse;
+
+        vec3 normal = normalize(v_normal);
+        vec3 lightVector = normalize(-g_directional_direction);
+        vec3 directionalDiffuseColor = g_material_diffuse * max(dot(normal, lightVector), 0.0) * g_material_color * g_directional_color * g_directional_intensity;
+
+        vec3 viewVector = normalize(u_camera_eye - v_position);
+        vec3 reflection = reflect(g_directional_direction, normal);
+        vec3 directionalSpecularColor = g_material_specular * pow(max(0.0, dot(reflection, viewVector)), g_material_alpha) * g_directional_color * g_directional_intensity;
+        
+        vec3 color = ambientColor + directionalDiffuseColor + directionalSpecularColor;
+        FragColor = vec4(color, 1.0);
+    }
+)";
+
 }  // namespace shader_source

@@ -35,6 +35,8 @@ inline const char* getFragmentShaderSource(MaterialType material_type) {
   switch (material_type) {
     case MaterialType::TEXTURE_TEST:
       return shader_source::texture_test_fragment.c_str();
+    case MaterialType::PHONG:
+      return shader_source::phong_fragment.c_str();
     default:
       throw std::runtime_error(
           "ERROR::SHADER::FRAGMENT::INVALID_MATERIAL_TYPE\n");

@@ -30,5 +30,8 @@ class MaterialComponent {
  public:
   MaterialComponent() { material_type = MaterialType::TEXTURE_TEST; }
 
+  MaterialComponent(MaterialType material_type)
+      : material_type(material_type) {}
+
   MaterialType material_type;
 };

@@ -25,7 +25,7 @@
 #include "./Entity/WashableEntity.h"
 
 WashableEntity::WashableEntity(WashablePreset preset) {
-  material_component = std::make_unique<MaterialComponent>();
+  material_component = std::make_unique<MaterialComponent>(MaterialType::PHONG);
   gr_material_component = std::make_unique<GrMaterialComponent>();
 
   if (preset == WashablePreset::CUBE) {
