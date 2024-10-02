@@ -43,7 +43,7 @@ namespace render_system {
 
 void initContext();
 
-void changeViewportSize(
+void adjustViewportSize(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component);
 

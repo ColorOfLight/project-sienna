@@ -49,7 +49,7 @@ void initContext() {
   glClearColor(0.1, 0.1, 0.1, 1);
 }
 
-void changeViewportSize(
+void adjustViewportSize(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component) {
   if (event_component.get().change_canvas_size) {
