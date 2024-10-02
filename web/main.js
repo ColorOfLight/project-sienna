@@ -1,4 +1,4 @@
-const canvasClientRect = document.getElementById('canvas').getBoundingClientRect();
+const canvas = document.getElementById('canvas');
 
 const ClientInputComponent = {
   pressedKeyMap: {
@@ -9,7 +9,7 @@ const ClientInputComponent = {
   },
   isPointerDown: false,
   pointerPosition: [0, 0],
-  canvasSize: [canvasClientRect.width, canvasClientRect.height],
+  canvasSize: [canvas.clientWidth * window.devicePixelRatio, canvas.clientHeight * window.devicePixelRatio],
 };
 
 const ClientEventComponent = {
