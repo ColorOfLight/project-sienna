@@ -26,6 +26,7 @@
 
 #include <vector>
 
+#include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrMaterialComponent.h"
@@ -45,7 +46,8 @@ void initContext();
 
 void adjustViewportSize(
     std::reference_wrapper<const InputComponent> input_component,
-    std::reference_wrapper<EventComponent> event_component);
+    std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<CameraComponent> camera_component);
 
 void render(
     std::reference_wrapper<const GrMaterialComponent> gr_material_component,
