@@ -57,7 +57,7 @@ class InputComponent {
     canvas_size.height = 0;
   }
 
-  std::map<InputKey, bool> pressed_key_map;
+  std::unordered_map<InputKey, bool> pressed_key_map;
   bool is_pointer_down;
   PointerPosition pointer_position;
   CanvasSize canvas_size;
