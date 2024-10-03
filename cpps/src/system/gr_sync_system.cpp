@@ -30,6 +30,16 @@
 
 #include "./shader/util.h"
 
+// TODO: move to util
+glm::vec3 getPositionOnSphere(float radius, float phi, float theta) {
+  return glm::vec3(radius * sin(phi) * sin(theta), radius * cos(phi),
+                   radius * sin(phi) * cos(theta));
+}
+
+glm::vec3 getUpOnSphere(float phi, float theta) {
+  return glm::vec3(-cos(phi) * sin(theta), sin(phi), -cos(phi) * cos(theta));
+}
+
 namespace gr_sync_system {
 
 void updateGeometry(
@@ -186,9 +196,15 @@ void updateCameraUniform(
     alignas(16) glm::vec3 eye;
   };
 
-  const auto& front = camera_component.get().front;
-  const auto& up = camera_component.get().up;
-  const auto& position = camera_component.get().position;
+  float radius = camera_component.get().radius;
+  float phi = camera_component.get().phi;
+  float theta = camera_component.get().theta;
+
+  const auto& position = getPositionOnSphere(radius, phi, theta);
+  const auto& up = getUpOnSphere(phi, theta);
+
+  const auto& front = glm::normalize(-position);  // target is origin
+
   const auto fovy = camera_component.get().fovy;
   float aspect_ratio =
       static_cast<float>(input_component.get().canvas_size.width) /

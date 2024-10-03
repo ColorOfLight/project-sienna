@@ -25,34 +25,33 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 class CameraComponent {
  public:
   CameraComponent() {
-    position = glm::vec3(1.0f, 1.0f, 3.0f);
-    front = glm::normalize(-position);
+    radius = 3.0f;
+    phi = glm::pi<float>() / 3.0f;
+    theta = glm::pi<float>() / 4.0f;
 
-    glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 right = glm::normalize(glm::cross(front, world_up));
-
-    up = glm::normalize(glm::cross(right, front));
     fovy = glm::radians(55.0f);
     needs_update = true;
   }
 
   CameraComponent(float fovy) {
     // TODO: integrate with the default constructor
+    radius = 3.0f;
+    phi = glm::pi<float>() / 3.0f;
+    theta = glm::pi<float>() / 4.0f;
 
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
-    front = glm::vec3(0.0f, 0.0f, -1.0f);
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
     this->fovy = fovy;
     needs_update = true;
   }
 
-  glm::vec3 position;
-  glm::vec3 front;
-  glm::vec3 up;
+  float radius;
+  float phi;    // Angle in radians from the positive Y-axis to positive Z-axis
+  float theta;  // Angle in radians from the positive Z-axis to positive X-axis
+
   float fovy;
   bool needs_update;
 };

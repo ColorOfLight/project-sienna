@@ -24,12 +24,60 @@
 
 #include "./system/transform_system.h"
 
+#include <cmath>
+#include <glm/gtc/constants.hpp>
+
 namespace transform_system {
 
+const float rotation_speed = glm::pi<float>() * 2.0f / 1000.0f;
+
+float modulateRotation(float angle);
+
 void transformCamera(
+    float delta_ms,
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component) {
-  // TODO: implement in source file
+  const auto& pressed_key_map = input_component.get().pressed_key_map;
+
+  bool is_up =
+      pressed_key_map.at(InputKey::W) && !pressed_key_map.at(InputKey::S);
+  bool is_down =
+      !pressed_key_map.at(InputKey::W) && pressed_key_map.at(InputKey::S);
+  bool is_left =
+      pressed_key_map.at(InputKey::A) && !pressed_key_map.at(InputKey::D);
+  bool is_right =
+      !pressed_key_map.at(InputKey::A) && pressed_key_map.at(InputKey::D);
+
+  if (is_up) {
+    camera_component.get().phi -= rotation_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_down) {
+    camera_component.get().phi += rotation_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_left) {
+    camera_component.get().theta -= rotation_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_right) {
+    camera_component.get().theta += rotation_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+}
+
+float modulateRotation(float angle) {
+  float range = -glm::two_pi<float>();
+
+  float modValue = std::fmod(angle, range);
+
+  if (modValue > 0.0f) {
+    modValue += range;
+  }
+  return modValue;
 }
 
 }  // namespace transform_system

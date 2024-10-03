@@ -4007,6 +4007,17 @@ var ___cxa_can_catch = createExportWrapper('__cxa_can_catch', 3);
 var ___cxa_is_pointer_type = createExportWrapper('__cxa_is_pointer_type', 1);
 var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji', 5);
 
+function invoke_iii(index,a1,a2) {
+  var sp = stackSave();
+  try {
+    return getWasmTableEntry(index)(a1,a2);
+  } catch(e) {
+    stackRestore(sp);
+    if (!(e instanceof EmscriptenEH)) throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_ii(index,a1) {
   var sp = stackSave();
   try {
@@ -4022,17 +4033,6 @@ function invoke_v(index) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)();
-  } catch(e) {
-    stackRestore(sp);
-    if (!(e instanceof EmscriptenEH)) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iii(index,a1,a2) {
-  var sp = stackSave();
-  try {
-    return getWasmTableEntry(index)(a1,a2);
   } catch(e) {
     stackRestore(sp);
     if (!(e instanceof EmscriptenEH)) throw e;

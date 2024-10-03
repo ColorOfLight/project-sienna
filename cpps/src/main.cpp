@@ -34,6 +34,7 @@
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
 #include "./system/render_system.h"
+#include "./system/transform_system.h"
 
 static std::function<void(float, float)> static_main_loop;
 static double start_time = emscripten_get_now();
@@ -85,7 +86,7 @@ int main() {
   auto main_loop = [game_entity = std::ref(game_entity),
                     player_entity = std::ref(player_entity),
                     washable_entity = std::ref(washable_entity),
-                    render_items](float elapsed_time, float delta_time) {
+                    render_items](float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(
         std::ref(*game_entity.get()->input_component));
     client_sync_system::consumeEvent(
@@ -94,6 +95,10 @@ int main() {
     render_system::adjustViewportSize(
         std::cref(*game_entity.get()->input_component),
         std::ref(*game_entity.get()->event_component),
+        std::ref(*player_entity.get()->camera_component));
+
+    transform_system::transformCamera(
+        delta_ms, std::cref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component));
 
     gr_sync_system::updateCameraUniform(
