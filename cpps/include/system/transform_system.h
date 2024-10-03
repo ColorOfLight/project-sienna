@@ -30,6 +30,7 @@
 namespace transform_system {
 
 void transformCamera(
+    float delta_ms,
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
