@@ -114,7 +114,7 @@ inline const std::string phong_fragment = R"(#version 300 es
         vec3 directionalDiffuseColor = g_material_diffuse * max(dot(normal, lightVector), 0.0) * g_material_color * g_directional_color * g_directional_intensity;
 
         vec3 viewVector = normalize(u_camera_eye - v_position);
-        vec3 reflection = reflect(g_directional_direction, normal);
+        vec3 reflection = reflect(-lightVector, normal);
         vec3 directionalSpecularColor = g_material_specular * pow(max(0.0, dot(reflection, viewVector)), g_material_alpha) * g_directional_color * g_directional_intensity;
         
         vec3 color = ambientColor + directionalDiffuseColor + directionalSpecularColor;
