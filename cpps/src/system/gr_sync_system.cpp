@@ -28,17 +28,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "./math_util.h"
 #include "./shader/util.h"
-
-// TODO: move to util
-glm::vec3 getPositionOnSphere(float radius, float phi, float theta) {
-  return glm::vec3(radius * sin(phi) * sin(theta), radius * cos(phi),
-                   radius * sin(phi) * cos(theta));
-}
-
-glm::vec3 getUpOnSphere(float phi, float theta) {
-  return glm::vec3(-cos(phi) * sin(theta), sin(phi), -cos(phi) * cos(theta));
-}
 
 namespace gr_sync_system {
 
