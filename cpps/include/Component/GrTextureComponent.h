@@ -26,15 +26,9 @@
 
 class GrTextureComponent {
  public:
-  GrTextureComponent() {
-    texture_id = 0;
-    width = 0;
-    height = 0;
-  }
+  GrTextureComponent();
 
-  ~GrTextureComponent() {
-    // TODO: delete texture
-  }
+  ~GrTextureComponent();
 
   unsigned int texture_id;
   int width;

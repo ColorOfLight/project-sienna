@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrTextureComponent.h"
 
-#include <vector>
+#include <GLES3/gl3.h>
 
-class DirtMapComponent {
- public:
-  DirtMapComponent() {
-    cleanness = 1.0f;
-    width = 200;
-    height = 200;
-    area = 0.0f;
+GrTextureComponent::GrTextureComponent() {
+  width = 200;
+  height = 200;
 
-    dirt_map = std::vector<unsigned char>(width * height, 255);
-    needs_update = true;
-  }
+  glGenTextures(1, &texture_id);
+  glBindTexture(GL_TEXTURE_2D, texture_id);
 
-  float cleanness;
-  std::vector<unsigned char> dirt_map;
-  float area;
-  bool needs_update;
-  int width;
-  int height;
-};
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED,
+               GL_UNSIGNED_BYTE, nullptr);
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+GrTextureComponent::~GrTextureComponent() { glDeleteTextures(1, &texture_id); }

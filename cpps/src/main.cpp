@@ -111,6 +111,10 @@ int main() {
       gr_sync_system::updateTransformUniform(
           std::ref(*washable_part->transform_component),
           std::ref(*washable_part->gr_transform_uniform_component));
+
+      gr_sync_system::updateDirtTexture(
+          std::ref(*washable_part->dirt_map_component),
+          std::ref(*washable_part->gr_texture_component));
     }
 
     render_system::render(

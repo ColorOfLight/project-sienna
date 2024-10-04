@@ -55,7 +55,7 @@ void updateTransformUniform(
     std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
 void updateDirtTexture(
-    std::reference_wrapper<const DirtMapComponent> dirt_map_component,
+    std::reference_wrapper<DirtMapComponent> dirt_map_component,
     std::reference_wrapper<GrTextureComponent> gr_texture_component);
 
 }  // namespace gr_sync_system
