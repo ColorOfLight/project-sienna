@@ -114,7 +114,7 @@ int main() {
 
       gr_sync_system::updateDirtTexture(
           std::ref(*washable_part->dirt_map_component),
-          std::ref(*washable_part->gr_texture_component));
+          std::ref(*washable_part->gr_dirt_map_texture_component));
     }
 
     render_system::render(

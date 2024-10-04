@@ -26,10 +26,9 @@
 
 #include <GLES3/gl3.h>
 
-GrTextureComponent::GrTextureComponent() {
-  width = 200;
-  height = 200;
-
+GrTextureComponent::GrTextureComponent(const std::string& name, int width,
+                                       int height)
+    : name(name), width(width), height(height) {
   glGenTextures(1, &texture_id);
   glBindTexture(GL_TEXTURE_2D, texture_id);
 

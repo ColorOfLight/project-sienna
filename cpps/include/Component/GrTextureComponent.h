@@ -24,13 +24,16 @@
 
 #pragma once
 
+#include <string>
+
 class GrTextureComponent {
  public:
-  GrTextureComponent();
+  GrTextureComponent(const std::string& name, int width, int height);
 
   ~GrTextureComponent();
 
   unsigned int texture_id;
+  std::string name;
   int width;
   int height;
 };

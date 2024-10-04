@@ -27,10 +27,15 @@
 WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
                                        glm::vec3 scale, glm::quat rotation,
                                        glm::vec3 translation) {
+  int dirt_map_width = 200;
+  int dirt_map_height = 200;
+
   clean_mark_component = std::make_unique<CleanMarkComponent>();
-  dirt_map_component = std::make_unique<DirtMapComponent>();
+  dirt_map_component =
+      std::make_unique<DirtMapComponent>(dirt_map_width, dirt_map_height);
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
-  gr_texture_component = std::make_unique<GrTextureComponent>();
+  gr_dirt_map_texture_component = std::make_unique<GrTextureComponent>(
+      "dirtMapTexture", dirt_map_width, dirt_map_height);
   gr_transform_uniform_component =
       std::make_unique<GrUniformComponent>("ModelBlock");
 

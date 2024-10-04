@@ -38,17 +38,6 @@ enum class WashablePartPreset { CUBE_PART };
 
 class WashablePartEntity {
  public:
-  WashablePartEntity() {
-    clean_mark_component = std::make_unique<CleanMarkComponent>();
-    dirt_map_component = std::make_unique<DirtMapComponent>();
-    geometry_component = std::make_unique<GeometryComponent>();
-    gr_geometry_component = std::make_unique<GrGeometryComponent>();
-    gr_texture_component = std::make_unique<GrTextureComponent>();
-    gr_transform_uniform_component =
-        std::make_unique<GrUniformComponent>("ModelBlock");
-    transform_component = std::make_unique<TransformComponent>();
-  }
-
   WashablePartEntity(WashablePartPreset preset, glm::vec3 scale,
                      glm::quat rotation, glm::vec3 translation);
 
@@ -56,7 +45,7 @@ class WashablePartEntity {
   std::unique_ptr<DirtMapComponent> dirt_map_component;
   std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
-  std::unique_ptr<GrTextureComponent> gr_texture_component;
+  std::unique_ptr<GrTextureComponent> gr_dirt_map_texture_component;
   std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
 };
