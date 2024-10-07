@@ -88,6 +88,8 @@ inline const std::string phong_fragment = R"(#version 300 es
         vec3 u_camera_eye;
     };
 
+    uniform sampler2D u_dirtMapTexture;
+
     vec3 g_material_color = vec3(1.0, 0.0, 0.0);
     float g_material_diffuse = 0.5;
     float g_material_specular = 0.5;
@@ -102,22 +104,26 @@ inline const std::string phong_fragment = R"(#version 300 es
 
     in vec3 v_normal;
     in vec3 v_position;
+    in vec2 v_texCoord;
 
     out vec4 FragColor;
 
     void main()
     {
-        vec3 ambientColor = g_material_color * g_ambient_color * g_ambient_intensity * g_material_diffuse;
+        float dirt = texture(u_dirtMapTexture, v_texCoord).r;
+        vec3 material_color = mix(g_material_color, vec3(0.5, 0.5, 0.5), dirt);
+
+        vec3 ambientColor = material_color * g_ambient_color * g_ambient_intensity * g_material_diffuse;
 
         vec3 normal = normalize(v_normal);
         vec3 lightVector = normalize(-g_directional_direction);
-        vec3 directionalDiffuseColor = g_material_diffuse * max(dot(normal, lightVector), 0.0) * g_material_color * g_directional_color * g_directional_intensity;
+        vec3 directionalDiffuseColor = g_material_diffuse * max(dot(normal, lightVector), 0.0) * material_color * g_directional_color * g_directional_intensity;
 
         vec3 viewVector = normalize(u_camera_eye - v_position);
         vec3 reflection = reflect(-lightVector, normal);
         vec3 directionalSpecularColor = g_material_specular * pow(max(0.0, dot(reflection, viewVector)), g_material_alpha) * g_directional_color * g_directional_intensity;
         
-        vec3 color = ambientColor + directionalDiffuseColor + directionalSpecularColor;
+        vec3 color = ambientColor + directionalDiffuseColor + directionalSpecularColor * (1.0 - dirt);
         FragColor = vec4(color, 1.0);
     }
 )";

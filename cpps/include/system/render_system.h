@@ -38,6 +38,8 @@ struct RenderItem {
   std::reference_wrapper<const GrGeometryComponent> gr_geometry_component;
   std::vector<std::reference_wrapper<const GrUniformComponent>>
       gr_uniform_components;
+  std::vector<std::reference_wrapper<const GrTextureComponent>>
+      gr_texture_components;
 };
 
 namespace render_system {

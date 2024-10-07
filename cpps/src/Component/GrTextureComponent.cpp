@@ -37,7 +37,7 @@ GrTextureComponent::GrTextureComponent(const std::string& name, int width,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED,
                GL_UNSIGNED_BYTE, nullptr);
 
   glBindTexture(GL_TEXTURE_2D, 0);

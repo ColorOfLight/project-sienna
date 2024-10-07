@@ -80,6 +80,10 @@ int main() {
                 std::cref(*player_entity.get()->gr_camera_uniform_component),
                 std::cref(*washable_part.get()->gr_transform_uniform_component),
             }),
+        .gr_texture_components =
+            std::vector<std::reference_wrapper<const GrTextureComponent>>({
+                std::cref(*washable_part.get()->gr_dirt_map_texture_component),
+            }),
     });
   }
 
