@@ -80,6 +80,10 @@ int main() {
                 std::cref(*player_entity.get()->gr_camera_uniform_component),
                 std::cref(*washable_part.get()->gr_transform_uniform_component),
             }),
+        .gr_texture_components =
+            std::vector<std::reference_wrapper<const GrTextureComponent>>({
+                std::cref(*washable_part.get()->gr_dirt_map_texture_component),
+            }),
     });
   }
 
@@ -111,6 +115,10 @@ int main() {
       gr_sync_system::updateTransformUniform(
           std::ref(*washable_part->transform_component),
           std::ref(*washable_part->gr_transform_uniform_component));
+
+      gr_sync_system::updateDirtTexture(
+          std::ref(*washable_part->dirt_map_component),
+          std::ref(*washable_part->gr_dirt_map_texture_component));
     }
 
     render_system::render(

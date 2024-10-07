@@ -59,6 +59,7 @@ vars: {
     label: GrTextureComponent
 
     + texture_id: uint
+    + name: string
     + width: int
     + height: int
   }
@@ -135,8 +136,10 @@ WashablePartEntity: {
     shape: class
 
     + cleanness: float
-    + dirt_map: "float[][]"
+    + dirt_map: "uchar[][]"
     + area: float
+    + width: int
+    + height: int
     + needs_update: bool
   }
 
@@ -376,7 +379,7 @@ Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
 # Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
 # Systems.GrSyncSystem <-> WashablePartEntity.TransformComponent
 # Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
-# Systems.GrSyncSystem <- WashablePartEntity.DirtMapComponent
+# Systems.GrSyncSystem <-> WashablePartEntity.DirtMapComponent
 # Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
 
 # RenderSystem

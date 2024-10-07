@@ -28,15 +28,18 @@
 
 class DirtMapComponent {
  public:
-  DirtMapComponent() {
+  DirtMapComponent(int width, int height) : width(width), height(height) {
     cleanness = 1.0f;
-    dirt_map = std::vector<std::vector<float>>();
     area = 0.0f;
+
+    dirt_map = std::vector<unsigned char>(width * height, 255);
     needs_update = true;
   }
 
   float cleanness;
-  std::vector<std::vector<float>> dirt_map;
+  std::vector<unsigned char> dirt_map;
   float area;
   bool needs_update;
+  int width;
+  int height;
 };

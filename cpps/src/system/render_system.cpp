@@ -76,6 +76,7 @@ void render(
   for (const auto& render_item : render_items) {
     const auto& gr_geometry_component = render_item.gr_geometry_component;
     const auto& gr_uniform_components = render_item.gr_uniform_components;
+    const auto& gr_texture_components = render_item.gr_texture_components;
 
     glBindVertexArray(gr_geometry_component.get().vao_id);
 
@@ -89,6 +90,16 @@ void render(
       glUniformBlockBinding(shader_program_id, block_index,
                             uniform_binging_point);
       uniform_binging_point++;
+    }
+
+    int texture_unit = 0;
+    for (const auto& gr_texture_component : gr_texture_components) {
+      glUniform1i(glGetUniformLocation(shader_program_id,
+                                       gr_texture_component.get().name.c_str()),
+                  texture_unit);
+      glActiveTexture(GL_TEXTURE0 + texture_unit);
+      glBindTexture(GL_TEXTURE_2D, gr_texture_component.get().texture_id);
+      texture_unit++;
     }
 
     glDrawElements(GL_TRIANGLES, gr_geometry_component.get().vertex_count,

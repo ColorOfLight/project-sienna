@@ -22,18 +22,25 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrTextureComponent.h"
 
-#include <string>
+#include <GLES3/gl3.h>
 
-class GrTextureComponent {
- public:
-  GrTextureComponent(const std::string& name, int width, int height);
+GrTextureComponent::GrTextureComponent(const std::string& name, int width,
+                                       int height)
+    : name(name), width(width), height(height) {
+  glGenTextures(1, &texture_id);
+  glBindTexture(GL_TEXTURE_2D, texture_id);
 
-  ~GrTextureComponent();
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  unsigned int texture_id;
-  std::string name;
-  int width;
-  int height;
-};
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED,
+               GL_UNSIGNED_BYTE, nullptr);
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+GrTextureComponent::~GrTextureComponent() { glDeleteTextures(1, &texture_id); }

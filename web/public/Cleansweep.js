@@ -3498,6 +3498,8 @@ function dbg(...args) {
       return 0;
     };
 
+  var _glActiveTexture = (x0) => GLctx.activeTexture(x0);
+
   var _glAttachShader = (program, shader) => {
       GLctx.attachShader(GL.programs[program], GL.shaders[shader]);
     };
@@ -3524,6 +3526,10 @@ function dbg(...args) {
 
   var _glBindBufferBase = (target, index, buffer) => {
       GLctx.bindBufferBase(target, index, GL.buffers[buffer]);
+    };
+
+  var _glBindTexture = (target, texture) => {
+      GLctx.bindTexture(target, GL.textures[texture]);
     };
 
   var _glBindVertexArray = (vao) => {
@@ -3624,6 +3630,19 @@ function dbg(...args) {
       GL.shaders[id] = null;
     };
 
+  var _glDeleteTextures = (n, textures) => {
+      for (var i = 0; i < n; i++) {
+        var id = HEAP32[(((textures)+(i*4))>>2)];
+        var texture = GL.textures[id];
+        // GL spec: "glDeleteTextures silently ignores 0s and names that do not
+        // correspond to existing textures".
+        if (!texture) continue;
+        GLctx.deleteTexture(texture);
+        texture.name = 0;
+        GL.textures[id] = null;
+      }
+    };
+
   var _glDeleteVertexArrays = (n, vaos) => {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[(((vaos)+(i*4))>>2)];
@@ -3646,6 +3665,11 @@ function dbg(...args) {
 
   var _glGenBuffers = (n, buffers) => {
       GL.genObject(n, buffers, 'createBuffer', GL.buffers
+        );
+    };
+
+  var _glGenTextures = (n, textures) => {
+      GL.genObject(n, textures, 'createTexture', GL.textures
         );
     };
 
@@ -3747,6 +3771,103 @@ function dbg(...args) {
       return GLctx.getUniformBlockIndex(GL.programs[program], UTF8ToString(uniformBlockName));
     };
 
+  /** @suppress {checkTypes} */
+  var jstoi_q = (str) => parseInt(str);
+  
+  /** @noinline */
+  var webglGetLeftBracePos = (name) => name.slice(-1) == ']' && name.lastIndexOf('[');
+  
+  var webglPrepareUniformLocationsBeforeFirstUse = (program) => {
+      var uniformLocsById = program.uniformLocsById, // Maps GLuint -> WebGLUniformLocation
+        uniformSizeAndIdsByName = program.uniformSizeAndIdsByName, // Maps name -> [uniform array length, GLuint]
+        i, j;
+  
+      // On the first time invocation of glGetUniformLocation on this shader program:
+      // initialize cache data structures and discover which uniforms are arrays.
+      if (!uniformLocsById) {
+        // maps GLint integer locations to WebGLUniformLocations
+        program.uniformLocsById = uniformLocsById = {};
+        // maps integer locations back to uniform name strings, so that we can lazily fetch uniform array locations
+        program.uniformArrayNamesById = {};
+  
+        for (i = 0; i < GLctx.getProgramParameter(program, 0x8B86/*GL_ACTIVE_UNIFORMS*/); ++i) {
+          var u = GLctx.getActiveUniform(program, i);
+          var nm = u.name;
+          var sz = u.size;
+          var lb = webglGetLeftBracePos(nm);
+          var arrayName = lb > 0 ? nm.slice(0, lb) : nm;
+  
+          // Assign a new location.
+          var id = program.uniformIdCounter;
+          program.uniformIdCounter += sz;
+          // Eagerly get the location of the uniformArray[0] base element.
+          // The remaining indices >0 will be left for lazy evaluation to
+          // improve performance. Those may never be needed to fetch, if the
+          // application fills arrays always in full starting from the first
+          // element of the array.
+          uniformSizeAndIdsByName[arrayName] = [sz, id];
+  
+          // Store placeholder integers in place that highlight that these
+          // >0 index locations are array indices pending population.
+          for (j = 0; j < sz; ++j) {
+            uniformLocsById[id] = j;
+            program.uniformArrayNamesById[id++] = arrayName;
+          }
+        }
+      }
+    };
+  
+  
+  
+  var _glGetUniformLocation = (program, name) => {
+  
+      name = UTF8ToString(name);
+  
+      if (program = GL.programs[program]) {
+        webglPrepareUniformLocationsBeforeFirstUse(program);
+        var uniformLocsById = program.uniformLocsById; // Maps GLuint -> WebGLUniformLocation
+        var arrayIndex = 0;
+        var uniformBaseName = name;
+  
+        // Invariant: when populating integer IDs for uniform locations, we must
+        // maintain the precondition that arrays reside in contiguous addresses,
+        // i.e. for a 'vec4 colors[10];', colors[4] must be at location
+        // colors[0]+4.  However, user might call glGetUniformLocation(program,
+        // "colors") for an array, so we cannot discover based on the user input
+        // arguments whether the uniform we are dealing with is an array. The only
+        // way to discover which uniforms are arrays is to enumerate over all the
+        // active uniforms in the program.
+        var leftBrace = webglGetLeftBracePos(name);
+  
+        // If user passed an array accessor "[index]", parse the array index off the accessor.
+        if (leftBrace > 0) {
+          arrayIndex = jstoi_q(name.slice(leftBrace + 1)) >>> 0; // "index]", coerce parseInt(']') with >>>0 to treat "foo[]" as "foo[0]" and foo[-1] as unsigned out-of-bounds.
+          uniformBaseName = name.slice(0, leftBrace);
+        }
+  
+        // Have we cached the location of this uniform before?
+        // A pair [array length, GLint of the uniform location]
+        var sizeAndId = program.uniformSizeAndIdsByName[uniformBaseName];
+  
+        // If an uniform with this name exists, and if its index is within the
+        // array limits (if it's even an array), query the WebGLlocation, or
+        // return an existing cached location.
+        if (sizeAndId && arrayIndex < sizeAndId[0]) {
+          arrayIndex += sizeAndId[1]; // Add the base location of the uniform to the array index offset.
+          if ((uniformLocsById[arrayIndex] = uniformLocsById[arrayIndex] || GLctx.getUniformLocation(program, name))) {
+            return arrayIndex;
+          }
+        }
+      }
+      else {
+        // N.b. we are currently unable to distinguish between GL program IDs that
+        // never existed vs GL program IDs that have been deleted, so report
+        // GL_INVALID_VALUE in both cases.
+        GL.recordError(0x501 /* GL_INVALID_VALUE */);
+      }
+      return -1;
+    };
+
   var _glLinkProgram = (program) => {
       program = GL.programs[program];
       GLctx.linkProgram(program);
@@ -3760,6 +3881,139 @@ function dbg(...args) {
       var source = GL.getSource(shader, count, string, length);
   
       GLctx.shaderSource(GL.shaders[shader], source);
+    };
+
+  var computeUnpackAlignedImageSize = (width, height, sizePerPixel) => {
+      function roundedToNextMultipleOf(x, y) {
+        return (x + y - 1) & -y;
+      }
+      var plainRowSize = (GL.unpackRowLength || width) * sizePerPixel;
+      var alignedRowSize = roundedToNextMultipleOf(plainRowSize, GL.unpackAlignment);
+      return height * alignedRowSize;
+    };
+  
+  var colorChannelsInGlTextureFormat = (format) => {
+      // Micro-optimizations for size: map format to size by subtracting smallest
+      // enum value (0x1902) from all values first.  Also omit the most common
+      // size value (1) from the list, which is assumed by formats not on the
+      // list.
+      var colorChannels = {
+        // 0x1902 /* GL_DEPTH_COMPONENT */ - 0x1902: 1,
+        // 0x1906 /* GL_ALPHA */ - 0x1902: 1,
+        5: 3,
+        6: 4,
+        // 0x1909 /* GL_LUMINANCE */ - 0x1902: 1,
+        8: 2,
+        29502: 3,
+        29504: 4,
+        // 0x1903 /* GL_RED */ - 0x1902: 1,
+        26917: 2,
+        26918: 2,
+        // 0x8D94 /* GL_RED_INTEGER */ - 0x1902: 1,
+        29846: 3,
+        29847: 4
+      };
+      return colorChannels[format - 0x1902]||1;
+    };
+  
+  var heapObjectForWebGLType = (type) => {
+      // Micro-optimization for size: Subtract lowest GL enum number (0x1400/* GL_BYTE */) from type to compare
+      // smaller values for the heap, for shorter generated code size.
+      // Also the type HEAPU16 is not tested for explicitly, but any unrecognized type will return out HEAPU16.
+      // (since most types are HEAPU16)
+      type -= 0x1400;
+      if (type == 0) return HEAP8;
+  
+      if (type == 1) return HEAPU8;
+  
+      if (type == 2) return HEAP16;
+  
+      if (type == 4) return HEAP32;
+  
+      if (type == 6) return HEAPF32;
+  
+      if (type == 5
+        || type == 28922
+        || type == 28520
+        || type == 30779
+        || type == 30782
+        )
+        return HEAPU32;
+  
+      return HEAPU16;
+    };
+  
+  var toTypedArrayIndex = (pointer, heap) =>
+      pointer >>> (31 - Math.clz32(heap.BYTES_PER_ELEMENT));
+  
+  var emscriptenWebGLGetTexPixelData = (type, format, width, height, pixels, internalFormat) => {
+      var heap = heapObjectForWebGLType(type);
+      var sizePerPixel = colorChannelsInGlTextureFormat(format) * heap.BYTES_PER_ELEMENT;
+      var bytes = computeUnpackAlignedImageSize(width, height, sizePerPixel);
+      return heap.subarray(toTypedArrayIndex(pixels, heap), toTypedArrayIndex(pixels + bytes, heap));
+    };
+  
+  
+  
+  var _glTexImage2D = (target, level, internalFormat, width, height, border, format, type, pixels) => {
+      if (true) {
+        if (GLctx.currentPixelUnpackBufferBinding) {
+          GLctx.texImage2D(target, level, internalFormat, width, height, border, format, type, pixels);
+          return;
+        }
+        if (pixels) {
+          var heap = heapObjectForWebGLType(type);
+          var index = toTypedArrayIndex(pixels, heap);
+          GLctx.texImage2D(target, level, internalFormat, width, height, border, format, type, heap, index);
+          return;
+        }
+      }
+      var pixelData = pixels ? emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, internalFormat) : null;
+      GLctx.texImage2D(target, level, internalFormat, width, height, border, format, type, pixelData);
+    };
+
+  var _glTexParameteri = (x0, x1, x2) => GLctx.texParameteri(x0, x1, x2);
+
+  
+  
+  
+  var _glTexSubImage2D = (target, level, xoffset, yoffset, width, height, format, type, pixels) => {
+      if (true) {
+        if (GLctx.currentPixelUnpackBufferBinding) {
+          GLctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+          return;
+        }
+        if (pixels) {
+          var heap = heapObjectForWebGLType(type);
+          GLctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, heap, toTypedArrayIndex(pixels, heap));
+          return;
+        }
+      }
+      var pixelData = pixels ? emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, 0) : null;
+      GLctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixelData);
+    };
+
+  var webglGetUniformLocation = (location) => {
+      var p = GLctx.currentProgram;
+  
+      if (p) {
+        var webglLoc = p.uniformLocsById[location];
+        // p.uniformLocsById[location] stores either an integer, or a
+        // WebGLUniformLocation.
+        // If an integer, we have not yet bound the location, so do it now. The
+        // integer value specifies the array index we should bind to.
+        if (typeof webglLoc == 'number') {
+          p.uniformLocsById[location] = webglLoc = GLctx.getUniformLocation(p, p.uniformArrayNamesById[location] + (webglLoc > 0 ? `[${webglLoc}]` : ''));
+        }
+        // Else an already cached WebGLUniformLocation, return it.
+        return webglLoc;
+      } else {
+        GL.recordError(0x502/*GL_INVALID_OPERATION*/);
+      }
+    };
+  
+  var _glUniform1i = (location, v0) => {
+      GLctx.uniform1i(webglGetUniformLocation(location), v0);
     };
 
   var _glUniformBlockBinding = (program, uniformBlockIndex, uniformBlockBinding) => {
@@ -3906,11 +4160,15 @@ var wasmImports = {
   /** @export */
   fd_write: _fd_write,
   /** @export */
+  glActiveTexture: _glActiveTexture,
+  /** @export */
   glAttachShader: _glAttachShader,
   /** @export */
   glBindBuffer: _glBindBuffer,
   /** @export */
   glBindBufferBase: _glBindBufferBase,
+  /** @export */
+  glBindTexture: _glBindTexture,
   /** @export */
   glBindVertexArray: _glBindVertexArray,
   /** @export */
@@ -3932,6 +4190,8 @@ var wasmImports = {
   /** @export */
   glDeleteShader: _glDeleteShader,
   /** @export */
+  glDeleteTextures: _glDeleteTextures,
+  /** @export */
   glDeleteVertexArrays: _glDeleteVertexArrays,
   /** @export */
   glDrawElements: _glDrawElements,
@@ -3941,6 +4201,8 @@ var wasmImports = {
   glEnableVertexAttribArray: _glEnableVertexAttribArray,
   /** @export */
   glGenBuffers: _glGenBuffers,
+  /** @export */
+  glGenTextures: _glGenTextures,
   /** @export */
   glGenVertexArrays: _glGenVertexArrays,
   /** @export */
@@ -3954,9 +4216,19 @@ var wasmImports = {
   /** @export */
   glGetUniformBlockIndex: _glGetUniformBlockIndex,
   /** @export */
+  glGetUniformLocation: _glGetUniformLocation,
+  /** @export */
   glLinkProgram: _glLinkProgram,
   /** @export */
   glShaderSource: _glShaderSource,
+  /** @export */
+  glTexImage2D: _glTexImage2D,
+  /** @export */
+  glTexParameteri: _glTexParameteri,
+  /** @export */
+  glTexSubImage2D: _glTexSubImage2D,
+  /** @export */
+  glUniform1i: _glUniform1i,
   /** @export */
   glUniformBlockBinding: _glUniformBlockBinding,
   /** @export */
@@ -4126,7 +4398,6 @@ var missingLibrarySymbols = [
   'randomFill',
   'emscriptenLog',
   'readEmAsmArgs',
-  'jstoi_q',
   'getExecutableName',
   'listenOnce',
   'autoResumeAudioContext',
@@ -4234,16 +4505,8 @@ var missingLibrarySymbols = [
   'FS_createDataFile',
   'FS_mkdirTree',
   '_setNetworkCallback',
-  'heapObjectForWebGLType',
-  'toTypedArrayIndex',
   'emscriptenWebGLGet',
-  'computeUnpackAlignedImageSize',
-  'colorChannelsInGlTextureFormat',
-  'emscriptenWebGLGetTexPixelData',
   'emscriptenWebGLGetUniform',
-  'webglGetUniformLocation',
-  'webglPrepareUniformLocationsBeforeFirstUse',
-  'webglGetLeftBracePos',
   'emscriptenWebGLGetVertexAttrib',
   '__glGetActiveAttribOrUniform',
   'writeGLArray',
@@ -4348,6 +4611,7 @@ var unexportedSymbols = [
   'timers',
   'warnOnce',
   'readEmAsmArgsArray',
+  'jstoi_q',
   'jstoi_s',
   'handleException',
   'keepRuntimeAlive',
@@ -4414,8 +4678,16 @@ var unexportedSymbols = [
   'tempFixedLengthArray',
   'miniTempWebGLFloatBuffers',
   'miniTempWebGLIntBuffers',
+  'heapObjectForWebGLType',
+  'toTypedArrayIndex',
   'webgl_enable_WEBGL_multi_draw',
   'GL',
+  'computeUnpackAlignedImageSize',
+  'colorChannelsInGlTextureFormat',
+  'emscriptenWebGLGetTexPixelData',
+  'webglGetUniformLocation',
+  'webglPrepareUniformLocationsBeforeFirstUse',
+  'webglGetLeftBracePos',
   'AL',
   'GLUT',
   'EGL',
