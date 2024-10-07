@@ -37,3 +37,16 @@ inline glm::vec3 getUpOnSphere(float phi, float theta) {
   return glm::vec3(-std::cos(phi) * std::sin(theta), std::sin(phi),
                    -std::cos(phi) * std::cos(theta));
 }
+
+inline glm::mat4x4 getTransformMatrix(const glm::vec3& scale,
+                                      const glm::quat& rotation,
+                                      const glm::vec3& translation) {
+  // Order matters: scale -> rotate -> translate
+  // Due to right multiplication of matrices
+  glm::mat4 model_matrix = glm::mat4(1.0f);
+  model_matrix = glm::translate(model_matrix, translation);
+  model_matrix = model_matrix * glm::mat4_cast(rotation);
+  model_matrix = glm::scale(model_matrix, scale);
+
+  return model_matrix;
+}
