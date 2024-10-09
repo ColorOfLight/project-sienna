@@ -47,8 +47,7 @@ void markToClean(
     std::vector<std::reference_wrapper<CleanMarkComponent>>
         clean_mark_components);
 
-void clean(
-    std::reference_wrapper<const CleanMarkComponent> clean_mark_component,
-    std::reference_wrapper<DirtMapComponent> dirt_map_component);
+void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
+           std::reference_wrapper<DirtMapComponent> dirt_map_component);
 
 }  // namespace clean_system

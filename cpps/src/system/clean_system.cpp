@@ -109,19 +109,46 @@ void markToClean(
     }
   }
 
-  // 4. Mark the shortest distance index
   if (shortest_distance_index == -1) {
     return;
   }
 
+  // 4. Mark the shortest distance index
   clean_mark_components[shortest_distance_index].get().clean_marks.push_back(
       {texture_coords, cleaner_component.get().hitting_radius});
 }
 
-void clean(
-    std::reference_wrapper<const CleanMarkComponent> clean_mark_component,
-    std::reference_wrapper<DirtMapComponent> dirt_map_component) {
-  // TODO: implement in source file
+void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
+           std::reference_wrapper<DirtMapComponent> dirt_map_component) {
+  auto& clean_marks = clean_mark_component.get().clean_marks;
+
+  if (clean_marks.empty()) {
+    return;
+  }
+
+  for (const auto& clean_mark : clean_marks) {
+    auto texture_width = dirt_map_component.get().width;
+    auto texture_height = dirt_map_component.get().height;
+    auto& dirt_map = dirt_map_component.get().dirt_map;
+
+    for (int x = 0; x < texture_width; x++) {
+      for (int y = 0; y < texture_height; y++) {
+        auto dx = (static_cast<float>(x) / texture_width) -
+                  clean_mark.texture_coords.x;
+        auto dy = (static_cast<float>(y) / texture_height) -
+                  clean_mark.texture_coords.y;
+
+        if (dx * dx + dy * dy < clean_mark.radius * clean_mark.radius) {
+          auto& target_dirt = dirt_map[y * texture_width + x];
+          target_dirt = target_dirt > 4 ? target_dirt - 4 : 0;
+        }
+      }
+    }
+
+    dirt_map_component.get().needs_update = true;
+  }
+
+  clean_marks.clear();
 }
 
 }  // namespace clean_system

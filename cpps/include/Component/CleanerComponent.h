@@ -27,8 +27,8 @@
 class CleanerComponent {
  public:
   CleanerComponent() {
-    ray_radius = 0.0f;
-    hitting_radius = 0.0f;
+    ray_radius = 0.2f;
+    hitting_radius = 0.2f;
   }
 
   float ray_radius;

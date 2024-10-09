@@ -133,6 +133,13 @@ int main() {
           std::cref(*player_entity.get()->camera_component),
           std::cref(*player_entity.get()->cleaner_component),
           washable_geometries, washable_transforms, washable_clean_marks);
+
+      for (auto& washable_part :
+           washable_entity.get()->washable_part_entities) {
+        clean_system::clean(
+            std::ref(*washable_part.get()->clean_mark_component),
+            std::ref(*washable_part.get()->dirt_map_component));
+      }
     }
 
     for (const auto& washable_part :
