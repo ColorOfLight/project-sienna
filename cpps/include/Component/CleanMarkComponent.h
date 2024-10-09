@@ -28,7 +28,7 @@
 #include <vector>
 
 struct CleanMark {
-  glm::ivec2 texture_coords;
+  glm::vec2 texture_coords;
   float radius;
 };
 

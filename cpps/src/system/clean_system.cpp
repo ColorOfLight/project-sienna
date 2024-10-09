@@ -45,7 +45,8 @@ void markToClean(
   float ndcX = (2.0f * pointer_position.x) / canvas_size.width - 1.0f;
   float ndcY = 1.0f - (2.0f * pointer_position.y) / canvas_size.height;
 
-  float aspect_ratio = canvas_size.width / canvas_size.height;
+  float aspect_ratio =
+      static_cast<float>(canvas_size.width) / canvas_size.height;
   float tanHalfFov = tan(camera_component.get().fovy / 2.0f);
   float half_height = tanHalfFov;
   float half_width = aspect_ratio * tanHalfFov;
@@ -131,8 +132,8 @@ void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
     auto texture_height = dirt_map_component.get().height;
     auto& dirt_map = dirt_map_component.get().dirt_map;
 
-    for (int x = 0; x < texture_width; x++) {
-      for (int y = 0; y < texture_height; y++) {
+    for (int y = 0; y < texture_height; y++) {
+      for (int x = 0; x < texture_width; x++) {
         auto dx = (static_cast<float>(x) / texture_width) -
                   clean_mark.texture_coords.x;
         auto dy = (static_cast<float>(y) / texture_height) -
