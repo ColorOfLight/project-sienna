@@ -30,6 +30,7 @@
 #include "./Component/CleanMarkComponent.h"
 #include "./Component/CleanerComponent.h"
 #include "./Component/DirtMapComponent.h"
+#include "./Component/GeometryComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/TransformComponent.h"
 
@@ -39,9 +40,11 @@ void markToClean(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<const CameraComponent> camera_component,
     std::reference_wrapper<const CleanerComponent> cleaner_component,
+    std::vector<std::reference_wrapper<const GeometryComponent>>
+        geometry_components,
     std::vector<std::reference_wrapper<const TransformComponent>>
         transform_components,
-    std::vector<std::reference_wrapper<const CleanMarkComponent>>
+    std::vector<std::reference_wrapper<CleanMarkComponent>>
         clean_mark_components);
 
 void clean(

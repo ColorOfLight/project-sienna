@@ -31,6 +31,7 @@
 #include "./Entity/GameEntity.h"
 #include "./Entity/PlayerEntity.h"
 #include "./Entity/WashableEntity.h"
+#include "./system/clean_system.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
 #include "./system/render_system.h"
@@ -62,6 +63,21 @@ int main() {
   auto player_entity = std::make_unique<PlayerEntity>();
   auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
 
+  auto washable_geometries =
+      std::vector<std::reference_wrapper<const GeometryComponent>>();
+  auto washable_transforms =
+      std::vector<std::reference_wrapper<const TransformComponent>>();
+  auto washable_clean_marks =
+      std::vector<std::reference_wrapper<CleanMarkComponent>>();
+  for (const auto& washable_part : washable_entity->washable_part_entities) {
+    washable_geometries.push_back(
+        std::ref(*washable_part.get()->geometry_component));
+    washable_transforms.push_back(
+        std::ref(*washable_part.get()->transform_component));
+    washable_clean_marks.push_back(
+        std::ref(*washable_part.get()->clean_mark_component));
+  }
+
   gr_sync_system::updateMaterial(
       std::cref(*washable_entity->material_component),
       std::ref(*washable_entity->gr_material_component));
@@ -89,8 +105,9 @@ int main() {
 
   auto main_loop = [game_entity = std::ref(game_entity),
                     player_entity = std::ref(player_entity),
-                    washable_entity = std::ref(washable_entity),
-                    render_items](float elapsed_ms, float delta_ms) {
+                    washable_entity = std::ref(washable_entity), render_items,
+                    washable_geometries, washable_transforms,
+                    washable_clean_marks](float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(
         std::ref(*game_entity.get()->input_component));
     client_sync_system::consumeEvent(
@@ -109,6 +126,14 @@ int main() {
         std::cref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component),
         std::ref(*player_entity.get()->gr_camera_uniform_component));
+
+    if (game_entity.get()->input_component.get()->is_pointer_down) {
+      clean_system::markToClean(
+          std::cref(*game_entity.get()->input_component),
+          std::cref(*player_entity.get()->camera_component),
+          std::cref(*player_entity.get()->cleaner_component),
+          washable_geometries, washable_transforms, washable_clean_marks);
+    }
 
     for (const auto& washable_part :
          washable_entity.get()->washable_part_entities) {

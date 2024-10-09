@@ -26,6 +26,7 @@
 
 #include <cmath>
 #include <glm/glm.hpp>
+#include <optional>
 
 inline glm::vec3 getPositionOnSphere(float radius, float phi, float theta) {
   return glm::vec3(radius * std::sin(phi) * std::sin(theta),
@@ -49,4 +50,50 @@ inline glm::mat4x4 getTransformMatrix(const glm::vec3& scale,
   model_matrix = glm::scale(model_matrix, scale);
 
   return model_matrix;
+}
+
+struct RayIntersectionResultSet {
+  float distance;
+  float u;
+  float v;
+};
+
+typedef std::optional<RayIntersectionResultSet> RayIntersectionResult;
+
+inline RayIntersectionResult getRayIntersectionDistance(
+    const glm::vec3& ray_origin, const glm::vec3& ray_direction,
+    const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2) {
+  const float EPSILON = 1e-04f;
+
+  // Find vectors for two edges sharing v0
+  glm::vec3 edge1 = v1 - v0;
+  glm::vec3 edge2 = v2 - v0;
+
+  // Begin calculating determinant - also used to calculate `u` parameter
+  glm::vec3 h = glm::cross(ray_direction, edge2);
+  float a = glm::dot(edge1, h);
+
+  // If determinant is near zero, ray is parallel to the triangle plane
+  if (a > -EPSILON && a < EPSILON) return std::nullopt;
+
+  // Calculate the inverse of the determinant
+  float f = 1.0f / a;
+
+  // Calculate distance from v0 to ray origin
+  glm::vec3 s = ray_origin - v0;
+
+  // Calculate `u` parameter and test bounds
+  float u = f * glm::dot(s, h);
+  if (u < 0.0f || u > 1.0f) return std::nullopt;
+
+  // Calculate `v` parameter
+  glm::vec3 q = glm::cross(s, edge1);
+  float v = f * glm::dot(ray_direction, q);
+  if (v < 0.0f || u + v > 1.0f) return std::nullopt;
+
+  // Calculate t to find the intersection point
+  float t = f * glm::dot(edge2, q);
+  if (t < EPSILON) return std::nullopt;  // No intersection
+
+  return RayIntersectionResultSet{t, u, v};
 }
