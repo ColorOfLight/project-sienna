@@ -61,7 +61,7 @@ void markToClean(
       glm::normalize(eye_position);  // camera is looking at the origin
   const auto& camera_up =
       getUpOnSphere(camera_component.get().phi, camera_component.get().theta);
-  const auto& camera_right = glm::cross(camera_front, camera_up);
+  const auto& camera_right = glm::cross(-camera_front, camera_up);
 
   glm::vec3 ray_direction_in_world =
       glm::normalize(camera_right * ray_direction_in_camera.x +
