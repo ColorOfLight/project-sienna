@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(Cleansweep)
+project(ProjectSienna)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -17,7 +17,7 @@ file(GLOB_RECURSE CPP_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 include_directories(${INCLUDE_DIR})
 
 # Add the executable
-add_executable(Cleansweep ${HEADER_FILES} ${CPP_FILES})
+add_executable(ProjectSienna ${HEADER_FILES} ${CPP_FILES})
 
 # NOTE: Activate when using assets
 # Copy assets to the build directory
@@ -33,19 +33,19 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
   set(CUSTOM_LINK_FLAGS "-03")
 endif()
 
-set_target_properties(Cleansweep PROPERTIES LINK_FLAGS "-sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sALLOW_MEMORY_GROWTH=1 -lembind ${CUSTOM_LINK_FLAGS}")
-target_compile_definitions(Cleansweep PRIVATE TARGET_EMSCRIPTEN)
+set_target_properties(ProjectSienna PROPERTIES LINK_FLAGS "-sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sALLOW_MEMORY_GROWTH=1 -lembind ${CUSTOM_LINK_FLAGS}")
+target_compile_definitions(ProjectSienna PRIVATE TARGET_EMSCRIPTEN)
 
 # NOTE: Activate when using assets
-# target_link_options(Cleansweep PUBLIC --preload-file assets)
+# target_link_options(ProjectSienna PUBLIC --preload-file assets)
 
 # Add third party libraries
 add_subdirectory(third-party/glm-1.0.1)
 
-target_link_libraries(Cleansweep PRIVATE
+target_link_libraries(ProjectSienna PRIVATE
   glm::glm)
 
-target_include_directories(Cleansweep PRIVATE
+target_include_directories(ProjectSienna PRIVATE
     third-party/glm-1.0.1/glm
 )
 
