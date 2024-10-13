@@ -19,3 +19,11 @@ button#reset {
   right: 10px;
   font-size: 24px;
 }
+
+#version {
+  color: #dcdcdc;
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 16px;
+}
