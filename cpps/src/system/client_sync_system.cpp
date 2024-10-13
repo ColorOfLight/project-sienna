@@ -35,13 +35,13 @@ void syncInput(std::reference_wrapper<InputComponent> input_component) {
   emscripten::val pressed_key_map = client_input_component["pressedKeyMap"];
 
   input_component.get().pressed_key_map[InputKey::UP] =
-      pressed_key_map["W"].as<bool>();
+      pressed_key_map["KeyW"].as<bool>();
   input_component.get().pressed_key_map[InputKey::LEFT] =
-      pressed_key_map["A"].as<bool>();
+      pressed_key_map["KeyA"].as<bool>();
   input_component.get().pressed_key_map[InputKey::DOWN] =
-      pressed_key_map["S"].as<bool>();
+      pressed_key_map["KeyS"].as<bool>();
   input_component.get().pressed_key_map[InputKey::RIGHT] =
-      pressed_key_map["D"].as<bool>();
+      pressed_key_map["KeyD"].as<bool>();
 
   emscripten::val is_pointer_down = client_input_component["isPointerDown"];
 

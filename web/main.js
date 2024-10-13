@@ -4,10 +4,10 @@ const getCanvasSize = () => [canvas.clientWidth * window.devicePixelRatio, canva
 const getPointerPosition = (event) => [event.clientX * window.devicePixelRatio, event.clientY * window.devicePixelRatio];
 const ClientInputComponent = {
   pressedKeyMap: {
-    'W': false,
-    'A': false,
-    'S': false,
-    'D': false
+    'KeyW': false,
+    'KeyA': false,
+    'KeyS': false,
+    'KeyD': false
   },
   isPointerDown: false,
   pointerPosition: [0, 0],
@@ -20,11 +20,11 @@ const ClientEventComponent = {
 };
 
 window.addEventListener('keydown', (event) => {
-  ClientInputComponent.pressedKeyMap[event.key.toUpperCase()] = true;
+  ClientInputComponent.pressedKeyMap[event.code] = true;
 });
 
 window.addEventListener('keyup', (event) => {
-  ClientInputComponent.pressedKeyMap[event.key.toUpperCase()] = false;
+  ClientInputComponent.pressedKeyMap[event.code] = false;
 });
 
 window.addEventListener('pointerdown', (event) => {
