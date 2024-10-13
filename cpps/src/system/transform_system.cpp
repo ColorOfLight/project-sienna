@@ -40,13 +40,13 @@ void transformCamera(
   const auto& pressed_key_map = input_component.get().pressed_key_map;
 
   bool is_up =
-      pressed_key_map.at(InputKey::W) && !pressed_key_map.at(InputKey::S);
+      pressed_key_map.at(InputKey::UP) && !pressed_key_map.at(InputKey::DOWN);
   bool is_down =
-      !pressed_key_map.at(InputKey::W) && pressed_key_map.at(InputKey::S);
-  bool is_left =
-      pressed_key_map.at(InputKey::A) && !pressed_key_map.at(InputKey::D);
-  bool is_right =
-      !pressed_key_map.at(InputKey::A) && pressed_key_map.at(InputKey::D);
+      !pressed_key_map.at(InputKey::UP) && pressed_key_map.at(InputKey::DOWN);
+  bool is_left = pressed_key_map.at(InputKey::LEFT) &&
+                 !pressed_key_map.at(InputKey::RIGHT);
+  bool is_right = !pressed_key_map.at(InputKey::LEFT) &&
+                  pressed_key_map.at(InputKey::RIGHT);
 
   if (is_up) {
     camera_component.get().phi -= rotation_speed * delta_ms;

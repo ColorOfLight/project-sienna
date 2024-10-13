@@ -27,10 +27,10 @@
 #include <map>
 
 enum class InputKey {
-  W = 0,
-  A = 1,
-  S = 2,
-  D = 3,
+  UP = 0,
+  DOWN = 1,
+  LEFT = 2,
+  RIGHT = 3,
 };
 
 struct PointerPosition {
@@ -46,10 +46,10 @@ struct CanvasSize {
 class InputComponent {
  public:
   InputComponent() {
-    pressed_key_map[InputKey::W] = false;
-    pressed_key_map[InputKey::A] = false;
-    pressed_key_map[InputKey::S] = false;
-    pressed_key_map[InputKey::D] = false;
+    pressed_key_map[InputKey::UP] = false;
+    pressed_key_map[InputKey::LEFT] = false;
+    pressed_key_map[InputKey::DOWN] = false;
+    pressed_key_map[InputKey::RIGHT] = false;
     is_pointer_down = false;
     pointer_position.x = 0;
     pointer_position.y = 0;
