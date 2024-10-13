@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas');
 
 const getCanvasSize = () => [canvas.clientWidth * window.devicePixelRatio, canvas.clientHeight * window.devicePixelRatio];
-
+const getPointerPosition = (event) => [event.clientX * window.devicePixelRatio, event.clientY * window.devicePixelRatio];
 const ClientInputComponent = {
   pressedKeyMap: {
     'W': false,
@@ -29,16 +29,16 @@ window.addEventListener('keyup', (event) => {
 
 window.addEventListener('pointerdown', (event) => {
   ClientInputComponent.isPointerDown = true;
-  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+  ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
 
 window.addEventListener('pointerup', (event) => {
   ClientInputComponent.isPointerDown = false;
-  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+  ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
 
 window.addEventListener('pointermove', (event) => {
-  ClientInputComponent.pointerPosition = [event.clientX, event.clientY];
+  ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
 
 document.getElementById('reset').addEventListener('click', () => {
