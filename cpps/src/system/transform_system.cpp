@@ -63,6 +63,7 @@ void transformWashable(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<TransformComponent> transform_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;
+  auto& current_rotation = transform_component.get().rotation;
 
   bool is_up =
       pressed_key_map.at(InputKey::UP) && !pressed_key_map.at(InputKey::DOWN);
@@ -74,30 +75,30 @@ void transformWashable(
                   pressed_key_map.at(InputKey::RIGHT);
 
   if (is_up) {
-    transform_component.get().rotation =
-        glm::rotate(transform_component.get().rotation,
-                    rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    auto new_rotation_quat =
+        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_down) {
-    transform_component.get().rotation =
-        glm::rotate(transform_component.get().rotation,
-                    -rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    auto new_rotation_quat =
+        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_left) {
-    transform_component.get().rotation =
-        glm::rotate(transform_component.get().rotation,
-                    rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    auto new_rotation_quat =
+        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_right) {
-    transform_component.get().rotation =
-        glm::rotate(transform_component.get().rotation,
-                    -rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    auto new_rotation_quat =
+        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 }
