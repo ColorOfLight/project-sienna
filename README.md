@@ -55,3 +55,15 @@ npm i
 # Start dev server
 npm run dev
 ```
+
+## Versioning
+
+This project uses a very robust versioning method
+
+### How to upgrade version
+
+1. Change version in `cpps/CMakeLists.txt` and `web/package.json`
+2. Add a new version log file to `version-logs`
+3. Commit the changes to git
+4. Add a new git tag with version name (like `v0.1.0`)
+5. merge the changes into `release` branch
