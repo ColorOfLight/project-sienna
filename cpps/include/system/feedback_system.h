@@ -26,6 +26,4 @@
 
 #include <memory>
 
-#include "./Component/GameStateComponent.h"
-
 namespace feedback_system {}  // namespace feedback_system

@@ -25,18 +25,15 @@
 #pragma once
 
 #include "./Component/EventComponent.h"
-#include "./Component/GameStateComponent.h"
 #include "./Component/InputComponent.h"
 
 class GameEntity {
  public:
   GameEntity() {
     event_component = std::make_unique<EventComponent>();
-    game_state_component = std::make_unique<GameStateComponent>();
     input_component = std::make_unique<InputComponent>();
   }
 
   std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<GameStateComponent> game_state_component;
   std::unique_ptr<InputComponent> input_component;
 };

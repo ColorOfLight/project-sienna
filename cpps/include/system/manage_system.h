@@ -29,7 +29,6 @@
 #include "./Component/CleanerComponent.h"
 #include "./Component/DirtMapComponent.h"
 #include "./Component/EventComponent.h"
-#include "./Component/GameStateComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/TransformComponent.h"
 
