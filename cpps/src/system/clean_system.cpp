@@ -32,10 +32,11 @@ void markToClean(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<const CameraComponent> camera_component,
     std::reference_wrapper<const CleanerComponent> cleaner_component,
+    std::reference_wrapper<TransformComponent> parent_transform_component,
     std::vector<std::reference_wrapper<const GeometryComponent>>
         geometry_components,
     std::vector<std::reference_wrapper<TransformComponent>>
-        transform_components,
+        child_transform_components,
     std::vector<std::reference_wrapper<CleanMarkComponent>>
         clean_mark_components) {
   // 1. Get Ray direction
@@ -77,11 +78,17 @@ void markToClean(
   int shortest_distance_index = -1;
   glm::vec2 texture_coords;
 
+  const auto& parent_transform_matrix =
+      getTransformMatrix(parent_transform_component.get().scale,
+                         parent_transform_component.get().rotation,
+                         parent_transform_component.get().translation);
+
   for (int i = 0; i < geometry_count; i++) {
     const auto& transform_matrix =
-        getTransformMatrix(transform_components[i].get().scale,
-                           transform_components[i].get().rotation,
-                           transform_components[i].get().translation);
+        parent_transform_matrix *
+        getTransformMatrix(child_transform_components[i].get().scale,
+                           child_transform_components[i].get().rotation,
+                           child_transform_components[i].get().translation);
 
     const auto& vertexes = geometry_components[i].get().vertices;
     const auto& indexes = geometry_components[i].get().indices;

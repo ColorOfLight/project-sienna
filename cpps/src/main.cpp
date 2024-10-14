@@ -147,6 +147,7 @@ int main() {
           std::cref(*game_entity.get()->input_component),
           std::cref(*player_entity.get()->camera_component),
           std::cref(*player_entity.get()->cleaner_component),
+          std::ref(*washable_entity.get()->transform_component),
           washable_geometries, washable_transforms, washable_clean_marks);
 
       for (auto& washable_part :
