@@ -66,5 +66,5 @@ This project uses a very robust versioning method
 2. Add a new version log file to `version-logs`
 3. Build new JS and WASM file with preset `release`
 4. Commit the changes to git
-5. Add a new git tag with version name (like `v0.1.0`)
-6. merge the changes into `release` branch
+5. merge the changes from `main` branch into `release` branch
+6. Add a new git tag with version name (like `v0.1.0`)
