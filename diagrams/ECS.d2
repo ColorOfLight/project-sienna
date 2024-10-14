@@ -228,8 +228,6 @@ Client: {
   ClientFunctions: {
     class: ClientInterface
     shape: class
-
-    setTotalCompleteness: void
   }
 }
 
@@ -241,7 +239,7 @@ GameEntity: {
     class: Component
     shape: class
 
-    + pressed_key_map: "struct {[enum:WASD]: bool}"
+    + pressed_key_map: "struct {[enum:Key]: bool}"
     + is_pointer_down: bool
     + pointer_position: "[float, float]"
     + canvas_size: "[int, int]"
@@ -287,7 +285,7 @@ Systems: {
     class: System
     shape: class
 
-    + resetGame(Event): Input, GameState, Camera, Cleaner, DirtMap, Transform, CleanMark, Event
+    + resetGame(Event): "DirtMap, Event"
   }
 
   TransformSystem: {
@@ -349,13 +347,7 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
-Systems.ManageSystem <- GameEntity.InputComponent
-Systems.ManageSystem <- GameEntity.GameStateComponent
-Systems.ManageSystem <- PlayerEntity.CameraComponent
-Systems.ManageSystem <- PlayerEntity.CleanerComponent
 Systems.ManageSystem <- WashablePartEntity.DirtMapComponent
-Systems.ManageSystem <- WashablePartEntity.TransformComponent
-Systems.ManageSystem <- WashablePartEntity.CleanMarkComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
