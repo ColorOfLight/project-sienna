@@ -88,19 +88,71 @@ inline const std::string phong_fragment = R"(#version 300 es
         vec3 u_camera_eye;
     };
 
+    struct AmbientLight
+    {
+        vec3 color;
+        float intensity;
+    };
+
+    struct DirectionalLight
+    {
+        vec3 color;
+        vec3 direction;
+        float intensity;
+    };
+
+    struct PointLight
+    {
+        vec3 color;
+        vec3 position;
+        float intensity;
+        float quadraticAttenuation;
+    };
+
+    struct Material
+    {
+        vec3 color;
+        float diffuse;
+        float specular;
+        float alpha;
+    };
+
+    vec3 getAmbientDiffuse(AmbientLight ambient_light, Material material)
+    {
+        return material.color * ambient_light.color * ambient_light.intensity * material.diffuse;
+    }
+
+    vec3 getDirectionalDiffuse(DirectionalLight directional_light, Material material, vec3 normal)
+    {
+        vec3 lightVector = normalize(-directional_light.direction);
+        return material.diffuse * max(dot(normal, lightVector), 0.0) * material.color * directional_light.color * directional_light.intensity;
+    }
+
+    vec3 getDirectionalSpecular(DirectionalLight directional_light, Material material, vec3 normal, vec3 viewVector)
+    {
+        vec3 lightVector = normalize(-directional_light.direction);
+        vec3 reflection = reflect(-lightVector, normal);
+        return material.specular * pow(max(0.0, dot(reflection, viewVector)), material.alpha) * material.color * directional_light.color * directional_light.intensity;
+    }
+
+    vec3 getPointDiffuse(PointLight point_light, Material material, vec3 normal, vec3 position)
+    {
+        vec3 lightVector = normalize(point_light.position - position);
+        float distance = length(point_light.position - position);
+        float attenuation = 1.0 / (1.0 + point_light.quadraticAttenuation * distance * distance);
+        return material.diffuse * max(dot(normal, lightVector), 0.0) * material.color * point_light.color * point_light.intensity * attenuation;
+    }
+
+    vec3 getPointSpecular(PointLight point_light, Material material, vec3 normal, vec3 position, vec3 viewVector)
+    {
+        vec3 lightVector = normalize(point_light.position - position);
+        vec3 reflection = reflect(-lightVector, normal);
+        float distance = length(point_light.position - position);
+        float attenuation = 1.0 / (1.0 + point_light.quadraticAttenuation * distance * distance);
+        return material.specular * pow(max(0.0, dot(reflection, viewVector)), material.alpha) * material.color * point_light.color * point_light.intensity * attenuation;
+    }
+
     uniform sampler2D u_dirtMapTexture;
-
-    vec3 g_material_color = vec3(1.0, 0.0, 0.0);
-    float g_material_diffuse = 0.5;
-    float g_material_specular = 0.5;
-    float g_material_alpha = 64.0;
-
-    vec3 g_ambient_color = vec3(1.0, 1.0, 1.0);
-    float g_ambient_intensity = 0.1;
-
-    vec3 g_directional_color = vec3(1.0, 1.0, 1.0);
-    vec3 g_directional_direction = vec3(-1.0, -2.0, -1.0);
-    float g_directional_intensity = 1.0;
 
     in vec3 v_normal;
     in vec3 v_position;
@@ -110,20 +162,54 @@ inline const std::string phong_fragment = R"(#version 300 es
 
     void main()
     {
-        float dirt = texture(u_dirtMapTexture, v_texCoord).r;
-        vec3 material_color = mix(g_material_color, vec3(0.5, 0.5, 0.5), dirt);
+        AmbientLight g_ambient_light;
+        g_ambient_light.color = vec3(0.8, 0.8, 0.75); // warm room light
+        g_ambient_light.intensity = 0.3;
 
-        vec3 ambientColor = material_color * g_ambient_color * g_ambient_intensity * g_material_diffuse;
+        DirectionalLight g_ceiling_light;
+        g_ceiling_light.color = vec3(1.0, 1.0, 0.95); // warm ceiling light
+        g_ceiling_light.direction = vec3(0.0, -1.0, 0.0);
+        g_ceiling_light.intensity = 0.8;
+
+        PointLight g_fill_light;
+        g_fill_light.color = vec3(1.0, 0.85, 0.7); // warm white as from a lamp
+        g_fill_light.position = vec3(2.0, 3.0, 2.0);
+        g_fill_light.intensity = 0.6;
+        g_fill_light.quadraticAttenuation = 0.20;
+
+        PointLight g_rim_light;
+        g_rim_light.color = vec3(0.8, 0.85, 1.0); // cool white as from a window
+        g_rim_light.position = vec3(0.0, 3.0, -3.0);
+        g_rim_light.intensity = 0.4;
+        g_rim_light.quadraticAttenuation = 0.20;
+
+        Material g_material;
+        g_material.color = vec3(1.0, 1.0, 1.0);
+        g_material.diffuse = 0.5;
+        g_material.specular = 0.5;
+        g_material.alpha = 64.0;
+
+        float dirt = texture(u_dirtMapTexture, v_texCoord).r;
+        g_material.color = mix(g_material.color, vec3(0.40, 0.26, 0.13), dirt);
 
         vec3 normal = normalize(v_normal);
-        vec3 lightVector = normalize(-g_directional_direction);
-        vec3 directionalDiffuseColor = g_material_diffuse * max(dot(normal, lightVector), 0.0) * material_color * g_directional_color * g_directional_intensity;
-
         vec3 viewVector = normalize(u_camera_eye - v_position);
-        vec3 reflection = reflect(-lightVector, normal);
-        vec3 directionalSpecularColor = g_material_specular * pow(max(0.0, dot(reflection, viewVector)), g_material_alpha) * g_directional_color * g_directional_intensity;
+
+        vec3 ambientDiffuse = getAmbientDiffuse(g_ambient_light, g_material);
+
+        vec3 ceilingDiffuse = getDirectionalDiffuse(g_ceiling_light, g_material, normal);
+        vec3 ceilingSpecular = getDirectionalSpecular(g_ceiling_light, g_material, normal, viewVector);
+
+        vec3 fillDiffuse = getPointDiffuse(g_fill_light, g_material, normal, v_position);
+        vec3 fillSpecular = getPointSpecular(g_fill_light, g_material, normal, v_position, viewVector);
+
+        vec3 rimDiffuse = getPointDiffuse(g_rim_light, g_material, normal, v_position);
+        vec3 rimSpecular = getPointSpecular(g_rim_light, g_material, normal, v_position, viewVector);
+
+        vec3 diffuseColor = ambientDiffuse + ceilingDiffuse + fillDiffuse + rimDiffuse;
+        vec3 specularColor = ceilingSpecular + fillSpecular + rimSpecular;
         
-        vec3 color = ambientColor + directionalDiffuseColor + directionalSpecularColor * (1.0 - dirt);
+        vec3 color = diffuseColor + specularColor * (1.0 - dirt);
         FragColor = vec4(color, 1.0);
     }
 )";
