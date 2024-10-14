@@ -34,7 +34,7 @@ void markToClean(
     std::reference_wrapper<const CleanerComponent> cleaner_component,
     std::vector<std::reference_wrapper<const GeometryComponent>>
         geometry_components,
-    std::vector<std::reference_wrapper<const TransformComponent>>
+    std::vector<std::reference_wrapper<TransformComponent>>
         transform_components,
     std::vector<std::reference_wrapper<CleanMarkComponent>>
         clean_mark_components) {

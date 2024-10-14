@@ -50,9 +50,12 @@ void updateCameraUniform(
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
-void updateTransformUniform(
-    std::reference_wrapper<TransformComponent> transform_component,
-    std::reference_wrapper<GrUniformComponent> gr_uniform_component);
+void updateTransformUniforms(
+    std::reference_wrapper<TransformComponent> parent_transform_component,
+    std::vector<std::reference_wrapper<TransformComponent>>
+        child_transform_components,
+    std::vector<std::reference_wrapper<GrUniformComponent>>
+        gr_uniform_components);
 
 void updateDirtTexture(
     std::reference_wrapper<DirtMapComponent> dirt_map_component,

@@ -26,6 +26,7 @@
 
 WashableEntity::WashableEntity(WashablePreset preset) {
   material_component = std::make_unique<MaterialComponent>(MaterialType::PHONG);
+  transform_component = std::make_unique<TransformComponent>();
   gr_material_component = std::make_unique<GrMaterialComponent>();
 
   if (preset == WashablePreset::CUBE) {
