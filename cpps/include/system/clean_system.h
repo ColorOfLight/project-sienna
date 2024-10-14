@@ -37,15 +37,15 @@
 namespace clean_system {
 
 void markToClean(
-    std::reference_wrapper<const InputComponent> input_component,
-    std::reference_wrapper<const CameraComponent> camera_component,
-    std::reference_wrapper<const CleanerComponent> cleaner_component,
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<CleanerComponent> cleaner_component,
     std::reference_wrapper<TransformComponent> parent_transform_component,
-    std::vector<std::reference_wrapper<const GeometryComponent>>
+    const std::vector<std::reference_wrapper<GeometryComponent>>&
         geometry_components,
-    std::vector<std::reference_wrapper<TransformComponent>>
+    const std::vector<std::reference_wrapper<TransformComponent>>&
         child_transform_components,
-    std::vector<std::reference_wrapper<CleanMarkComponent>>
+    const std::vector<std::reference_wrapper<CleanMarkComponent>>&
         clean_mark_components);
 
 void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,

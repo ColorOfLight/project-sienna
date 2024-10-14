@@ -35,10 +35,9 @@ const float min_radius = 1.0f;
 
 float modulateRotation(float angle);
 
-void transformCamera(
-    float delta_ms,
-    std::reference_wrapper<const InputComponent> input_component,
-    std::reference_wrapper<CameraComponent> camera_component) {
+void transformCamera(float delta_ms,
+                     std::reference_wrapper<InputComponent> input_component,
+                     std::reference_wrapper<CameraComponent> camera_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;
 
   bool is_forward = pressed_key_map.at(InputKey::FORWARD) &&
@@ -59,8 +58,7 @@ void transformCamera(
 }
 
 void transformWashable(
-    float delta_ms,
-    std::reference_wrapper<const InputComponent> input_component,
+    float delta_ms, std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<TransformComponent> transform_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;
   auto& current_rotation = transform_component.get().rotation;

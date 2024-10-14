@@ -65,7 +65,7 @@ int main() {
   auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
 
   auto washable_geometries =
-      std::vector<std::reference_wrapper<const GeometryComponent>>();
+      std::vector<std::reference_wrapper<GeometryComponent>>();
   auto washable_transforms =
       std::vector<std::reference_wrapper<TransformComponent>>();
   auto washable_clean_marks =
@@ -89,26 +89,26 @@ int main() {
   }
 
   gr_sync_system::updateMaterial(
-      std::cref(*washable_entity->material_component),
+      std::ref(*washable_entity->material_component),
       std::ref(*washable_entity->gr_material_component));
 
   auto render_items = std::vector<RenderItem>();
   for (const auto& washable_part : washable_entity->washable_part_entities) {
     gr_sync_system::updateGeometry(
-        std::cref(*washable_part.get()->geometry_component),
+        std::ref(*washable_part.get()->geometry_component),
         std::ref(*washable_part.get()->gr_geometry_component));
 
     render_items.push_back({
         .gr_geometry_component =
-            std::cref(*washable_part.get()->gr_geometry_component),
+            std::ref(*washable_part.get()->gr_geometry_component),
         .gr_uniform_components =
-            std::vector<std::reference_wrapper<const GrUniformComponent>>({
-                std::cref(*player_entity.get()->gr_camera_uniform_component),
-                std::cref(*washable_part.get()->gr_transform_uniform_component),
+            std::vector<std::reference_wrapper<GrUniformComponent>>({
+                std::ref(*player_entity.get()->gr_camera_uniform_component),
+                std::ref(*washable_part.get()->gr_transform_uniform_component),
             }),
         .gr_texture_components =
-            std::vector<std::reference_wrapper<const GrTextureComponent>>({
-                std::cref(*washable_part.get()->gr_dirt_map_texture_component),
+            std::vector<std::reference_wrapper<GrTextureComponent>>({
+                std::ref(*washable_part.get()->gr_dirt_map_texture_component),
             }),
     });
   }
@@ -126,27 +126,27 @@ int main() {
         std::ref(*game_entity.get()->event_component));
 
     render_system::adjustViewportSize(
-        std::cref(*game_entity.get()->input_component),
+        std::ref(*game_entity.get()->input_component),
         std::ref(*game_entity.get()->event_component),
         std::ref(*player_entity.get()->camera_component));
 
     transform_system::transformCamera(
-        delta_ms, std::cref(*game_entity.get()->input_component),
+        delta_ms, std::ref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component));
     transform_system::transformWashable(
-        delta_ms, std::cref(*game_entity.get()->input_component),
+        delta_ms, std::ref(*game_entity.get()->input_component),
         std::ref(*washable_entity.get()->transform_component));
 
     gr_sync_system::updateCameraUniform(
-        std::cref(*game_entity.get()->input_component),
+        std::ref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component),
         std::ref(*player_entity.get()->gr_camera_uniform_component));
 
     if (game_entity.get()->input_component.get()->is_pointer_down) {
       clean_system::markToClean(
-          std::cref(*game_entity.get()->input_component),
-          std::cref(*player_entity.get()->camera_component),
-          std::cref(*player_entity.get()->cleaner_component),
+          std::ref(*game_entity.get()->input_component),
+          std::ref(*player_entity.get()->camera_component),
+          std::ref(*player_entity.get()->cleaner_component),
           std::ref(*washable_entity.get()->transform_component),
           washable_geometries, washable_transforms, washable_clean_marks);
 
@@ -175,7 +175,7 @@ int main() {
     }
 
     render_system::render(
-        std::cref(*washable_entity.get()->gr_material_component), render_items);
+        std::ref(*washable_entity.get()->gr_material_component), render_items);
   };
 
   static_main_loop = main_loop;

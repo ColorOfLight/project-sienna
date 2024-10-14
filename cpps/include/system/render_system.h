@@ -35,11 +35,9 @@
 #include "./Component/InputComponent.h"
 
 struct RenderItem {
-  std::reference_wrapper<const GrGeometryComponent> gr_geometry_component;
-  std::vector<std::reference_wrapper<const GrUniformComponent>>
-      gr_uniform_components;
-  std::vector<std::reference_wrapper<const GrTextureComponent>>
-      gr_texture_components;
+  std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
+  std::vector<std::reference_wrapper<GrUniformComponent>> gr_uniform_components;
+  std::vector<std::reference_wrapper<GrTextureComponent>> gr_texture_components;
 };
 
 namespace render_system {
@@ -47,12 +45,11 @@ namespace render_system {
 void initContext();
 
 void adjustViewportSize(
-    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
-void render(
-    std::reference_wrapper<const GrMaterialComponent> gr_material_component,
-    const std::vector<RenderItem>& render_items);
+void render(std::reference_wrapper<GrMaterialComponent> gr_material_component,
+            const std::vector<RenderItem>& render_items);
 
 }  // namespace render_system
