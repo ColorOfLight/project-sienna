@@ -18,6 +18,7 @@ button#reset {
   top: 10px;
   right: 10px;
   font-size: 24px;
+  cursor: pointer;
 }
 
 #version {
