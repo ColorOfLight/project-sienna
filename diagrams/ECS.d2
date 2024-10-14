@@ -323,13 +323,6 @@ Systems: {
     + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
   }
 
-  CalculateSystem: {
-    class: System
-    shape: class
-
-    + calculateCompleteness(DirtMap\[\]): GameState
-  }
-
   FeedbackSystem: {
     class: System
     shape: class
@@ -384,10 +377,6 @@ Systems.RenderSystem <- WashableEntity.GrMaterialComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- WashablePartEntity.TransformGrUniformComponent
 Systems.RenderSystem <- WashablePartEntity.DirtGrTextureComponent
-
-# CalculateSystem
-Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
-Systems.CalculateSystem -> GameEntity.GameStateComponent
 
 # FeedbackSystem
 Systems.FeedbackSystem <- GameEntity.GameStateComponent
