@@ -26,15 +26,16 @@
 
 namespace manage_system {
 
-void resetGame(std::reference_wrapper<EventComponent> event_component,
-               std::reference_wrapper<CameraComponent> camera_component,
-               std::reference_wrapper<CleanMarkComponent> clean_mark_component,
-               std::reference_wrapper<CleanerComponent> cleaner_component,
-               std::reference_wrapper<DirtMapComponent> dirt_map_component,
-               std::reference_wrapper<GameStateComponent> game_state_component,
-               std::reference_wrapper<InputComponent> input_component,
-               std::reference_wrapper<TransformComponent> transform_component) {
-  // TODO: implement in source file
+void resetGame(
+    std::reference_wrapper<EventComponent> event_component,
+    std::vector<std::reference_wrapper<DirtMapComponent>> dirt_map_components) {
+  for (auto& dirt_map_component : dirt_map_components) {
+    auto& dirt_map = dirt_map_component.get().dirt_map;
+    std::fill(dirt_map.begin(), dirt_map.end(), 255);
+    dirt_map_component.get().needs_update = true;
+  }
+
+  event_component.get().reset = false;
 }
 
 }  // namespace manage_system
