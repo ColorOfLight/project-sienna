@@ -29,7 +29,7 @@
 
 namespace transform_system {
 
-const float rotation_speed = glm::pi<float>() * 2.0f / 1000.0f;
+const float rotation_speed = glm::pi<float>() * 1.0f / 1000.0f;
 const float zoom_speed = 2.0f / 1000.0f;
 const float min_radius = 1.0f;
 
