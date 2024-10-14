@@ -228,8 +228,6 @@ Client: {
   ClientFunctions: {
     class: ClientInterface
     shape: class
-
-    setTotalCompleteness: void
   }
 }
 
@@ -241,7 +239,7 @@ GameEntity: {
     class: Component
     shape: class
 
-    + pressed_key_map: "struct {[enum:WASD]: bool}"
+    + pressed_key_map: "struct {[enum:Key]: bool}"
     + is_pointer_down: bool
     + pointer_position: "[float, float]"
     + canvas_size: "[int, int]"
@@ -253,14 +251,6 @@ GameEntity: {
 
     + reset: bool
     + change_canvas_size: bool
-  }
-
-  GameStateComponent: {
-    class: Component
-    shape: class
-
-    + state: playing | completed
-    + completeness: float
   }
 }
 
@@ -287,7 +277,7 @@ Systems: {
     class: System
     shape: class
 
-    + resetGame(Event): Input, GameState, Camera, Cleaner, DirtMap, Transform, CleanMark, Event
+    + resetDirtMap(Event): "DirtMap, Event"
   }
 
   TransformSystem: {
@@ -325,18 +315,9 @@ Systems: {
     + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
   }
 
-  CalculateSystem: {
-    class: System
-    shape: class
-
-    + calculateCompleteness(DirtMap\[\]): GameState
-  }
-
   FeedbackSystem: {
     class: System
     shape: class
-
-    + setTotalCompleteness(GameState): void
   }
 }
 
@@ -349,13 +330,7 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
-Systems.ManageSystem <- GameEntity.InputComponent
-Systems.ManageSystem <- GameEntity.GameStateComponent
-Systems.ManageSystem <- PlayerEntity.CameraComponent
-Systems.ManageSystem <- PlayerEntity.CleanerComponent
 Systems.ManageSystem <- WashablePartEntity.DirtMapComponent
-Systems.ManageSystem <- WashablePartEntity.TransformComponent
-Systems.ManageSystem <- WashablePartEntity.CleanMarkComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
@@ -393,10 +368,5 @@ Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- WashablePartEntity.TransformGrUniformComponent
 Systems.RenderSystem <- WashablePartEntity.DirtGrTextureComponent
 
-# CalculateSystem
-Systems.CalculateSystem <- WashablePartEntity.DirtMapComponent
-Systems.CalculateSystem -> GameEntity.GameStateComponent
-
 # FeedbackSystem
-Systems.FeedbackSystem <- GameEntity.GameStateComponent
 Client.ClientFunctions <- Systems.FeedbackSystem

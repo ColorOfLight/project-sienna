@@ -29,13 +29,12 @@
 #include "./Component/CleanerComponent.h"
 #include "./Component/DirtMapComponent.h"
 #include "./Component/EventComponent.h"
-#include "./Component/GameStateComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/TransformComponent.h"
 
 namespace manage_system {
 
-void resetGame(
+void resetDirtMap(
     std::reference_wrapper<EventComponent> event_component,
     std::vector<std::reference_wrapper<DirtMapComponent>> dirt_map_components);
 

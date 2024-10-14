@@ -150,8 +150,8 @@ int main() {
     }
 
     if (game_entity.get()->event_component.get()->reset) {
-      manage_system::resetGame(std::ref(*game_entity.get()->event_component),
-                               washable_dirt_maps);
+      manage_system::resetDirtMap(std::ref(*game_entity.get()->event_component),
+                                  washable_dirt_maps);
     }
 
     for (const auto& washable_part :
