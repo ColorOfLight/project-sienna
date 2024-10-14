@@ -69,6 +69,17 @@ vars: {
       stroke-dash: 3
     }
   }
+
+  vTransformComponent: {
+    class: Component
+    shape: class
+    label: TransformComponent
+
+    + scale: Vec3
+    + rotation: Quat
+    + translation: Vec3
+    + needs_update: bool
+  }
 }
 
 # Entity & Components
@@ -122,6 +133,10 @@ WashableEntity: {
     + shader_program_id: uint
   }
 
+  TransformComponent: {
+    ...${vTransformComponent}
+  }
+
   MaterialComponent -> GrMaterialComponent: data to {
     ...${vGrFrom}
   }
@@ -148,13 +163,7 @@ WashablePartEntity: {
   }
 
   TransformComponent: {
-    class: Component
-    shape: class
-
-    + scale: Vec3
-    + rotation: Vec3
-    + translation: Vec3
-    + needs_update: bool
+    ...${vTransformComponent}
   }
 
   TransformGrUniformComponent: {
@@ -285,6 +294,7 @@ Systems: {
     shape: class
 
     + transformCamera(Input): Camera
+    + transformWashable(Input): Transform
   }
 
   CleanSystem: {
@@ -302,7 +312,7 @@ Systems: {
     + updateGeometry(Geometry): GrGeometry
     + updateMaterial(Material): GrMaterial
     + updateCameraUniform(Input, Camera): GrUniform
-    + updateTransformUniform(Transform): GrUniform
+    + updateTransformUniform(Transform, Transform\[\]): GrUniform
     + updateDirtTexture(DirtMap): GrTexture
   }
 
@@ -335,6 +345,7 @@ Systems.ManageSystem <- WashablePartEntity.DirtMapComponent
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
 Systems.TransformSystem -> PlayerEntity.CameraComponent
+Systems.TransformSystem -> WashableEntity.TransformComponent
 
 # CleanSystem
 Systems.CleanSystem <- GameEntity.InputComponent
