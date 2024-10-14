@@ -133,6 +133,9 @@ int main() {
     transform_system::transformCamera(
         delta_ms, std::cref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component));
+    transform_system::transformWashable(
+        delta_ms, std::cref(*game_entity.get()->input_component),
+        std::ref(*washable_entity.get()->transform_component));
 
     gr_sync_system::updateCameraUniform(
         std::cref(*game_entity.get()->input_component),
