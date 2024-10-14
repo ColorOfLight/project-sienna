@@ -38,16 +38,6 @@ class CameraComponent {
     needs_update = true;
   }
 
-  CameraComponent(float fovy) {
-    // TODO: integrate with the default constructor
-    radius = 3.0f;
-    phi = glm::pi<float>() / 3.0f;
-    theta = glm::pi<float>() / 4.0f;
-
-    this->fovy = fovy;
-    needs_update = true;
-  }
-
   float radius;
   float phi;    // Angle in radians from the positive Y-axis to positive Z-axis
   float theta;  // Angle in radians from the positive Z-axis to positive X-axis
