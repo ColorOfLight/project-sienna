@@ -30,6 +30,8 @@
 namespace transform_system {
 
 const float rotation_speed = glm::pi<float>() * 2.0f / 1000.0f;
+const float zoom_speed = 2.0f / 1000.0f;
+const float min_radius = 1.0f;
 
 float modulateRotation(float angle);
 
@@ -47,6 +49,10 @@ void transformCamera(
                  !pressed_key_map.at(InputKey::RIGHT);
   bool is_right = !pressed_key_map.at(InputKey::LEFT) &&
                   pressed_key_map.at(InputKey::RIGHT);
+  bool is_forward = pressed_key_map.at(InputKey::FORWARD) &&
+                    !pressed_key_map.at(InputKey::BACKWARD);
+  bool is_backward = !pressed_key_map.at(InputKey::FORWARD) &&
+                     pressed_key_map.at(InputKey::BACKWARD);
 
   if (is_up) {
     camera_component.get().phi -= rotation_speed * delta_ms;
@@ -65,6 +71,17 @@ void transformCamera(
 
   if (is_right) {
     camera_component.get().theta += rotation_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_forward) {
+    camera_component.get().radius = std::max(
+        min_radius, camera_component.get().radius - zoom_speed * delta_ms);
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_backward) {
+    camera_component.get().radius += zoom_speed * delta_ms;
     camera_component.get().needs_update = true;
   }
 }
