@@ -67,11 +67,13 @@ int main() {
   auto washable_geometries =
       std::vector<std::reference_wrapper<const GeometryComponent>>();
   auto washable_transforms =
-      std::vector<std::reference_wrapper<const TransformComponent>>();
+      std::vector<std::reference_wrapper<TransformComponent>>();
   auto washable_clean_marks =
       std::vector<std::reference_wrapper<CleanMarkComponent>>();
   auto washable_dirt_maps =
       std::vector<std::reference_wrapper<DirtMapComponent>>();
+  auto washable_gr_transform_uniforms =
+      std::vector<std::reference_wrapper<GrUniformComponent>>();
 
   for (const auto& washable_part : washable_entity->washable_part_entities) {
     washable_geometries.push_back(
@@ -82,6 +84,8 @@ int main() {
         std::ref(*washable_part.get()->clean_mark_component));
     washable_dirt_maps.push_back(
         std::ref(*washable_part.get()->dirt_map_component));
+    washable_gr_transform_uniforms.push_back(
+        std::ref(*washable_part.get()->gr_transform_uniform_component));
   }
 
   gr_sync_system::updateMaterial(
@@ -113,8 +117,9 @@ int main() {
                     player_entity = std::ref(player_entity),
                     washable_entity = std::ref(washable_entity), render_items,
                     washable_geometries, washable_transforms,
-                    washable_clean_marks,
-                    washable_dirt_maps](float elapsed_ms, float delta_ms) {
+                    washable_clean_marks, washable_dirt_maps,
+                    washable_gr_transform_uniforms](float elapsed_ms,
+                                                    float delta_ms) {
     client_sync_system::syncInput(
         std::ref(*game_entity.get()->input_component));
     client_sync_system::consumeEvent(
@@ -128,6 +133,9 @@ int main() {
     transform_system::transformCamera(
         delta_ms, std::cref(*game_entity.get()->input_component),
         std::ref(*player_entity.get()->camera_component));
+    transform_system::transformWashable(
+        delta_ms, std::cref(*game_entity.get()->input_component),
+        std::ref(*washable_entity.get()->transform_component));
 
     gr_sync_system::updateCameraUniform(
         std::cref(*game_entity.get()->input_component),
@@ -139,6 +147,7 @@ int main() {
           std::cref(*game_entity.get()->input_component),
           std::cref(*player_entity.get()->camera_component),
           std::cref(*player_entity.get()->cleaner_component),
+          std::ref(*washable_entity.get()->transform_component),
           washable_geometries, washable_transforms, washable_clean_marks);
 
       for (auto& washable_part :
@@ -156,9 +165,9 @@ int main() {
 
     for (const auto& washable_part :
          washable_entity.get()->washable_part_entities) {
-      gr_sync_system::updateTransformUniform(
-          std::ref(*washable_part->transform_component),
-          std::ref(*washable_part->gr_transform_uniform_component));
+      gr_sync_system::updateTransformUniforms(
+          std::ref(*washable_entity.get()->transform_component),
+          washable_transforms, washable_gr_transform_uniforms);
 
       gr_sync_system::updateDirtTexture(
           std::ref(*washable_part->dirt_map_component),

@@ -7,7 +7,9 @@ const ClientInputComponent = {
     'KeyW': false,
     'KeyA': false,
     'KeyS': false,
-    'KeyD': false
+    'KeyD': false,
+    'KeyR': false,
+    'KeyF': false,
   },
   isPointerDown: false,
   pointerPosition: [0, 0],

@@ -31,6 +31,8 @@ enum class InputKey {
   DOWN = 1,
   LEFT = 2,
   RIGHT = 3,
+  FORWARD = 4,
+  BACKWARD = 5,
 };
 
 struct PointerPosition {
@@ -50,6 +52,8 @@ class InputComponent {
     pressed_key_map[InputKey::LEFT] = false;
     pressed_key_map[InputKey::DOWN] = false;
     pressed_key_map[InputKey::RIGHT] = false;
+    pressed_key_map[InputKey::FORWARD] = false;
+    pressed_key_map[InputKey::BACKWARD] = false;
     is_pointer_down = false;
     pointer_position.x = 0;
     pointer_position.y = 0;

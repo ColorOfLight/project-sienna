@@ -32,19 +32,9 @@ class CameraComponent {
   CameraComponent() {
     radius = 3.0f;
     phi = glm::pi<float>() / 3.0f;
-    theta = glm::pi<float>() / 4.0f;
+    theta = 0;
 
     fovy = glm::radians(55.0f);
-    needs_update = true;
-  }
-
-  CameraComponent(float fovy) {
-    // TODO: integrate with the default constructor
-    radius = 3.0f;
-    phi = glm::pi<float>() / 3.0f;
-    theta = glm::pi<float>() / 4.0f;
-
-    this->fovy = fovy;
     needs_update = true;
   }
 

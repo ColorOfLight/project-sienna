@@ -26,6 +26,7 @@
 
 #include "./Component/CameraComponent.h"
 #include "./Component/InputComponent.h"
+#include "./Component/TransformComponent.h"
 
 namespace transform_system {
 
@@ -33,5 +34,10 @@ void transformCamera(
     float delta_ms,
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component);
+
+void transformWashable(
+    float delta_ms,
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<TransformComponent> transform_component);
 
 }  // namespace transform_system

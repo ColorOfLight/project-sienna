@@ -29,7 +29,9 @@
 
 namespace transform_system {
 
-const float rotation_speed = glm::pi<float>() * 2.0f / 1000.0f;
+const float rotation_speed = glm::pi<float>() * 1.0f / 1000.0f;
+const float zoom_speed = 2.0f / 1000.0f;
+const float min_radius = 1.0f;
 
 float modulateRotation(float angle);
 
@@ -38,6 +40,30 @@ void transformCamera(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;
+
+  bool is_forward = pressed_key_map.at(InputKey::FORWARD) &&
+                    !pressed_key_map.at(InputKey::BACKWARD);
+  bool is_backward = !pressed_key_map.at(InputKey::FORWARD) &&
+                     pressed_key_map.at(InputKey::BACKWARD);
+
+  if (is_forward) {
+    camera_component.get().radius = std::max(
+        min_radius, camera_component.get().radius - zoom_speed * delta_ms);
+    camera_component.get().needs_update = true;
+  }
+
+  if (is_backward) {
+    camera_component.get().radius += zoom_speed * delta_ms;
+    camera_component.get().needs_update = true;
+  }
+}
+
+void transformWashable(
+    float delta_ms,
+    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<TransformComponent> transform_component) {
+  const auto& pressed_key_map = input_component.get().pressed_key_map;
+  auto& current_rotation = transform_component.get().rotation;
 
   bool is_up =
       pressed_key_map.at(InputKey::UP) && !pressed_key_map.at(InputKey::DOWN);
@@ -49,23 +75,31 @@ void transformCamera(
                   pressed_key_map.at(InputKey::RIGHT);
 
   if (is_up) {
-    camera_component.get().phi -= rotation_speed * delta_ms;
-    camera_component.get().needs_update = true;
+    auto new_rotation_quat =
+        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
+    transform_component.get().needs_update = true;
   }
 
   if (is_down) {
-    camera_component.get().phi += rotation_speed * delta_ms;
-    camera_component.get().needs_update = true;
+    auto new_rotation_quat =
+        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
+    transform_component.get().needs_update = true;
   }
 
   if (is_left) {
-    camera_component.get().theta -= rotation_speed * delta_ms;
-    camera_component.get().needs_update = true;
+    auto new_rotation_quat =
+        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
+    transform_component.get().needs_update = true;
   }
 
   if (is_right) {
-    camera_component.get().theta += rotation_speed * delta_ms;
-    camera_component.get().needs_update = true;
+    auto new_rotation_quat =
+        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+    current_rotation = new_rotation_quat * current_rotation;
+    transform_component.get().needs_update = true;
   }
 }
 

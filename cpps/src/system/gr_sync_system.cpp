@@ -146,26 +146,43 @@ void updateMaterial(
   gr_material_component.get().shader_program_id = shader_program_id;
 }
 
-void updateTransformUniform(
-    std::reference_wrapper<TransformComponent> transform_component,
-    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-  if (!transform_component.get().needs_update) {
-    return;
+void updateTransformUniforms(
+    std::reference_wrapper<TransformComponent> parent_transform_component,
+    std::vector<std::reference_wrapper<TransformComponent>>
+        child_transform_components,
+    std::vector<std::reference_wrapper<GrUniformComponent>>
+        gr_uniform_components) {
+  auto parent_needs_update = parent_transform_component.get().needs_update;
+  const auto& parent_model_matrix =
+      getTransformMatrix(parent_transform_component.get().scale,
+                         parent_transform_component.get().rotation,
+                         parent_transform_component.get().translation);
+
+  for (int i = 0; i < child_transform_components.size(); i++) {
+    auto& child_transform_component = child_transform_components[i];
+
+    if (!parent_transform_component.get().needs_update &&
+        !child_transform_component.get().needs_update) {
+      continue;
+    }
+
+    const auto& model_matrix =
+        parent_model_matrix *
+        getTransformMatrix(child_transform_component.get().scale,
+                           child_transform_component.get().rotation,
+                           child_transform_component.get().translation);
+
+    auto& gr_uniform_component = gr_uniform_components[i];
+
+    glBindBuffer(GL_UNIFORM_BUFFER,
+                 gr_uniform_component.get().uniform_buffer_id);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(model_matrix), &model_matrix,
+                 GL_STATIC_DRAW);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    child_transform_component.get().needs_update = false;
   }
-
-  const auto& scale = transform_component.get().scale;
-  const auto& rotation = transform_component.get().rotation;
-  const auto& translation = transform_component.get().translation;
-
-  glm::mat4 model_matrix = getTransformMatrix(scale, rotation, translation);
-
-  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(model_matrix), &model_matrix,
-               GL_STATIC_DRAW);
-
-  glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-  transform_component.get().needs_update = false;
 }
 
 void updateCameraUniform(

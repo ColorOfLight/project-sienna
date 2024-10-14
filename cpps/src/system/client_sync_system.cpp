@@ -42,6 +42,10 @@ void syncInput(std::reference_wrapper<InputComponent> input_component) {
       pressed_key_map["KeyS"].as<bool>();
   input_component.get().pressed_key_map[InputKey::RIGHT] =
       pressed_key_map["KeyD"].as<bool>();
+  input_component.get().pressed_key_map[InputKey::FORWARD] =
+      pressed_key_map["KeyR"].as<bool>();
+  input_component.get().pressed_key_map[InputKey::BACKWARD] =
+      pressed_key_map["KeyF"].as<bool>();
 
   emscripten::val is_pointer_down = client_input_component["isPointerDown"];
 

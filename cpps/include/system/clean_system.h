@@ -40,10 +40,11 @@ void markToClean(
     std::reference_wrapper<const InputComponent> input_component,
     std::reference_wrapper<const CameraComponent> camera_component,
     std::reference_wrapper<const CleanerComponent> cleaner_component,
+    std::reference_wrapper<TransformComponent> parent_transform_component,
     std::vector<std::reference_wrapper<const GeometryComponent>>
         geometry_components,
-    std::vector<std::reference_wrapper<const TransformComponent>>
-        transform_components,
+    std::vector<std::reference_wrapper<TransformComponent>>
+        child_transform_components,
     std::vector<std::reference_wrapper<CleanMarkComponent>>
         clean_mark_components);
 

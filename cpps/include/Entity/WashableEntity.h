@@ -28,20 +28,17 @@
 
 #include "./Component/GrMaterialComponent.h"
 #include "./Component/MaterialComponent.h"
+#include "./Component/TransformComponent.h"
 #include "./WashablePartEntity.h"
 
 enum class WashablePreset { CUBE };
 
 class WashableEntity {
  public:
-  WashableEntity() {
-    material_component = std::make_unique<MaterialComponent>();
-    gr_material_component = std::make_unique<GrMaterialComponent>();
-    washable_part_entities = std::vector<std::unique_ptr<WashablePartEntity>>();
-  }
   WashableEntity(WashablePreset preset);
 
   std::unique_ptr<MaterialComponent> material_component;
+  std::unique_ptr<TransformComponent> transform_component;
   std::unique_ptr<GrMaterialComponent> gr_material_component;
   std::vector<std::unique_ptr<WashablePartEntity>> washable_part_entities;
 };
