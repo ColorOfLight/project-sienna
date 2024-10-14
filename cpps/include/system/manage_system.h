@@ -35,7 +35,7 @@
 
 namespace manage_system {
 
-void resetGame(
+void resetDirtMap(
     std::reference_wrapper<EventComponent> event_component,
     std::vector<std::reference_wrapper<DirtMapComponent>> dirt_map_components);
 
