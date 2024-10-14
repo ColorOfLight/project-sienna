@@ -34,6 +34,7 @@
 #include "./system/clean_system.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
+#include "./system/manage_system.h"
 #include "./system/render_system.h"
 #include "./system/transform_system.h"
 
@@ -69,6 +70,9 @@ int main() {
       std::vector<std::reference_wrapper<const TransformComponent>>();
   auto washable_clean_marks =
       std::vector<std::reference_wrapper<CleanMarkComponent>>();
+  auto washable_dirt_maps =
+      std::vector<std::reference_wrapper<DirtMapComponent>>();
+
   for (const auto& washable_part : washable_entity->washable_part_entities) {
     washable_geometries.push_back(
         std::ref(*washable_part.get()->geometry_component));
@@ -76,6 +80,8 @@ int main() {
         std::ref(*washable_part.get()->transform_component));
     washable_clean_marks.push_back(
         std::ref(*washable_part.get()->clean_mark_component));
+    washable_dirt_maps.push_back(
+        std::ref(*washable_part.get()->dirt_map_component));
   }
 
   gr_sync_system::updateMaterial(
@@ -107,7 +113,8 @@ int main() {
                     player_entity = std::ref(player_entity),
                     washable_entity = std::ref(washable_entity), render_items,
                     washable_geometries, washable_transforms,
-                    washable_clean_marks](float elapsed_ms, float delta_ms) {
+                    washable_clean_marks,
+                    washable_dirt_maps](float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(
         std::ref(*game_entity.get()->input_component));
     client_sync_system::consumeEvent(
@@ -140,6 +147,11 @@ int main() {
             std::ref(*washable_part.get()->clean_mark_component),
             std::ref(*washable_part.get()->dirt_map_component));
       }
+    }
+
+    if (game_entity.get()->event_component.get()->reset) {
+      manage_system::resetGame(std::ref(*game_entity.get()->event_component),
+                               washable_dirt_maps);
     }
 
     for (const auto& washable_part :
