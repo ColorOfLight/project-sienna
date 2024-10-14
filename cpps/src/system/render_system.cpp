@@ -50,7 +50,7 @@ void initContext() {
 }
 
 void adjustViewportSize(
-    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component) {
   if (event_component.get().change_canvas_size) {
@@ -66,9 +66,8 @@ void adjustViewportSize(
   }
 }
 
-void render(
-    std::reference_wrapper<const GrMaterialComponent> gr_material_component,
-    const std::vector<RenderItem>& render_items) {
+void render(std::reference_wrapper<GrMaterialComponent> gr_material_component,
+            const std::vector<RenderItem>& render_items) {
   GLuint shader_program_id = gr_material_component.get().shader_program_id;
 
   glUseProgram(shader_program_id);

@@ -38,23 +38,23 @@
 namespace gr_sync_system {
 
 void updateGeometry(
-    std::reference_wrapper<const GeometryComponent> geometry_component,
+    std::reference_wrapper<GeometryComponent> geometry_component,
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
 
 void updateMaterial(
-    std::reference_wrapper<const MaterialComponent> material_component,
+    std::reference_wrapper<MaterialComponent> material_component,
     std::reference_wrapper<GrMaterialComponent> gr_material_component);
 
 void updateCameraUniform(
-    std::reference_wrapper<const InputComponent> input_component,
+    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
 void updateTransformUniforms(
     std::reference_wrapper<TransformComponent> parent_transform_component,
-    std::vector<std::reference_wrapper<TransformComponent>>
+    const std::vector<std::reference_wrapper<TransformComponent>>&
         child_transform_components,
-    std::vector<std::reference_wrapper<GrUniformComponent>>
+    const std::vector<std::reference_wrapper<GrUniformComponent>>&
         gr_uniform_components);
 
 void updateDirtTexture(
