@@ -158,13 +158,13 @@ int main() {
                                   washable_dirt_maps);
     }
 
+    gr_sync_system::updateTransformUniforms(
+        std::ref(*washable_entity.get().transform_component),
+        washable_transforms, washable_gr_transform_uniforms);
+
     for (const auto& washable_part :
          washable_entity.get().washable_part_entities) {
-      gr_sync_system::updateTransformUniforms(
-          std::ref(*washable_entity.get().transform_component),
-          washable_transforms, washable_gr_transform_uniforms);
-
-      gr_sync_system::updateDirtTexture(
+            gr_sync_system::updateDirtTexture(
           std::ref(*washable_part->dirt_map_component),
           std::ref(*washable_part->gr_dirt_map_texture_component));
     }
