@@ -24,11 +24,4 @@
 
 #include "./system/feedback_system.h"
 
-namespace feedback_system {
-
-void setTotalCompleteness(
-    std::reference_wrapper<const GameStateComponent> game_state_component) {
-  // TODO: implement in source file
-}
-
-}  // namespace feedback_system
+namespace feedback_system {}  // namespace feedback_system

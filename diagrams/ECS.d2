@@ -326,8 +326,6 @@ Systems: {
   FeedbackSystem: {
     class: System
     shape: class
-
-    + setTotalCompleteness(GameState): void
   }
 }
 
@@ -379,5 +377,4 @@ Systems.RenderSystem <- WashablePartEntity.TransformGrUniformComponent
 Systems.RenderSystem <- WashablePartEntity.DirtGrTextureComponent
 
 # FeedbackSystem
-Systems.FeedbackSystem <- GameEntity.GameStateComponent
 Client.ClientFunctions <- Systems.FeedbackSystem
