@@ -268,7 +268,55 @@ void updateBrushUniform(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
-  // TODO: implement later
+  const auto& pointer_position = input_component.get().pointer_position;
+  const auto& canvas_size = input_component.get().canvas_size;
+
+  struct BrushUniformData {
+    alignas(16) float air_pressure;
+    alignas(16) glm::vec3 paint_color;
+    alignas(16) float paint_viscosity;
+    alignas(16) float nozzle_fov;
+    alignas(16) glm::mat4 view_matrix;
+    alignas(16) glm::mat4 projection_matrix;
+    alignas(16) glm::vec3 position;
+  };
+
+  glm::mat4 projection_matrix =
+      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 10.0f);
+
+  auto eye_position = getPositionOnSphere(camera_component.get().radius,
+                                          camera_component.get().phi,
+                                          camera_component.get().theta);
+
+  auto camera_up =
+      getUpOnSphere(camera_component.get().phi, camera_component.get().theta);
+
+  auto camera_view_matrix =
+      glm::lookAt(eye_position, glm::vec3(0.0f), camera_up);
+
+  auto ray_direction = getRayDirectionFromScreen(
+      glm::vec2(pointer_position.x, pointer_position.y),
+      glm::vec2(canvas_size.width, canvas_size.height),
+      camera_component.get().fovy, camera_view_matrix);
+
+  auto brush_view_matrix =
+      getRayViewMatrix(eye_position, camera_up, ray_direction);
+
+  BrushUniformData brush_uniform_data = {
+      .air_pressure = brush_component.get().air_pressure,
+      .paint_color = brush_component.get().paint_color,
+      .paint_viscosity = brush_component.get().paint_viscosity,
+      .nozzle_fov = brush_component.get().nozzle_fov,
+      .view_matrix = brush_view_matrix,
+      .projection_matrix = projection_matrix,
+      .position = eye_position,
+  };
+
+  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(brush_uniform_data),
+               &brush_uniform_data, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 }  // namespace gr_sync_system
