@@ -159,9 +159,11 @@ int main() {
 
       for (auto& washable_part : washable_entity.get().washable_part_entities) {
         paint_system::paint(
+            std::ref(*washable_part->gr_geometry_component),
             std::ref(*player_entity.get().gr_decal_shader_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
-            std::ref(*washable_part->gr_painted_texture_component));
+            std::ref(*washable_part->gr_transform_uniform_component),
+            std::ref(*washable_part->gr_painted_framebuffer_component));
 
         // TODO: remove the belows later
         clean_system::clean(std::ref(*washable_part->clean_mark_component),
