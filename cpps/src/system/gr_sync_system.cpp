@@ -95,10 +95,10 @@ void updateMaterial(
   int success;
   char info_log[512];
 
-  auto material_type = material_component.get().material_type;
+  auto shader_type = material_component.get().shader_type;
 
-  const char* vertex_shader_source = getVertexShaderSource(material_type);
-  const char* fragment_shader_source = getFragmentShaderSource(material_type);
+  const char* vertex_shader_source = getVertexShaderSource(shader_type);
+  const char* fragment_shader_source = getFragmentShaderSource(shader_type);
 
   // Compile the vertex shader
   GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);

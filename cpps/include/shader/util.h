@@ -24,21 +24,22 @@
 
 #pragma once
 
-#include "./Component/MaterialComponent.h"
 #include "./shader/source.h"
 
-inline const char* getVertexShaderSource(MaterialType material_type) {
+enum class ShaderType { TEXTURE_TEST, PHONG };
+
+inline const char* getVertexShaderSource(ShaderType shader_type) {
   return shader_source::basic_vertex.c_str();
 };
 
-inline const char* getFragmentShaderSource(MaterialType material_type) {
-  switch (material_type) {
-    case MaterialType::TEXTURE_TEST:
+inline const char* getFragmentShaderSource(ShaderType shader_type) {
+  switch (shader_type) {
+    case ShaderType::TEXTURE_TEST:
       return shader_source::texture_test_fragment.c_str();
-    case MaterialType::PHONG:
+    case ShaderType::PHONG:
       return shader_source::phong_fragment.c_str();
     default:
       throw std::runtime_error(
-          "ERROR::SHADER::FRAGMENT::INVALID_MATERIAL_TYPE\n");
+          "ERROR::SHADER::FRAGMENT::INVALID_SHADER_TYPE\n");
   }
 };
