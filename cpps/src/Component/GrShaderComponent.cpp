@@ -22,15 +22,16 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrShaderComponent.h"
 
-#include <limits>
+#include <GLES3/gl3.h>
 
-class GrMaterialComponent {
- public:
-  GrMaterialComponent();
+GrShaderComponent::GrShaderComponent() {
+  shader_program_id = std::numeric_limits<unsigned int>::max();
+}
 
-  ~GrMaterialComponent();
-
-  unsigned int shader_program_id;
-};
+GrShaderComponent::~GrShaderComponent() {
+  if (shader_program_id != std::numeric_limits<unsigned int>::max()) {
+    glDeleteProgram(shader_program_id);
+  }
+}

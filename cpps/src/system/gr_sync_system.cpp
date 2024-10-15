@@ -91,7 +91,7 @@ void updateGeometry(
 
 void updateMaterial(
     std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrMaterialComponent> gr_material_component) {
+    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
   int success;
   char info_log[512];
 
@@ -143,7 +143,7 @@ void updateMaterial(
   glDeleteShader(vertex_shader_id);
   glDeleteShader(fragment_shader_id);
 
-  gr_material_component.get().shader_program_id = shader_program_id;
+  gr_shader_component.get().shader_program_id = shader_program_id;
 }
 
 void updateTransformUniforms(

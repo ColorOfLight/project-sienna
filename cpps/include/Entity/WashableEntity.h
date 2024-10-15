@@ -26,7 +26,7 @@
 
 #include <vector>
 
-#include "./Component/GrMaterialComponent.h"
+#include "./Component/GrShaderComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
 #include "./WashablePartEntity.h"
@@ -39,6 +39,6 @@ class WashableEntity {
 
   std::unique_ptr<MaterialComponent> material_component;
   std::unique_ptr<TransformComponent> transform_component;
-  std::unique_ptr<GrMaterialComponent> gr_material_component;
+  std::unique_ptr<GrShaderComponent> gr_shader_component;
   std::vector<std::unique_ptr<WashablePartEntity>> washable_part_entities;
 };

@@ -88,7 +88,7 @@ int main() {
 
   gr_sync_system::updateMaterial(
       std::ref(*washable_entity->material_component),
-      std::ref(*washable_entity->gr_material_component));
+      std::ref(*washable_entity->gr_shader_component));
 
   auto render_items = std::vector<RenderItem>();
   for (const auto& washable_part : washable_entity->washable_part_entities) {
@@ -164,13 +164,13 @@ int main() {
 
     for (const auto& washable_part :
          washable_entity.get().washable_part_entities) {
-            gr_sync_system::updateDirtTexture(
+      gr_sync_system::updateDirtTexture(
           std::ref(*washable_part->dirt_map_component),
           std::ref(*washable_part->gr_dirt_map_texture_component));
     }
 
-    render_system::render(
-        std::ref(*washable_entity.get().gr_material_component), render_items);
+    render_system::render(std::ref(*washable_entity.get().gr_shader_component),
+                          render_items);
   };
 
   static_main_loop = main_loop;

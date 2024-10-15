@@ -28,7 +28,7 @@
 #include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrMaterialComponent.h"
+#include "./Component/GrShaderComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
@@ -43,7 +43,7 @@ void updateGeometry(
 
 void updateMaterial(
     std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrMaterialComponent> gr_material_component);
+    std::reference_wrapper<GrShaderComponent> gr_shader_component);
 
 void updateCameraUniform(
     std::reference_wrapper<InputComponent> input_component,

@@ -27,7 +27,7 @@
 WashableEntity::WashableEntity(WashablePreset preset) {
   material_component = std::make_unique<MaterialComponent>(MaterialType::PHONG);
   transform_component = std::make_unique<TransformComponent>();
-  gr_material_component = std::make_unique<GrMaterialComponent>();
+  gr_shader_component = std::make_unique<GrShaderComponent>();
 
   if (preset == WashablePreset::CUBE) {
     // front face

@@ -29,7 +29,7 @@
 #include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrMaterialComponent.h"
+#include "./Component/GrShaderComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
@@ -49,7 +49,7 @@ void adjustViewportSize(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
-void render(std::reference_wrapper<GrMaterialComponent> gr_material_component,
+void render(std::reference_wrapper<GrShaderComponent> gr_shader_component,
             const std::vector<RenderItem>& render_items);
 
 }  // namespace render_system
