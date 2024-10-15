@@ -24,32 +24,19 @@
 
 #pragma once
 
-#include <vector>
+#include <glm/glm.hpp>
 
-#include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
-#include "./Component/GeometryComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/TransformComponent.h"
+class BrushComponent {
+ public:
+  BrushComponent() {
+    nozzle_fov = glm::radians(45.0f);
+    air_pressure = 0.5f;
+    paint_color = glm::vec3(1.0f, 0.5f, 0.0f);
+    paint_viscosity = 0.1f;
+  }
 
-// TODO: remove later
-namespace clean_system {
-
-void markToClean(
-    std::reference_wrapper<InputComponent> input_component,
-    std::reference_wrapper<CameraComponent> camera_component,
-    std::reference_wrapper<CleanerComponent> cleaner_component,
-    std::reference_wrapper<TransformComponent> parent_transform_component,
-    const std::vector<std::reference_wrapper<GeometryComponent>>&
-        geometry_components,
-    const std::vector<std::reference_wrapper<TransformComponent>>&
-        child_transform_components,
-    const std::vector<std::reference_wrapper<CleanMarkComponent>>&
-        clean_mark_components);
-
-void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
-           std::reference_wrapper<DirtMapComponent> dirt_map_component);
-
-}  // namespace clean_system
+  float nozzle_fov;
+  float air_pressure;
+  glm::vec3 paint_color;
+  float paint_viscosity;
+};

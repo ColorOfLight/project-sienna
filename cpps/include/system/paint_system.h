@@ -24,32 +24,15 @@
 
 #pragma once
 
-#include <vector>
+#include "./Component/GrShaderComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
 
-#include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
-#include "./Component/GeometryComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/TransformComponent.h"
+namespace paint_system {
 
-// TODO: remove later
-namespace clean_system {
+void paint(
+    std::reference_wrapper<GrShaderComponent> gr_shader_component,
+    std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
+    std::reference_wrapper<GrTextureComponent> gr_painted_texture_component);
 
-void markToClean(
-    std::reference_wrapper<InputComponent> input_component,
-    std::reference_wrapper<CameraComponent> camera_component,
-    std::reference_wrapper<CleanerComponent> cleaner_component,
-    std::reference_wrapper<TransformComponent> parent_transform_component,
-    const std::vector<std::reference_wrapper<GeometryComponent>>&
-        geometry_components,
-    const std::vector<std::reference_wrapper<TransformComponent>>&
-        child_transform_components,
-    const std::vector<std::reference_wrapper<CleanMarkComponent>>&
-        clean_mark_components);
-
-void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
-           std::reference_wrapper<DirtMapComponent> dirt_map_component);
-
-}  // namespace clean_system
+}  // namespace paint_system

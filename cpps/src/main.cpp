@@ -35,6 +35,7 @@
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
 #include "./system/manage_system.h"
+#include "./system/paint_system.h"
 #include "./system/render_system.h"
 #include "./system/transform_system.h"
 
@@ -90,6 +91,9 @@ int main() {
       std::ref(*washable_entity->material_component),
       std::ref(*washable_entity->gr_shader_component));
 
+  gr_sync_system::updateDecalShader(
+      std::ref(*player_entity->gr_decal_shader_component));
+
   auto render_items = std::vector<RenderItem>();
   for (const auto& washable_part : washable_entity->washable_part_entities) {
     gr_sync_system::updateGeometry(
@@ -140,6 +144,12 @@ int main() {
         std::ref(*player_entity.get().gr_camera_uniform_component));
 
     if (game_entity.get().input_component->is_pointer_down) {
+      gr_sync_system::updateBrushUniform(
+          std::ref(*player_entity.get().brush_component),
+          std::ref(*game_entity.get().input_component),
+          std::ref(*player_entity.get().camera_component),
+          std::ref(*player_entity.get().gr_brush_uniform_component));
+      // TODO: remove the belows later
       clean_system::markToClean(
           std::ref(*game_entity.get().input_component),
           std::ref(*player_entity.get().camera_component),

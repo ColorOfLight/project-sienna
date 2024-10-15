@@ -34,6 +34,7 @@ void transformCamera(float delta_ms,
                      std::reference_wrapper<InputComponent> input_component,
                      std::reference_wrapper<CameraComponent> camera_component);
 
+// TODO: rename later
 void transformWashable(
     float delta_ms, std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<TransformComponent> transform_component);

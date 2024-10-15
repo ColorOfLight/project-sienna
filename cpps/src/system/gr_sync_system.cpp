@@ -250,4 +250,17 @@ void updateDirtTexture(
   dirt_map_component.get().needs_update = false;
 }
 
+void updateDecalShader(
+    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
+  // TODO: implement later
+}
+
+void updateBrushUniform(
+    std::reference_wrapper<BrushComponent> brush_component,
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+  // TODO: implement later
+}
+
 }  // namespace gr_sync_system

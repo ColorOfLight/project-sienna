@@ -27,15 +27,15 @@
 WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
                                        glm::vec3 scale, glm::quat rotation,
                                        glm::vec3 translation) {
-  int dirt_map_width = 200;
-  int dirt_map_height = 200;
+  int painted_map_width = 200;
+  int painted_map_height = 200;
 
   clean_mark_component = std::make_unique<CleanMarkComponent>();
-  dirt_map_component =
-      std::make_unique<DirtMapComponent>(dirt_map_width, dirt_map_height);
+
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
-  gr_dirt_map_texture_component = std::make_unique<GrTextureComponent>(
-      "u_dirtMapTexture", dirt_map_width, dirt_map_height);
+
+  gr_painted_texture_component = std::make_unique<GrTextureComponent>(
+      "u_paintedMapTexture", painted_map_width, painted_map_height);
   gr_transform_uniform_component =
       std::make_unique<GrUniformComponent>("ModelBlock");
 
@@ -48,4 +48,12 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   } else {
     throw std::invalid_argument("Invalid washable part preset");
   }
+
+  // TODO: remove the belows later
+  int dirt_map_width = 200;
+  int dirt_map_height = 200;
+  dirt_map_component =
+      std::make_unique<DirtMapComponent>(dirt_map_width, dirt_map_height);
+  gr_dirt_map_texture_component = std::make_unique<GrTextureComponent>(
+      "u_dirtMapTexture", dirt_map_width, dirt_map_height);
 }
