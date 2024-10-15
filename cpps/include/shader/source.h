@@ -73,6 +73,7 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
         float u_brush_airPressure;
         vec3 u_brush_paintColor;
         float u_brush_paintViscosity;
+        float u_brush_nozzleFov;
         mat4 u_brush_viewMatrix;
         mat4 u_brush_projectionMatrix;
         vec3 u_brush_position;
@@ -95,7 +96,7 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
     {
         float positionX = a_texCoord.x * 2.0 - 1.0;
         float positionY = a_texCoord.y * 2.0 - 1.0;
-        float positionZ = 1.0 // TODO: calculate z value
+        float positionZ = 1.0; // TODO: calculate z value
         gl_Position = vec4(positionX, positionY, positionZ, 1.0);
 
         vec4 modelPosition = u_model_matrix * vec4(a_position, 1.0);
@@ -134,7 +135,10 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         float k = 1.0;
         float distance = length(v_projectedPosition - u_brush_position);
         float distanceFactor = exp(-distance * u_brush_paintViscosity);
-        float fovFactor = 1 / pow(tan(u_brush_nozzleFov / 2), 2);
+
+        float epsilon = 1e-6;
+        float tanFov = tan(u_brush_nozzleFov / 2.0) + epsilon;
+        float fovFactor = 1.0 / pow(tanFov, 2.0);
 
         float intensity = k * u_brush_airPressure * distanceFactor * fovFactor;
         FragColor = vec4(u_brush_paintColor, min(intensity, 1.0));
