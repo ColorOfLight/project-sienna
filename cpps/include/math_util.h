@@ -121,3 +121,12 @@ inline glm::vec3 getRayDirectionFromScreen(const glm::vec2& screen_position,
 
   return ray_direction;
 }
+
+inline glm::mat4 getRayViewMatrix(const glm::vec3& ray_origin,
+                                  const glm::vec3& base_up,
+                                  const glm::vec3& ray_direction) {
+  glm::vec3 right = glm::cross(ray_direction, base_up);
+  glm::vec3 up = glm::cross(right, ray_direction);
+
+  return glm::lookAt(ray_origin, ray_origin + ray_direction, up);
+}
