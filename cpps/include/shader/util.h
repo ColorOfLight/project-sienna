@@ -26,10 +26,18 @@
 
 #include "./shader/source.h"
 
-enum class ShaderType { TEXTURE_TEST, PHONG };
+enum class ShaderType { TEXTURE_TEST, PHONG, BRUSH_DECAL };
 
 inline const char* getVertexShaderSource(ShaderType shader_type) {
-  return shader_source::basic_vertex.c_str();
+  switch (shader_type) {
+    case ShaderType::TEXTURE_TEST:
+    case ShaderType::PHONG:
+      return shader_source::basic_vertex.c_str();
+    case ShaderType::BRUSH_DECAL:
+      return shader_source::brush_decal_vertex.c_str();
+    default:
+      throw std::runtime_error("ERROR::SHADER::VERTEX::INVALID_SHADER_TYPE\n");
+  }
 };
 
 inline const char* getFragmentShaderSource(ShaderType shader_type) {
@@ -38,6 +46,8 @@ inline const char* getFragmentShaderSource(ShaderType shader_type) {
       return shader_source::texture_test_fragment.c_str();
     case ShaderType::PHONG:
       return shader_source::phong_fragment.c_str();
+    case ShaderType::BRUSH_DECAL:
+      return shader_source::brush_decal_fragment.c_str();
     default:
       throw std::runtime_error(
           "ERROR::SHADER::FRAGMENT::INVALID_SHADER_TYPE\n");

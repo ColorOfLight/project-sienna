@@ -65,6 +65,82 @@ inline const std::string basic_vertex = R"(#version 300 es
     }
 )";
 
+inline const std::string brush_decal_vertex = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_paintViscosity;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+
+    layout (std140) uniform ModelBlock
+    {
+        mat4 u_model_matrix;
+    };
+
+    layout (location = 0) in vec3 a_position;
+    layout (location = 1) in vec3 a_normal;
+    layout (location = 2) in vec2 a_texCoord;
+
+    out vec3 v_position;
+    out vec3 v_normal;
+    out vec3 v_projectedPosition;
+
+    void main()
+    {
+        float positionX = a_texCoord.x * 2.0 - 1.0;
+        float positionY = a_texCoord.y * 2.0 - 1.0;
+        float positionZ = 1.0 // TODO: calculate z value
+        gl_Position = vec4(positionX, positionY, positionZ, 1.0);
+
+        vec4 modelPosition = u_model_matrix * vec4(a_position, 1.0);
+        v_position = modelPosition.xyz;
+
+        vec4 projectedPosition = u_brush_projectionMatrix * u_brush_viewMatrix * modelPosition;
+        v_projectedPosition = projectedPosition.xyz;
+
+        mat3 normalMatrix = transpose(inverse(mat3(u_model_matrix)));
+        v_normal = normalize(normalMatrix * a_normal);
+    }
+)";
+
+inline const std::string brush_decal_fragment = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_paintViscosity;
+        float u_brush_nozzleFov;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+
+    out vec4 FragColor;
+
+    in vec3 v_position;
+    in vec3 v_normal;
+    in vec3 v_projectedPosition;
+
+    void main()
+    {
+        float k = 1.0;
+        float distance = length(v_projectedPosition - u_brush_position);
+        float distanceFactor = exp(-distance * u_brush_paintViscosity);
+        float fovFactor = 1 / pow(tan(u_brush_nozzleFov / 2), 2);
+
+        float intensity = k * u_brush_airPressure * distanceFactor * fovFactor;
+        FragColor = vec4(u_brush_paintColor, min(intensity, 1.0));
+    }
+)";
+
 inline const std::string texture_test_fragment = R"(#version 300 es
     precision mediump float;
 
