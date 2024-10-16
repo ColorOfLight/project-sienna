@@ -43,15 +43,15 @@ void paint(
       gr_brush_uniform_component.get().uniform_block_name.c_str();
   auto model_uniform_block_name =
       gr_model_uniform_component.get().uniform_block_name.c_str();
+  auto texture_name = gr_painted_texture_component.get().name.c_str();
 
   glBindFramebuffer(GL_FRAMEBUFFER,
                     gr_painted_framebuffer_component.get().framebuffer_id);
   glViewport(0, 0, gr_painted_texture_component.get().width,
              gr_painted_texture_component.get().height);
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
 
   glUseProgram(shader_program_id);
 
