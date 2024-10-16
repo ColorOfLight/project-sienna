@@ -35,7 +35,8 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
 
   gr_painted_texture_component = std::make_unique<GrTextureComponent>(
-      "u_paintedMapTexture", painted_map_width, painted_map_height);
+      TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
+      painted_map_height);
 
   gr_painted_framebuffer_component = std::make_unique<GrFramebufferComponent>(
       gr_painted_texture_component->texture_id);
@@ -59,5 +60,5 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   dirt_map_component =
       std::make_unique<DirtMapComponent>(dirt_map_width, dirt_map_height);
   gr_dirt_map_texture_component = std::make_unique<GrTextureComponent>(
-      "u_dirtMapTexture", dirt_map_width, dirt_map_height);
+      TextureType::R8, "u_dirtMapTexture", dirt_map_width, dirt_map_height);
 }

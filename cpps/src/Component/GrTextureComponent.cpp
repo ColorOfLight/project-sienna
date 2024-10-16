@@ -26,7 +26,8 @@
 
 #include <GLES3/gl3.h>
 
-GrTextureComponent::GrTextureComponent(const std::string& name, int width,
+GrTextureComponent::GrTextureComponent(TextureType texture_type,
+                                       const std::string& name, int width,
                                        int height)
     : name(name), width(width), height(height) {
   glGenTextures(1, &texture_id);
@@ -37,8 +38,15 @@ GrTextureComponent::GrTextureComponent(const std::string& name, int width,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED,
-               GL_UNSIGNED_BYTE, nullptr);
+  if (texture_type == TextureType::R8) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED,
+                 GL_UNSIGNED_BYTE, nullptr);
+  } else if (texture_type == TextureType::RGBA) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+  } else {
+    throw std::invalid_argument("Invalid texture type");
+  }
 
   glBindTexture(GL_TEXTURE_2D, 0);
 }
