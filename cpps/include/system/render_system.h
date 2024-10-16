@@ -49,7 +49,8 @@ void adjustViewportSize(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
-void render(std::reference_wrapper<GrShaderComponent> gr_shader_component,
+void render(std::reference_wrapper<InputComponent> input_component,
+            std::reference_wrapper<GrShaderComponent> gr_shader_component,
             const std::vector<RenderItem>& render_items);
 
 }  // namespace render_system
