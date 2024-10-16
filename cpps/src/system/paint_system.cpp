@@ -24,6 +24,8 @@
 
 #include "./system/paint_system.h"
 
+#include <GLES3/gl3.h>
+
 namespace paint_system {
 
 void paint(
@@ -31,9 +33,48 @@ void paint(
     std::reference_wrapper<GrShaderComponent> gr_shader_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
+    std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,
     std::reference_wrapper<GrFramebufferComponent>
         gr_painted_framebuffer_component) {
-  // TODO: implement later
+  auto shader_program_id = gr_shader_component.get().shader_program_id;
+
+  auto vao_id = gr_geometry_component.get().vao_id;
+  auto brush_uniform_block_name =
+      gr_brush_uniform_component.get().uniform_block_name.c_str();
+  auto model_uniform_block_name =
+      gr_model_uniform_component.get().uniform_block_name.c_str();
+
+  glBindFramebuffer(GL_FRAMEBUFFER,
+                    gr_painted_framebuffer_component.get().framebuffer_id);
+  glViewport(0, 0, gr_painted_texture_component.get().width,
+             gr_painted_texture_component.get().height);
+  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glUseProgram(shader_program_id);
+
+  glBindVertexArray(vao_id);
+
+  glBindBufferBase(GL_UNIFORM_BUFFER, 0,
+                   gr_brush_uniform_component.get().uniform_buffer_id);
+  unsigned int brush_uniform_block_index =
+      glGetUniformBlockIndex(shader_program_id, brush_uniform_block_name);
+  glUniformBlockBinding(shader_program_id, brush_uniform_block_index, 0);
+
+  glBindBufferBase(GL_UNIFORM_BUFFER, 1,
+                   gr_model_uniform_component.get().uniform_buffer_id);
+  unsigned int model_uniform_block_index =
+      glGetUniformBlockIndex(shader_program_id, model_uniform_block_name);
+  glUniformBlockBinding(shader_program_id, model_uniform_block_index, 1);
+
+  glDrawElements(GL_TRIANGLES, gr_geometry_component.get().vertex_count,
+                 GL_UNSIGNED_INT, 0);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glUseProgram(0);
+  glDisable(GL_BLEND);
 }
 
 }  // namespace paint_system
