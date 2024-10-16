@@ -27,8 +27,8 @@
 WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
                                        glm::vec3 scale, glm::quat rotation,
                                        glm::vec3 translation) {
-  int painted_map_width = 200;
-  int painted_map_height = 200;
+  int painted_map_width = 400;
+  int painted_map_height = 400;
 
   clean_mark_component = std::make_unique<CleanMarkComponent>();
 
