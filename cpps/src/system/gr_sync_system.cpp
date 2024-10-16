@@ -309,7 +309,7 @@ void updateBrushUniform(
       .nozzle_fov = brush_component.get().nozzle_fov,
       .view_matrix = brush_view_matrix,
       .projection_matrix = projection_matrix,
-      .position = eye_position,
+      .position = eye_position + ray_direction * glm::vec3(0.2),
   };
 
   glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
