@@ -272,17 +272,17 @@ void updateBrushUniform(
   const auto& canvas_size = input_component.get().canvas_size;
 
   struct BrushUniformData {
-    alignas(16) float air_pressure;
+    float air_pressure;
     alignas(16) glm::vec3 paint_color;
-    alignas(16) float paint_viscosity;
-    alignas(16) float nozzle_fov;
+    float paint_viscosity;
+    float nozzle_fov;
     alignas(16) glm::mat4 view_matrix;
     alignas(16) glm::mat4 projection_matrix;
     alignas(16) glm::vec3 position;
   };
 
   glm::mat4 projection_matrix =
-      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 10.0f);
+      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 100.0f);
 
   auto eye_position = getPositionOnSphere(camera_component.get().radius,
                                           camera_component.get().phi,
