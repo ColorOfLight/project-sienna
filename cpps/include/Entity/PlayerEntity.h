@@ -26,7 +26,6 @@
 
 #include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
-#include "./Component/CleanerComponent.h"
 #include "./Component/GrShaderComponent.h"
 #include "./Component/GrUniformComponent.h"
 

@@ -26,7 +26,6 @@
 
 #include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
-#include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrShaderComponent.h"

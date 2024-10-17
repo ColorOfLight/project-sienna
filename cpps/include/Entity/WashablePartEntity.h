@@ -26,8 +26,6 @@
 
 #include <glm/glm.hpp>
 
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrFramebufferComponent.h"
 #include "./Component/GrGeometryComponent.h"

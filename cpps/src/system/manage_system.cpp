@@ -26,16 +26,18 @@
 
 namespace manage_system {
 
-void resetDirtMap(std::reference_wrapper<EventComponent> event_component,
-                  const std::vector<std::reference_wrapper<DirtMapComponent>>&
-                      dirt_map_components) {
-  for (auto& dirt_map_component : dirt_map_components) {
-    auto& dirt_map = dirt_map_component.get().dirt_map;
-    std::fill(dirt_map.begin(), dirt_map.end(), 255);
-    dirt_map_component.get().needs_update = true;
-  }
+// TODO: fix it later
+// void resetDirtMap(std::reference_wrapper<EventComponent> event_component,
+//                   const
+//                   std::vector<std::reference_wrapper<DirtMapComponent>>&
+//                       dirt_map_components) {
+//   for (auto& dirt_map_component : dirt_map_components) {
+//     auto& dirt_map = dirt_map_component.get().dirt_map;
+//     std::fill(dirt_map.begin(), dirt_map.end(), 255);
+//     dirt_map_component.get().needs_update = true;
+//   }
 
-  event_component.get().reset = false;
-}
+//   event_component.get().reset = false;
+// }
 
 }  // namespace manage_system
