@@ -22,51 +22,50 @@
  * SOFTWARE.
  */
 
-#include "./Entity/WashableEntity.h"
-
+#include "./Entity/PaintableEntity.h"
 #include "./shader/util.h"
 
-WashableEntity::WashableEntity(WashablePreset preset) {
+PaintableEntity::PaintableEntity(PaintablePreset preset) {
   material_component = std::make_unique<MaterialComponent>(ShaderType::PHONG);
   transform_component = std::make_unique<TransformComponent>();
   gr_shader_component = std::make_unique<GrShaderComponent>();
 
-  if (preset == WashablePreset::CUBE) {
+  if (preset == PaintablePreset::CUBE) {
     // front face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.5f)));
 
     // back face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(180.0f), 0.0f)),
         glm::vec3(0.0f, 0.0f, -0.5f)));
 
     // left face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(-90.0f), 0.0f)),
         glm::vec3(-0.5f, 0.0f, 0.0f)));
 
     // right face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(90.0f), 0.0f)),
         glm::vec3(0.5f, 0.0f, 0.0f)));
 
     // top face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f)),
         glm::vec3(0.0f, 0.5f, 0.0f)));
 
     // bottom face
-    washable_part_entities.push_back(std::make_unique<WashablePartEntity>(
-        WashablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f)),
         glm::vec3(0.0f, -0.5f, 0.0f)));
   } else {
-    throw std::invalid_argument("Invalid washable preset");
+    throw std::invalid_argument("Invalid paintable preset");
   }
 }

@@ -25,16 +25,25 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <vector>
 
-struct CleanMark {
-  glm::vec2 texture_coords;
-  float radius;
-};
+#include "./Component/GeometryComponent.h"
+#include "./Component/GrFramebufferComponent.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./Component/TransformComponent.h"
 
-class CleanMarkComponent {
+enum class PaintablePartPreset { CUBE_PART };
+
+class PaintablePartEntity {
  public:
-  CleanMarkComponent() { clean_marks = std::vector<CleanMark>(); }
+  PaintablePartEntity(PaintablePartPreset preset, glm::vec3 scale,
+                      glm::quat rotation, glm::vec3 translation);
 
-  std::vector<CleanMark> clean_marks;
+  std::unique_ptr<GeometryComponent> geometry_component;
+  std::unique_ptr<GrGeometryComponent> gr_geometry_component;
+  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
+  std::unique_ptr<TransformComponent> transform_component;
+  std::unique_ptr<GrTextureComponent> gr_painted_texture_component;
+  std::unique_ptr<GrFramebufferComponent> gr_painted_framebuffer_component;
 };

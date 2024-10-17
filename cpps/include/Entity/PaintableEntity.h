@@ -26,30 +26,19 @@
 
 #include <vector>
 
-#include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
-#include "./Component/GeometryComponent.h"
-#include "./Component/InputComponent.h"
+#include "./Component/GrShaderComponent.h"
+#include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
+#include "./PaintablePartEntity.h"
 
-// TODO: remove later
-namespace clean_system {
+enum class PaintablePreset { CUBE };
 
-void markToClean(
-    std::reference_wrapper<InputComponent> input_component,
-    std::reference_wrapper<CameraComponent> camera_component,
-    std::reference_wrapper<CleanerComponent> cleaner_component,
-    std::reference_wrapper<TransformComponent> parent_transform_component,
-    const std::vector<std::reference_wrapper<GeometryComponent>>&
-        geometry_components,
-    const std::vector<std::reference_wrapper<TransformComponent>>&
-        child_transform_components,
-    const std::vector<std::reference_wrapper<CleanMarkComponent>>&
-        clean_mark_components);
+class PaintableEntity {
+ public:
+  PaintableEntity(PaintablePreset preset);
 
-void clean(std::reference_wrapper<CleanMarkComponent> clean_mark_component,
-           std::reference_wrapper<DirtMapComponent> dirt_map_component);
-
-}  // namespace clean_system
+  std::unique_ptr<MaterialComponent> material_component;
+  std::unique_ptr<TransformComponent> transform_component;
+  std::unique_ptr<GrShaderComponent> gr_shader_component;
+  std::vector<std::unique_ptr<PaintablePartEntity>> paintable_part_entities;
+};

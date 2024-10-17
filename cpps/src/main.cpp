@@ -29,9 +29,8 @@
 #include <vector>
 
 #include "./Entity/GameEntity.h"
+#include "./Entity/PaintableEntity.h"
 #include "./Entity/PlayerEntity.h"
-#include "./Entity/WashableEntity.h"
-#include "./system/clean_system.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
 #include "./system/manage_system.h"
@@ -60,65 +59,59 @@ int main() {
 
   auto game_entity = std::make_unique<GameEntity>();
   auto player_entity = std::make_unique<PlayerEntity>();
-  auto washable_entity = std::make_unique<WashableEntity>(WashablePreset::CUBE);
+  auto paintable_entity =
+      std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
 
-  auto washable_geometries =
+  auto paintable_geometries =
       std::vector<std::reference_wrapper<GeometryComponent>>();
-  auto washable_transforms =
+  auto paintable_transforms =
       std::vector<std::reference_wrapper<TransformComponent>>();
-  auto washable_clean_marks =
-      std::vector<std::reference_wrapper<CleanMarkComponent>>();
-  auto washable_dirt_maps =
-      std::vector<std::reference_wrapper<DirtMapComponent>>();
-  auto washable_gr_transform_uniforms =
+  auto paintable_gr_transform_uniforms =
       std::vector<std::reference_wrapper<GrUniformComponent>>();
 
-  for (const auto& washable_part : washable_entity->washable_part_entities) {
-    washable_geometries.push_back(std::ref(*washable_part->geometry_component));
-    washable_transforms.push_back(
-        std::ref(*washable_part->transform_component));
-    washable_clean_marks.push_back(
-        std::ref(*washable_part->clean_mark_component));
-    washable_dirt_maps.push_back(std::ref(*washable_part->dirt_map_component));
-    washable_gr_transform_uniforms.push_back(
-        std::ref(*washable_part->gr_transform_uniform_component));
+  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
+    paintable_geometries.push_back(
+        std::ref(*paintable_part->geometry_component));
+    paintable_transforms.push_back(
+        std::ref(*paintable_part->transform_component));
+    paintable_gr_transform_uniforms.push_back(
+        std::ref(*paintable_part->gr_transform_uniform_component));
   }
 
   gr_sync_system::updateMaterial(
-      std::ref(*washable_entity->material_component),
-      std::ref(*washable_entity->gr_shader_component));
+      std::ref(*paintable_entity->material_component),
+      std::ref(*paintable_entity->gr_shader_component));
 
   gr_sync_system::updateDecalShader(
       std::ref(*player_entity->gr_decal_shader_component));
 
   auto render_items = std::vector<RenderItem>();
-  for (const auto& washable_part : washable_entity->washable_part_entities) {
+  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     gr_sync_system::updateGeometry(
-        std::ref(*washable_part->geometry_component),
-        std::ref(*washable_part->gr_geometry_component));
+        std::ref(*paintable_part->geometry_component),
+        std::ref(*paintable_part->gr_geometry_component));
 
     render_items.push_back({
         .gr_geometry_component =
-            std::ref(*washable_part->gr_geometry_component),
+            std::ref(*paintable_part->gr_geometry_component),
         .gr_uniform_components =
             std::vector<std::reference_wrapper<GrUniformComponent>>({
                 std::ref(*player_entity->gr_camera_uniform_component),
-                std::ref(*washable_part->gr_transform_uniform_component),
+                std::ref(*paintable_part->gr_transform_uniform_component),
             }),
         .gr_texture_components =
             std::vector<std::reference_wrapper<GrTextureComponent>>({
-                std::ref(*washable_part->gr_painted_texture_component),
+                std::ref(*paintable_part->gr_painted_texture_component),
             }),
     });
   }
 
   auto main_loop = [game_entity = std::ref(*game_entity),
                     player_entity = std::ref(*player_entity),
-                    washable_entity = std::ref(*washable_entity), render_items,
-                    washable_geometries, washable_transforms,
-                    washable_clean_marks, washable_dirt_maps,
-                    washable_gr_transform_uniforms](float elapsed_ms,
-                                                    float delta_ms) {
+                    paintable_entity = std::ref(*paintable_entity),
+                    render_items, paintable_geometries, paintable_transforms,
+                    paintable_gr_transform_uniforms](float elapsed_ms,
+                                                     float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
         std::ref(*game_entity.get().event_component));
@@ -131,9 +124,9 @@ int main() {
     transform_system::transformCamera(
         delta_ms, std::ref(*game_entity.get().input_component),
         std::ref(*player_entity.get().camera_component));
-    transform_system::transformWashable(
+    transform_system::transformPaintable(
         delta_ms, std::ref(*game_entity.get().input_component),
-        std::ref(*washable_entity.get().transform_component));
+        std::ref(*paintable_entity.get().transform_component));
 
     gr_sync_system::updateCameraUniform(
         std::ref(*game_entity.get().input_component),
@@ -146,47 +139,25 @@ int main() {
           std::ref(*game_entity.get().input_component),
           std::ref(*player_entity.get().camera_component),
           std::ref(*player_entity.get().gr_brush_uniform_component));
-      // TODO: remove the belows later
-      //   clean_system::markToClean(
-      //       std::ref(*game_entity.get().input_component),
-      //       std::ref(*player_entity.get().camera_component),
-      //       std::ref(*player_entity.get().cleaner_component),
-      //       std::ref(*washable_entity.get().transform_component),
-      //       washable_geometries, washable_transforms, washable_clean_marks);
 
-      for (auto& washable_part : washable_entity.get().washable_part_entities) {
+      for (auto& paintable_part :
+           paintable_entity.get().paintable_part_entities) {
         paint_system::paint(
-            std::ref(*washable_part->gr_geometry_component),
+            std::ref(*paintable_part->gr_geometry_component),
             std::ref(*player_entity.get().gr_decal_shader_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
-            std::ref(*washable_part->gr_transform_uniform_component),
-            std::ref(*washable_part->gr_painted_texture_component),
-            std::ref(*washable_part->gr_painted_framebuffer_component));
-
-        // TODO: remove the belows later
-        // clean_system::clean(std::ref(*washable_part->clean_mark_component),
-        //                     std::ref(*washable_part->dirt_map_component));
+            std::ref(*paintable_part->gr_transform_uniform_component),
+            std::ref(*paintable_part->gr_painted_texture_component),
+            std::ref(*paintable_part->gr_painted_framebuffer_component));
       }
     }
 
-    if (game_entity.get().event_component->reset) {
-      manage_system::resetDirtMap(std::ref(*game_entity.get().event_component),
-                                  washable_dirt_maps);
-    }
-
     gr_sync_system::updateTransformUniforms(
-        std::ref(*washable_entity.get().transform_component),
-        washable_transforms, washable_gr_transform_uniforms);
-
-    // for (const auto& washable_part :
-    //      washable_entity.get().washable_part_entities) {
-    //   gr_sync_system::updateDirtTexture(
-    //       std::ref(*washable_part->dirt_map_component),
-    //       std::ref(*washable_part->gr_dirt_map_texture_component));
-    // }
+        std::ref(*paintable_entity.get().transform_component),
+        paintable_transforms, paintable_gr_transform_uniforms);
 
     render_system::render(std::ref(*game_entity.get().input_component),
-                          std::ref(*washable_entity.get().gr_shader_component),
+                          std::ref(*paintable_entity.get().gr_shader_component),
                           render_items);
   };
 

@@ -25,18 +25,16 @@
 #pragma once
 
 #include "./Component/CameraComponent.h"
-#include "./Component/CleanMarkComponent.h"
-#include "./Component/CleanerComponent.h"
-#include "./Component/DirtMapComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/TransformComponent.h"
 
 namespace manage_system {
 
-// TODO: rename it later
-void resetDirtMap(std::reference_wrapper<EventComponent> event_component,
-                  const std::vector<std::reference_wrapper<DirtMapComponent>>&
-                      dirt_map_components);
+// TODO: fix it later
+// void resetDirtMap(std::reference_wrapper<EventComponent> event_component,
+//                   const
+//                   std::vector<std::reference_wrapper<DirtMapComponent>>&
+//                       dirt_map_components);
 
 }  // namespace manage_system
