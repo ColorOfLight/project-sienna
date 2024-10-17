@@ -26,7 +26,7 @@
 
 #include "./Component/GrFramebufferComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrShaderComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 
@@ -34,7 +34,8 @@ namespace paint_system {
 
 void paint(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
-    std::reference_wrapper<GrShaderComponent> gr_shader_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
     std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,

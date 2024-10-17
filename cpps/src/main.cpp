@@ -144,7 +144,7 @@ int main() {
            paintable_entity.get().paintable_part_entities) {
         paint_system::paint(
             std::ref(*paintable_part->gr_geometry_component),
-            std::ref(*player_entity.get().gr_decal_shader_component),
+            std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
             std::ref(*paintable_part->gr_painted_texture_component),
