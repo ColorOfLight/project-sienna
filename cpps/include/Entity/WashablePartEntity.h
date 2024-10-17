@@ -48,9 +48,4 @@ class WashablePartEntity {
   std::unique_ptr<TransformComponent> transform_component;
   std::unique_ptr<GrTextureComponent> gr_painted_texture_component;
   std::unique_ptr<GrFramebufferComponent> gr_painted_framebuffer_component;
-
-  // TODO: Remove later
-  std::unique_ptr<CleanMarkComponent> clean_mark_component;
-  std::unique_ptr<DirtMapComponent> dirt_map_component;
-  std::unique_ptr<GrTextureComponent> gr_dirt_map_texture_component;
 };

@@ -34,7 +34,6 @@ class PlayerEntity {
  public:
   PlayerEntity() {
     camera_component = std::make_unique<CameraComponent>();
-    cleaner_component = std::make_unique<CleanerComponent>();
     brush_component = std::make_unique<BrushComponent>();
 
     gr_camera_uniform_component =
@@ -49,7 +48,4 @@ class PlayerEntity {
   std::unique_ptr<BrushComponent> brush_component;
   std::unique_ptr<GrShaderComponent> gr_decal_shader_component;
   std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
-
-  // TODO: remove later
-  std::unique_ptr<CleanerComponent> cleaner_component;
 };

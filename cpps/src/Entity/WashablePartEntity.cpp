@@ -30,8 +30,6 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   int painted_map_width = 400;
   int painted_map_height = 400;
 
-  clean_mark_component = std::make_unique<CleanMarkComponent>();
-
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
 
   gr_painted_texture_component = std::make_unique<GrTextureComponent>(
@@ -53,12 +51,4 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   } else {
     throw std::invalid_argument("Invalid washable part preset");
   }
-
-  // TODO: remove the belows later
-  int dirt_map_width = 200;
-  int dirt_map_height = 200;
-  dirt_map_component =
-      std::make_unique<DirtMapComponent>(dirt_map_width, dirt_map_height);
-  gr_dirt_map_texture_component = std::make_unique<GrTextureComponent>(
-      TextureType::R8, "u_dirtMapTexture", dirt_map_width, dirt_map_height);
 }

@@ -65,10 +65,6 @@ int main() {
       std::vector<std::reference_wrapper<GeometryComponent>>();
   auto washable_transforms =
       std::vector<std::reference_wrapper<TransformComponent>>();
-  auto washable_clean_marks =
-      std::vector<std::reference_wrapper<CleanMarkComponent>>();
-  auto washable_dirt_maps =
-      std::vector<std::reference_wrapper<DirtMapComponent>>();
   auto washable_gr_transform_uniforms =
       std::vector<std::reference_wrapper<GrUniformComponent>>();
 
@@ -76,9 +72,6 @@ int main() {
     washable_geometries.push_back(std::ref(*washable_part->geometry_component));
     washable_transforms.push_back(
         std::ref(*washable_part->transform_component));
-    washable_clean_marks.push_back(
-        std::ref(*washable_part->clean_mark_component));
-    washable_dirt_maps.push_back(std::ref(*washable_part->dirt_map_component));
     washable_gr_transform_uniforms.push_back(
         std::ref(*washable_part->gr_transform_uniform_component));
   }
@@ -115,7 +108,6 @@ int main() {
                     player_entity = std::ref(*player_entity),
                     washable_entity = std::ref(*washable_entity), render_items,
                     washable_geometries, washable_transforms,
-                    washable_clean_marks, washable_dirt_maps,
                     washable_gr_transform_uniforms](float elapsed_ms,
                                                     float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
@@ -155,11 +147,6 @@ int main() {
             std::ref(*washable_part->gr_painted_texture_component),
             std::ref(*washable_part->gr_painted_framebuffer_component));
       }
-    }
-
-    if (game_entity.get().event_component->reset) {
-      manage_system::resetDirtMap(std::ref(*game_entity.get().event_component),
-                                  washable_dirt_maps);
     }
 
     gr_sync_system::updateTransformUniforms(
