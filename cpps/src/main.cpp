@@ -78,13 +78,6 @@ int main() {
         std::ref(*paintable_part->gr_transform_uniform_component));
   }
 
-  gr_sync_system::updateMaterial(
-      std::ref(*paintable_entity->material_component),
-      std::ref(*paintable_entity->gr_shader_component));
-
-  gr_sync_system::updateDecalShader(
-      std::ref(*player_entity->gr_decal_shader_component));
-
   auto render_items = std::vector<RenderItem>();
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     gr_sync_system::updateGeometry(
@@ -144,7 +137,7 @@ int main() {
            paintable_entity.get().paintable_part_entities) {
         paint_system::paint(
             std::ref(*paintable_part->gr_geometry_component),
-            std::ref(*player_entity.get().gr_decal_shader_component),
+            std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
             std::ref(*paintable_part->gr_painted_texture_component),
@@ -156,9 +149,10 @@ int main() {
         std::ref(*paintable_entity.get().transform_component),
         paintable_transforms, paintable_gr_transform_uniforms);
 
-    render_system::render(std::ref(*game_entity.get().input_component),
-                          std::ref(*paintable_entity.get().gr_shader_component),
-                          render_items);
+    render_system::render(
+        std::ref(*game_entity.get().input_component),
+        std::ref(*paintable_entity.get().material_component),
+        std::ref(*game_entity.get().gr_shader_manager_component), render_items);
   };
 
   static_main_loop = main_loop;

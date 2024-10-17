@@ -28,7 +28,6 @@
 #include "./Component/CameraComponent.h"
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrShaderComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
@@ -41,10 +40,6 @@ void updateGeometry(
     std::reference_wrapper<GeometryComponent> geometry_component,
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
 
-void updateMaterial(
-    std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrShaderComponent> gr_shader_component);
-
 void updateCameraUniform(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component,
@@ -56,9 +51,6 @@ void updateTransformUniforms(
         child_transform_components,
     const std::vector<std::reference_wrapper<GrUniformComponent>>&
         gr_uniform_components);
-
-void updateDecalShader(
-    std::reference_wrapper<GrShaderComponent> gr_shader_component);
 
 void updateBrushUniform(
     std::reference_wrapper<BrushComponent> brush_component,

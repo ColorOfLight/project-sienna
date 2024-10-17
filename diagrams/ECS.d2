@@ -16,7 +16,7 @@ classes: {
   }
 
   Component: {
-    width: 600
+    width: 700
     style: {
       stroke-width: 0
       fill: "#44C7B1" # pastel green
@@ -34,7 +34,7 @@ classes: {
   }
 
   ClientInterface: {
-    width: 600
+    width: 700
     style: {
       stroke-width: 0
       fill: "#FFA07A" # light salmon
@@ -62,14 +62,6 @@ vars: {
     + name: string
     + width: int
     + height: int
-  }
-
-  vGrShaderComponent: {
-    class: Component
-    shape: class
-    label: GrShaderComponent
-
-    + shader_program_id: uint
   }
 
   vGrFrom: {
@@ -113,10 +105,6 @@ PlayerEntity: {
     ...${vGrFrom}
   }
 
-  BrushGrShaderComponent: {
-    ...${vGrShaderComponent}
-  }
-
   CameraComponent: {
     class: Component
     shape: class
@@ -141,23 +129,15 @@ PaintableEntity: {
   label: Paintable
   class: Entity
 
+  TransformComponent: {
+    ...${vTransformComponent}
+  }
+
   MaterialComponent: {
     class: Component
     shape: class
 
     + material_type: "enum:PHONG"
-  }
-
-  GrShaderComponent: {
-    ...${vGrShaderComponent}
-  }
-
-  TransformComponent: {
-    ...${vTransformComponent}
-  }
-
-  MaterialComponent -> GrShaderComponent: data to {
-    ...${vGrFrom}
   }
 }
 
@@ -268,6 +248,14 @@ GameEntity: {
     + reset: bool
     + change_canvas_size: bool
   }
+
+  GrShaderManagerComponent: {
+    class: Component
+    shape: class
+
+    - shader_program_ids: "uomap<ShaderType, unsigned int>"
+    + getShaderProgram(ShaderType): unsigned int
+  }
 }
 
 # Relationships
@@ -309,8 +297,6 @@ Systems: {
     shape: class
 
     + updateGeometry(Geometry): GrGeometry
-    + updateMaterial(Material): GrShader
-    + updateDecalShader(): GrShader
     + updateCameraUniform(Input, Camera): GrUniform
     + updateTransformUniform(Transform, Transform\[\]): GrUniform
     + updateBrushUniform(Brush, Input, Camera): GrUniform
@@ -320,7 +306,7 @@ Systems: {
     class: System
     shape: class
 
-    + paint(GrGeometry, GrShader, GrUniform, GrUniform, GrTexture, GrFramebuffer): GrTexture
+    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrTexture, GrFramebuffer): GrTexture
   }
 
   RenderSystem: {
@@ -329,7 +315,7 @@ Systems: {
 
     + initContext(InputComponent): void
     + adjustViewportSize(Input, Event): Event
-    + render(GrGeometry, GrMaterial, GrUniform\[\], GrTexture): void
+    + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture): void
   }
 
   FeedbackSystem: {
@@ -355,11 +341,11 @@ Systems.TransformSystem -> PaintableEntity.TransformComponent
 
 # PaintSystem
 Systems.PaintSystem <-> PaintablePartEntity.PaintedGrTextureComponent
+Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
 Systems.PaintSystem <- PaintablePartEntity.PaintedGrFramebufferComponent
 Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
-Systems.PaintSystem <- PlayerEntity.BrushGrShaderComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
@@ -367,10 +353,11 @@ Systems.RenderSystem <- GameEntity.InputComponent
 Systems.RenderSystem <-> GameEntity.EventComponent
 Systems.RenderSystem -> PlayerEntity.CameraComponent
 Systems.RenderSystem <- PaintablePartEntity.GrGeometryComponent
-Systems.RenderSystem <- PaintableEntity.GrShaderComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- PaintablePartEntity.TransformGrUniformComponent
 Systems.RenderSystem <- PaintablePartEntity.PaintedGrTextureComponent
+Systems.RenderSystem <- GameEntity.GrShaderManagerComponent
+Systems.RenderSystem <- PaintableEntity.MaterialComponent
 
 # FeedbackSystem
 Client.ClientFunctions <- Systems.FeedbackSystem

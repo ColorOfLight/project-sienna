@@ -25,6 +25,7 @@
 #pragma once
 
 #include "./Component/EventComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
 #include "./Component/InputComponent.h"
 
 class GameEntity {
@@ -32,8 +33,10 @@ class GameEntity {
   GameEntity() {
     event_component = std::make_unique<EventComponent>();
     input_component = std::make_unique<InputComponent>();
+    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
   }
 
   std::unique_ptr<EventComponent> event_component;
   std::unique_ptr<InputComponent> input_component;
+  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
 };

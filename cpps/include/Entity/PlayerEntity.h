@@ -26,7 +26,6 @@
 
 #include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
-#include "./Component/GrShaderComponent.h"
 #include "./Component/GrUniformComponent.h"
 
 class PlayerEntity {
@@ -37,7 +36,6 @@ class PlayerEntity {
 
     gr_camera_uniform_component =
         std::make_unique<GrUniformComponent>("CameraBlock");
-    gr_decal_shader_component = std::make_unique<GrShaderComponent>();
     gr_brush_uniform_component =
         std::make_unique<GrUniformComponent>("BrushBlock");
   }
@@ -45,6 +43,5 @@ class PlayerEntity {
   std::unique_ptr<CameraComponent> camera_component;
   std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
   std::unique_ptr<BrushComponent> brush_component;
-  std::unique_ptr<GrShaderComponent> gr_decal_shader_component;
   std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
 };

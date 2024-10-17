@@ -30,13 +30,15 @@ namespace paint_system {
 
 void paint(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
-    std::reference_wrapper<GrShaderComponent> gr_shader_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
     std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,
     std::reference_wrapper<GrFramebufferComponent>
         gr_painted_framebuffer_component) {
-  auto shader_program_id = gr_shader_component.get().shader_program_id;
+  auto shader_program_id = gr_shader_manager_component.get().getShaderProgramId(
+      ShaderType::BRUSH_DECAL);
 
   auto vao_id = gr_geometry_component.get().vao_id;
   auto brush_uniform_block_name =

@@ -24,13 +24,17 @@
 
 #pragma once
 
-#include <limits>
+#include <map>
 
-class GrShaderComponent {
+#include "./shader/util.h"
+
+class GrShaderManagerComponent {
  public:
-  GrShaderComponent();
+  GrShaderManagerComponent();
+  ~GrShaderManagerComponent();
 
-  ~GrShaderComponent();
+  unsigned int getShaderProgramId(ShaderType shader_type);
 
-  unsigned int shader_program_id;
+ private:
+  std::unordered_map<ShaderType, unsigned int> shader_program_ids;
 };

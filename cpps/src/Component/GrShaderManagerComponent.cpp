@@ -22,16 +22,31 @@
  * SOFTWARE.
  */
 
-#include "./Component/GrShaderComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
 
 #include <GLES3/gl3.h>
 
-GrShaderComponent::GrShaderComponent() {
-  shader_program_id = std::numeric_limits<unsigned int>::max();
+unsigned int generateShaderProgram(ShaderType shader_type);
+
+GrShaderManagerComponent::GrShaderManagerComponent() {
+  shader_program_ids = std::unordered_map<ShaderType, unsigned int>();
 }
 
-GrShaderComponent::~GrShaderComponent() {
-  if (shader_program_id != std::numeric_limits<unsigned int>::max()) {
-    glDeleteProgram(shader_program_id);
+GrShaderManagerComponent::~GrShaderManagerComponent() {
+  for (auto& shader_program_id : shader_program_ids) {
+    glDeleteProgram(shader_program_id.second);
   }
+}
+
+unsigned int GrShaderManagerComponent::getShaderProgramId(
+    ShaderType shader_type) {
+  auto it = shader_program_ids.find(shader_type);
+
+  if (it == shader_program_ids.end()) {
+    unsigned int shader_program_id = generateShaderProgram(shader_type);
+    shader_program_ids[shader_type] = shader_program_id;
+    return shader_program_id;
+  }
+
+  return it->second;
 }
