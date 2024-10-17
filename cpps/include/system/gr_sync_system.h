@@ -58,11 +58,6 @@ void updateTransformUniforms(
     const std::vector<std::reference_wrapper<GrUniformComponent>>&
         gr_uniform_components);
 
-// TODO: remove later
-void updateDirtTexture(
-    std::reference_wrapper<DirtMapComponent> dirt_map_component,
-    std::reference_wrapper<GrTextureComponent> gr_texture_component);
-
 void updateDecalShader(
     std::reference_wrapper<GrShaderComponent> gr_shader_component);
 

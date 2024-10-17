@@ -234,28 +234,6 @@ void updateCameraUniform(
   camera_component.get().needs_update = false;
 }
 
-void updateDirtTexture(
-    std::reference_wrapper<DirtMapComponent> dirt_map_component,
-    std::reference_wrapper<GrTextureComponent> gr_texture_component) {
-  if (!dirt_map_component.get().needs_update) {
-    return;
-  }
-
-  const auto& dirt_map_data = dirt_map_component.get().dirt_map.data();
-  int width = dirt_map_component.get().width;
-  int height = dirt_map_component.get().height;
-
-  GLuint texture_id = gr_texture_component.get().texture_id;
-
-  glBindTexture(GL_TEXTURE_2D, texture_id);
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RED,
-                  GL_UNSIGNED_BYTE, dirt_map_data);
-
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  dirt_map_component.get().needs_update = false;
-}
-
 void updateDecalShader(
     std::reference_wrapper<GrShaderComponent> gr_shader_component) {
   auto shader_program_id = generateShaderProgram(ShaderType::BRUSH_DECAL);
