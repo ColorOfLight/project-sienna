@@ -24,19 +24,17 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/GrShaderManagerComponent.h"
-#include "./Component/InputComponent.h"
+#include <map>
 
-class GameEntity {
+#include "./shader/util.h"
+
+class GrShaderManagerComponent {
  public:
-  GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
-    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
-  }
+  GrShaderManagerComponent();
+  ~GrShaderManagerComponent();
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
-  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
+  unsigned int getShaderProgramId(ShaderType shader_type);
+
+ private:
+  std::unordered_map<ShaderType, unsigned int> shader_program_ids;
 };

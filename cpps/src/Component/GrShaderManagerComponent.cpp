@@ -22,21 +22,31 @@
  * SOFTWARE.
  */
 
-#pragma once
-
-#include "./Component/EventComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
-#include "./Component/InputComponent.h"
 
-class GameEntity {
- public:
-  GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
-    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
+#include <GLES3/gl3.h>
+
+unsigned int generateShaderProgram(ShaderType shader_type);
+
+GrShaderManagerComponent::GrShaderManagerComponent() {
+  shader_program_ids = std::unordered_map<ShaderType, unsigned int>();
+}
+
+GrShaderManagerComponent::~GrShaderManagerComponent() {
+  for (auto& shader_program_id : shader_program_ids) {
+    glDeleteProgram(shader_program_id.second);
+  }
+}
+
+unsigned int GrShaderManagerComponent::getShaderProgramId(
+    ShaderType shader_type) {
+  auto it = shader_program_ids.find(shader_type);
+
+  if (it == shader_program_ids.end()) {
+    unsigned int shader_program_id = generateShaderProgram(shader_type);
+    shader_program_ids[shader_type] = shader_program_id;
+    return shader_program_id;
   }
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
-  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
-};
+  return it->second;
+}
