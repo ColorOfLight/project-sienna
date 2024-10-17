@@ -40,8 +40,8 @@ GrTextureComponent::GrTextureComponent(TextureType texture_type,
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, nullptr);
   } else if (texture_type == TextureType::DEPTH) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0,
-                 GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0,
+                 GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, nullptr);
   } else {
     throw std::invalid_argument("Invalid texture type");
   }

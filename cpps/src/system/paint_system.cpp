@@ -32,6 +32,35 @@
 
 namespace paint_system {
 
+void updateBrushDepth(
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
+    const std::vector<std::reference_wrapper<GrGeometryComponent>>&
+        gr_geometry_components,
+    const std::vector<std::reference_wrapper<GrUniformComponent>>&
+        gr_model_uniform_components,
+    std::reference_wrapper<GrFramedTextureComponent>
+        gr_brush_depth_framed_texture_component) {
+  glBindFramebuffer(
+      GL_FRAMEBUFFER,
+      gr_brush_depth_framed_texture_component.get().framebuffer_id);
+  glViewport(0, 0, gr_brush_depth_framed_texture_component.get().width,
+             gr_brush_depth_framed_texture_component.get().height);
+  glClear(GL_DEPTH_BUFFER_BIT);
+
+  for (int i = 0; i < gr_geometry_components.size(); i++) {
+    auto gr_uniform_components =
+        std::vector<std::reference_wrapper<GrUniformComponent>>{
+            gr_brush_uniform_component, gr_model_uniform_components[i]};
+
+    drawGrComponents(ShaderType::BRUSH_DEPTH, gr_shader_manager_component,
+                     gr_geometry_components[i], gr_uniform_components, {});
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void paint(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
     std::reference_wrapper<GrShaderManagerComponent>

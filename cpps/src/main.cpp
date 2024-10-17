@@ -65,6 +65,8 @@ int main() {
 
   auto paintable_geometries =
       std::vector<std::reference_wrapper<GeometryComponent>>();
+  auto paintable_gr_geometries =
+      std::vector<std::reference_wrapper<GrGeometryComponent>>();
   auto paintable_transforms =
       std::vector<std::reference_wrapper<TransformComponent>>();
   auto paintable_gr_transform_uniforms =
@@ -75,6 +77,8 @@ int main() {
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_geometries.push_back(
         std::ref(*paintable_part->geometry_component));
+    paintable_gr_geometries.push_back(
+        std::ref(*paintable_part->gr_geometry_component));
     paintable_transforms.push_back(
         std::ref(*paintable_part->transform_component));
     paintable_gr_transform_uniforms.push_back(
@@ -109,8 +113,8 @@ int main() {
                     paintable_entity = std::ref(*paintable_entity),
                     render_items, paintable_geometries, paintable_transforms,
                     paintable_gr_transform_uniforms,
-                    paintable_gr_framed_textures](float elapsed_ms,
-                                                  float delta_ms) {
+                    paintable_gr_framed_textures,
+                    paintable_gr_geometries](float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
         std::ref(*game_entity.get().event_component));
@@ -145,6 +149,13 @@ int main() {
           std::ref(*game_entity.get().input_component),
           std::ref(*player_entity.get().camera_component),
           std::ref(*player_entity.get().gr_brush_uniform_component));
+      paint_system::updateBrushDepth(
+
+          std::ref(*game_entity.get().gr_shader_manager_component),
+          std::ref(*player_entity.get().gr_brush_uniform_component),
+          paintable_gr_geometries, paintable_gr_transform_uniforms,
+          std::ref(
+              *player_entity.get().gr_brush_depth_framed_texture_component));
 
       for (auto& paintable_part :
            paintable_entity.get().paintable_part_entities) {
