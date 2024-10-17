@@ -78,13 +78,6 @@ int main() {
         std::ref(*paintable_part->gr_transform_uniform_component));
   }
 
-  gr_sync_system::updateMaterial(
-      std::ref(*paintable_entity->material_component),
-      std::ref(*paintable_entity->gr_shader_component));
-
-  gr_sync_system::updateDecalShader(
-      std::ref(*player_entity->gr_decal_shader_component));
-
   auto render_items = std::vector<RenderItem>();
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     gr_sync_system::updateGeometry(

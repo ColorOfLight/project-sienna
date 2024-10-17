@@ -89,16 +89,6 @@ void updateGeometry(
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void updateMaterial(
-    std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
-  auto shader_type = material_component.get().shader_type;
-
-  auto shader_program_id = generateShaderProgram(shader_type);
-
-  gr_shader_component.get().shader_program_id = shader_program_id;
-}
-
 void updateTransformUniforms(
     std::reference_wrapper<TransformComponent> parent_transform_component,
     const std::vector<std::reference_wrapper<TransformComponent>>&
@@ -179,13 +169,6 @@ void updateCameraUniform(
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
   camera_component.get().needs_update = false;
-}
-
-void updateDecalShader(
-    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
-  auto shader_program_id = generateShaderProgram(ShaderType::BRUSH_DECAL);
-
-  gr_shader_component.get().shader_program_id = shader_program_id;
 }
 
 void updateBrushUniform(

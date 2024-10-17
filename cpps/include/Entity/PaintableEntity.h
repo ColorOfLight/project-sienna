@@ -26,7 +26,6 @@
 
 #include <vector>
 
-#include "./Component/GrShaderComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
 #include "./PaintablePartEntity.h"
@@ -39,6 +38,5 @@ class PaintableEntity {
 
   std::unique_ptr<MaterialComponent> material_component;
   std::unique_ptr<TransformComponent> transform_component;
-  std::unique_ptr<GrShaderComponent> gr_shader_component;
   std::vector<std::unique_ptr<PaintablePartEntity>> paintable_part_entities;
 };
