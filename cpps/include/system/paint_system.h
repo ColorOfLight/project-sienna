@@ -24,13 +24,25 @@
 
 #pragma once
 
-#include "./Component/GrFramebufferComponent.h"
+#include <vector>
+
+#include "./Component/GrFramedTextureComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
-#include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 
 namespace paint_system {
+
+void updateBrushDepth(
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
+    const std::vector<std::reference_wrapper<GrGeometryComponent>>&
+        gr_geometry_components,
+    const std::vector<std::reference_wrapper<GrUniformComponent>>&
+        gr_model_uniform_components,
+    std::reference_wrapper<GrFramedTextureComponent>
+        gr_brush_depth_framed_texture_component);
 
 void paint(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
@@ -38,8 +50,7 @@ void paint(
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
-    std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,
-    std::reference_wrapper<GrFramebufferComponent>
-        gr_painted_framebuffer_component);
+    std::reference_wrapper<GrFramedTextureComponent>
+        gr_painted_framed_texture_component);
 
 }  // namespace paint_system

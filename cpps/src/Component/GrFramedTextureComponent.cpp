@@ -22,32 +22,28 @@
  * SOFTWARE.
  */
 
-#pragma once
-
-#include "./Component/BrushComponent.h"
-#include "./Component/CameraComponent.h"
 #include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrUniformComponent.h"
 
-class PlayerEntity {
- public:
-  PlayerEntity() {
-    camera_component = std::make_unique<CameraComponent>();
-    brush_component = std::make_unique<BrushComponent>();
+#include <GLES3/gl3.h>
 
-    gr_camera_uniform_component =
-        std::make_unique<GrUniformComponent>("CameraBlock");
-    gr_brush_uniform_component =
-        std::make_unique<GrUniformComponent>("BrushBlock");
-    gr_brush_depth_framed_texture_component =
-        std::make_unique<GrFramedTextureComponent>(
-            TextureType::DEPTH, "u_brushDepthTexture", 1024, 1024);
+GrFramedTextureComponent::GrFramedTextureComponent(TextureType texture_type,
+                                                   const std::string& name,
+                                                   int width, int height)
+    : GrTextureComponent(texture_type, name, width, height) {
+  glGenFramebuffers(1, &framebuffer_id);
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
+
+  if (texture_type == TextureType::DEPTH) {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                           texture_id, 0);
+  } else {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           texture_id, 0);
   }
 
-  std::unique_ptr<CameraComponent> camera_component;
-  std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
-  std::unique_ptr<BrushComponent> brush_component;
-  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
-  std::unique_ptr<GrFramedTextureComponent>
-      gr_brush_depth_framed_texture_component;
-};
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GrFramedTextureComponent::~GrFramedTextureComponent() {
+  glDeleteFramebuffers(1, &framebuffer_id);
+}

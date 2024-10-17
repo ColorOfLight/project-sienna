@@ -24,30 +24,20 @@
 
 #pragma once
 
-#include "./Component/BrushComponent.h"
-#include "./Component/CameraComponent.h"
-#include "./Component/GrFramedTextureComponent.h"
+#include <vector>
+
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
+#include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
+#include "./shader/util.h"
 
-class PlayerEntity {
- public:
-  PlayerEntity() {
-    camera_component = std::make_unique<CameraComponent>();
-    brush_component = std::make_unique<BrushComponent>();
-
-    gr_camera_uniform_component =
-        std::make_unique<GrUniformComponent>("CameraBlock");
-    gr_brush_uniform_component =
-        std::make_unique<GrUniformComponent>("BrushBlock");
-    gr_brush_depth_framed_texture_component =
-        std::make_unique<GrFramedTextureComponent>(
-            TextureType::DEPTH, "u_brushDepthTexture", 1024, 1024);
-  }
-
-  std::unique_ptr<CameraComponent> camera_component;
-  std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
-  std::unique_ptr<BrushComponent> brush_component;
-  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
-  std::unique_ptr<GrFramedTextureComponent>
-      gr_brush_depth_framed_texture_component;
-};
+void drawGrComponents(
+    ShaderType shader_type,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    const std::vector<std::reference_wrapper<GrUniformComponent>>&
+        gr_uniform_components,
+    const std::vector<std::reference_wrapper<GrTextureComponent>>&
+        gr_texture_components);
