@@ -43,31 +43,19 @@ void markToClean(
   const auto& canvas_size = input_component.get().canvas_size;
   const auto& pointer_position = input_component.get().pointer_position;
 
-  float ndcX = (2.0f * pointer_position.x) / canvas_size.width - 1.0f;
-  float ndcY = 1.0f - (2.0f * pointer_position.y) / canvas_size.height;
+  auto eye_position = getPositionOnSphere(camera_component.get().radius,
+                                          camera_component.get().phi,
+                                          camera_component.get().theta);
 
-  float aspect_ratio =
-      static_cast<float>(canvas_size.width) / canvas_size.height;
-  float tanHalfFov = tan(camera_component.get().fovy / 2.0f);
-  float half_height = tanHalfFov;
-  float half_width = aspect_ratio * tanHalfFov;
-
-  glm::vec3 ray_direction_in_camera =
-      glm::vec3(half_width * ndcX, half_height * ndcY, -1.0f);
-
-  const auto& eye_position = getPositionOnSphere(camera_component.get().radius,
-                                                 camera_component.get().phi,
-                                                 camera_component.get().theta);
-  const auto& camera_front =
-      glm::normalize(eye_position);  // camera is looking at the origin
-  const auto& camera_up =
+  auto camera_up =
       getUpOnSphere(camera_component.get().phi, camera_component.get().theta);
-  const auto& camera_right = glm::cross(-camera_front, camera_up);
 
-  glm::vec3 ray_direction_in_world =
-      glm::normalize(camera_right * ray_direction_in_camera.x +
-                     camera_up * ray_direction_in_camera.y +
-                     camera_front * ray_direction_in_camera.z);
+  auto view_matrix = glm::lookAt(eye_position, glm::vec3(0.0f), camera_up);
+
+  glm::vec3 ray_direction_in_world = getRayDirectionFromScreen(
+      glm::vec2(pointer_position.x, pointer_position.y),
+      glm::vec2(canvas_size.width, canvas_size.height),
+      camera_component.get().fovy, view_matrix);
 
   // 2. Get Ray origin
   glm::vec3 ray_origin = eye_position;

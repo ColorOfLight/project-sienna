@@ -101,3 +101,32 @@ inline RayIntersectionResult getRayIntersectionDistance(
 
   return RayIntersectionResultSet{t, u, v};
 }
+
+inline glm::vec3 getRayDirectionFromScreen(const glm::vec2& screen_position,
+                                           const glm::vec2& canvas_size,
+                                           float fovy,
+                                           const glm::mat4& view_matrix) {
+  float ndcX = (2.0f * screen_position.x) / canvas_size.x - 1.0f;
+  float ndcY = 1.0f - (2.0f * screen_position.y) / canvas_size.y;
+
+  float aspect_ratio = static_cast<float>(canvas_size.x) / canvas_size.y;
+  float tanHalfFov = tan(fovy / 2.0f);
+  float half_height = tanHalfFov;
+  float half_width = aspect_ratio * tanHalfFov;
+
+  glm::vec3 ray_eye = glm::vec3(half_width * ndcX, half_height * ndcY, -1.0f);
+
+  glm::vec4 ray_world = glm::inverse(view_matrix) * glm::vec4(ray_eye, 0.0f);
+  glm::vec3 ray_direction = glm::normalize(glm::vec3(ray_world));
+
+  return ray_direction;
+}
+
+inline glm::mat4 getRayViewMatrix(const glm::vec3& ray_origin,
+                                  const glm::vec3& base_up,
+                                  const glm::vec3& ray_direction) {
+  glm::vec3 right = glm::cross(ray_direction, base_up);
+  glm::vec3 up = glm::cross(right, ray_direction);
+
+  return glm::lookAt(ray_origin, ray_origin + ray_direction, up);
+}

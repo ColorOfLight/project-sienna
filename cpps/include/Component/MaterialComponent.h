@@ -24,14 +24,13 @@
 
 #pragma once
 
-enum class MaterialType { TEXTURE_TEST, PHONG };
+#include "./shader/util.h"
 
 class MaterialComponent {
  public:
-  MaterialComponent() { material_type = MaterialType::TEXTURE_TEST; }
+  MaterialComponent() { shader_type = ShaderType::TEXTURE_TEST; }
 
-  MaterialComponent(MaterialType material_type)
-      : material_type(material_type) {}
+  MaterialComponent(ShaderType shader_type) : shader_type(shader_type) {}
 
-  MaterialType material_type;
+  ShaderType shader_type;
 };

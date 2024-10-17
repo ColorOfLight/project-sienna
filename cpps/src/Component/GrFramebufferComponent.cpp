@@ -22,15 +22,30 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./Component/GrFramebufferComponent.h"
 
-#include <limits>
+#include <GLES3/gl3.h>
 
-class GrMaterialComponent {
- public:
-  GrMaterialComponent();
+#include <stdexcept>
 
-  ~GrMaterialComponent();
+GrFramebufferComponent::GrFramebufferComponent() {
+  glGenFramebuffers(1, &framebuffer_id);
+}
 
-  unsigned int shader_program_id;
-};
+GrFramebufferComponent::GrFramebufferComponent(unsigned int texture_id) {
+  glGenFramebuffers(1, &framebuffer_id);
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                         texture_id, 0);
+
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    throw std::runtime_error(
+        "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n");
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GrFramebufferComponent::~GrFramebufferComponent() {
+  glDeleteFramebuffers(1, &framebuffer_id);
+}

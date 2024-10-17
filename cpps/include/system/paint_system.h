@@ -22,16 +22,23 @@
  * SOFTWARE.
  */
 
-#include "./Component/GrMaterialComponent.h"
+#pragma once
 
-#include <GLES3/gl3.h>
+#include "./Component/GrFramebufferComponent.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrShaderComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
 
-GrMaterialComponent::GrMaterialComponent() {
-  shader_program_id = std::numeric_limits<unsigned int>::max();
-}
+namespace paint_system {
 
-GrMaterialComponent::~GrMaterialComponent() {
-  if (shader_program_id != std::numeric_limits<unsigned int>::max()) {
-    glDeleteProgram(shader_program_id);
-  }
-}
+void paint(
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    std::reference_wrapper<GrShaderComponent> gr_shader_component,
+    std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
+    std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
+    std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,
+    std::reference_wrapper<GrFramebufferComponent>
+        gr_painted_framebuffer_component);
+
+}  // namespace paint_system

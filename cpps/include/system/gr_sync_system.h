@@ -24,11 +24,12 @@
 
 #pragma once
 
+#include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
 #include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrMaterialComponent.h"
+#include "./Component/GrShaderComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
@@ -43,7 +44,7 @@ void updateGeometry(
 
 void updateMaterial(
     std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrMaterialComponent> gr_material_component);
+    std::reference_wrapper<GrShaderComponent> gr_shader_component);
 
 void updateCameraUniform(
     std::reference_wrapper<InputComponent> input_component,
@@ -57,8 +58,18 @@ void updateTransformUniforms(
     const std::vector<std::reference_wrapper<GrUniformComponent>>&
         gr_uniform_components);
 
+// TODO: remove later
 void updateDirtTexture(
     std::reference_wrapper<DirtMapComponent> dirt_map_component,
     std::reference_wrapper<GrTextureComponent> gr_texture_component);
+
+void updateDecalShader(
+    std::reference_wrapper<GrShaderComponent> gr_shader_component);
+
+void updateBrushUniform(
+    std::reference_wrapper<BrushComponent> brush_component,
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
 }  // namespace gr_sync_system

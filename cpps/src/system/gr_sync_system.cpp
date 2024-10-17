@@ -31,6 +31,59 @@
 #include "./math_util.h"
 #include "./shader/util.h"
 
+unsigned int generateShaderProgram(ShaderType shader_type) {
+  int success;
+  char info_log[512];
+
+  const char* vertex_shader_source = getVertexShaderSource(shader_type);
+  const char* fragment_shader_source = getFragmentShaderSource(shader_type);
+
+  // Compile the vertex shader
+  GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertex_shader_id, 1, &vertex_shader_source, nullptr);
+  glCompileShader(vertex_shader_id);
+
+  // Check for vertex shader compile errors
+  glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertex_shader_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  // Compile the fragment shader
+  GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragment_shader_id, 1, &fragment_shader_source, nullptr);
+  glCompileShader(fragment_shader_id);
+
+  // Check for fragment shader compile errors
+  glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragment_shader_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  // Link shaders to create a shader program
+  GLuint shader_program_id = glCreateProgram();
+  glAttachShader(shader_program_id, vertex_shader_id);
+  glAttachShader(shader_program_id, fragment_shader_id);
+  glLinkProgram(shader_program_id);
+
+  // Check for linking errors
+  glGetProgramiv(shader_program_id, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(shader_program_id, 512, nullptr, info_log);
+    throw std::runtime_error("ERROR::SHADER::PROGRAM::LINKING_FAILED\n" +
+                             std::string(info_log));
+  }
+
+  glDeleteShader(vertex_shader_id);
+  glDeleteShader(fragment_shader_id);
+
+  return shader_program_id;
+}
+
 namespace gr_sync_system {
 
 void updateGeometry(
@@ -91,59 +144,12 @@ void updateGeometry(
 
 void updateMaterial(
     std::reference_wrapper<MaterialComponent> material_component,
-    std::reference_wrapper<GrMaterialComponent> gr_material_component) {
-  int success;
-  char info_log[512];
+    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
+  auto shader_type = material_component.get().shader_type;
 
-  auto material_type = material_component.get().material_type;
+  auto shader_program_id = generateShaderProgram(shader_type);
 
-  const char* vertex_shader_source = getVertexShaderSource(material_type);
-  const char* fragment_shader_source = getFragmentShaderSource(material_type);
-
-  // Compile the vertex shader
-  GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertex_shader_id, 1, &vertex_shader_source, nullptr);
-  glCompileShader(vertex_shader_id);
-
-  // Check for vertex shader compile errors
-  glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(vertex_shader_id, 512, nullptr, info_log);
-    throw std::runtime_error("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" +
-                             std::string(info_log));
-  }
-
-  // Compile the fragment shader
-  GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader_id, 1, &fragment_shader_source, nullptr);
-  glCompileShader(fragment_shader_id);
-
-  // Check for fragment shader compile errors
-  glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(fragment_shader_id, 512, nullptr, info_log);
-    throw std::runtime_error("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" +
-                             std::string(info_log));
-  }
-
-  // Link shaders to create a shader program
-  GLuint shader_program_id = glCreateProgram();
-  glAttachShader(shader_program_id, vertex_shader_id);
-  glAttachShader(shader_program_id, fragment_shader_id);
-  glLinkProgram(shader_program_id);
-
-  // Check for linking errors
-  glGetProgramiv(shader_program_id, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shader_program_id, 512, nullptr, info_log);
-    throw std::runtime_error("ERROR::SHADER::PROGRAM::LINKING_FAILED\n" +
-                             std::string(info_log));
-  }
-
-  glDeleteShader(vertex_shader_id);
-  glDeleteShader(fragment_shader_id);
-
-  gr_material_component.get().shader_program_id = shader_program_id;
+  gr_shader_component.get().shader_program_id = shader_program_id;
 }
 
 void updateTransformUniforms(
@@ -248,6 +254,69 @@ void updateDirtTexture(
   glBindTexture(GL_TEXTURE_2D, 0);
 
   dirt_map_component.get().needs_update = false;
+}
+
+void updateDecalShader(
+    std::reference_wrapper<GrShaderComponent> gr_shader_component) {
+  auto shader_program_id = generateShaderProgram(ShaderType::BRUSH_DECAL);
+
+  gr_shader_component.get().shader_program_id = shader_program_id;
+}
+
+void updateBrushUniform(
+    std::reference_wrapper<BrushComponent> brush_component,
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+  const auto& pointer_position = input_component.get().pointer_position;
+  const auto& canvas_size = input_component.get().canvas_size;
+
+  struct BrushUniformData {
+    float air_pressure;
+    alignas(16) glm::vec3 paint_color;
+    float paint_viscosity;
+    float nozzle_fov;
+    alignas(16) glm::mat4 view_matrix;
+    alignas(16) glm::mat4 projection_matrix;
+    alignas(16) glm::vec3 position;
+  };
+
+  glm::mat4 projection_matrix =
+      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 100.0f);
+
+  auto eye_position = getPositionOnSphere(camera_component.get().radius,
+                                          camera_component.get().phi,
+                                          camera_component.get().theta);
+
+  auto camera_up =
+      getUpOnSphere(camera_component.get().phi, camera_component.get().theta);
+
+  auto camera_view_matrix =
+      glm::lookAt(eye_position, glm::vec3(0.0f), camera_up);
+
+  auto ray_direction = getRayDirectionFromScreen(
+      glm::vec2(pointer_position.x, pointer_position.y),
+      glm::vec2(canvas_size.width, canvas_size.height),
+      camera_component.get().fovy, camera_view_matrix);
+
+  auto brush_view_matrix =
+      getRayViewMatrix(eye_position, camera_up, ray_direction);
+
+  BrushUniformData brush_uniform_data = {
+      .air_pressure = brush_component.get().air_pressure,
+      .paint_color = brush_component.get().paint_color,
+      .paint_viscosity = brush_component.get().paint_viscosity,
+      .nozzle_fov = brush_component.get().nozzle_fov,
+      .view_matrix = brush_view_matrix,
+      .projection_matrix = projection_matrix,
+      .position = eye_position + ray_direction * glm::vec3(0.2),
+  };
+
+  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(brush_uniform_data),
+               &brush_uniform_data, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 }  // namespace gr_sync_system

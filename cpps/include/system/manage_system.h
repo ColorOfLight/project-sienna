@@ -34,6 +34,7 @@
 
 namespace manage_system {
 
+// TODO: rename it later
 void resetDirtMap(std::reference_wrapper<EventComponent> event_component,
                   const std::vector<std::reference_wrapper<DirtMapComponent>>&
                       dirt_map_components);

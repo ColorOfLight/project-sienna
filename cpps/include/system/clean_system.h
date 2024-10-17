@@ -34,6 +34,7 @@
 #include "./Component/InputComponent.h"
 #include "./Component/TransformComponent.h"
 
+// TODO: remove later
 namespace clean_system {
 
 void markToClean(

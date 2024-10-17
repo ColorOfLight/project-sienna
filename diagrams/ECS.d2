@@ -64,6 +64,14 @@ vars: {
     + height: int
   }
 
+  vGrShaderComponent: {
+    class: Component
+    shape: class
+    label: GrShaderComponent
+
+    + shader_program_id: uint
+  }
+
   vGrFrom: {
     style: {
       stroke-dash: 3
@@ -87,12 +95,26 @@ PlayerEntity: {
   label: Player
   class: Entity
 
-  CleanerComponent: {
+  BrushComponent: {
     class: Component
     shape: class
 
-    + ray_radius: float
-    + hitting_radius: float
+    + nozzle_fov: float
+    + air_pressure: float
+    + paint_color: Vec3
+    + paint_viscosity: float
+  }
+
+  BrushGrUniformComponent: {
+    ...${vGrUniformComponent}
+  }
+
+  BrushComponent -> BrushGrUniformComponent: data to {
+    ...${vGrFrom}
+  }
+
+  BrushGrShaderComponent: {
+    ...${vGrShaderComponent}
   }
 
   CameraComponent: {
@@ -115,8 +137,8 @@ PlayerEntity: {
   }
 }
 
-WashableEntity: {
-  label: Washable
+PaintableEntity: {
+  label: Paintable
   class: Entity
 
   MaterialComponent: {
@@ -126,40 +148,36 @@ WashableEntity: {
     + material_type: "enum:PHONG"
   }
 
-  GrMaterialComponent: {
-    class: Component
-    shape: class
-
-    + shader_program_id: uint
+  GrShaderComponent: {
+    ...${vGrShaderComponent}
   }
 
   TransformComponent: {
     ...${vTransformComponent}
   }
 
-  MaterialComponent -> GrMaterialComponent: data to {
+  MaterialComponent -> GrShaderComponent: data to {
     ...${vGrFrom}
   }
 }
 
-WashablePartEntity: {
-  label: WashablePart
+PaintablePartEntity: {
+  label: PaintablePart
   class: Entity
 
-  DirtMapComponent: {
+  PaintedGrTextureComponent: {
+    ...${vGrTextureComponent}
+  }
+
+  PaintedGrFramebufferComponent: {
     class: Component
     shape: class
 
-    + cleanness: float
-    + dirt_map: "uchar[][]"
-    + area: float
-    + width: int
-    + height: int
-    + needs_update: bool
+    + framebuffer_id: uint
   }
 
-  DirtGrTextureComponent: {
-    ...${vGrTextureComponent}
+  PaintedGrTextureComponent -> PaintedGrFramebufferComponent: data to {
+    ...${vGrFrom}
   }
 
   TransformComponent: {
@@ -168,13 +186,6 @@ WashablePartEntity: {
 
   TransformGrUniformComponent: {
     ...${vGrUniformComponent}
-  }
-
-  CleanMarkComponent: {
-    class: Component
-    shape: class
-
-    + marks: "vector<{Vec2i, float}>" # texture_coodrs, radius
   }
 
   GeometryComponent: {
@@ -193,10 +204,6 @@ WashablePartEntity: {
     + vbo_id: uint
     + ebo_id: unit
     + vertex_count: int
-  }
-
-  DirtMapComponent -> DirtGrTextureComponent: data to {
-    ...${vGrFrom}
   }
 
   TransformComponent -> TransformGrUniformComponent: data to {
@@ -264,7 +271,7 @@ GameEntity: {
 }
 
 # Relationships
-WashablePartEntity -> WashableEntity: included
+PaintablePartEntity -> PaintableEntity: included
 
 # Systems
 Systems: {
@@ -286,7 +293,7 @@ Systems: {
     class: System
     shape: class
 
-    + resetDirtMap(Event): "DirtMap, Event"
+    + resetPaintedMap(Event): "GrTexture, Event"
   }
 
   TransformSystem: {
@@ -294,15 +301,7 @@ Systems: {
     shape: class
 
     + transformCamera(Input): Camera
-    + transformWashable(Input): Transform
-  }
-
-  CleanSystem: {
-    class: System
-    shape: class
-
-    + markToClean(Input, Cleaner, Camera, Transform\[\]): "CleanMark[]"
-    + clean(CleanMark): "DirtMap"
+    + transformPaintable(Input): Transform
   }
 
   GrSyncSystem: {
@@ -310,10 +309,18 @@ Systems: {
     shape: class
 
     + updateGeometry(Geometry): GrGeometry
-    + updateMaterial(Material): GrMaterial
+    + updateMaterial(Material): GrShader
+    + updateDecalShader(): GrShader
     + updateCameraUniform(Input, Camera): GrUniform
     + updateTransformUniform(Transform, Transform\[\]): GrUniform
-    + updateDirtTexture(DirtMap): GrTexture
+    + updateBrushUniform(Brush, Input, Camera): GrUniform
+  }
+
+  PaintSystem: {
+    class: System
+    shape: class
+
+    + paint(GrGeometry, GrShader, GrUniform, GrUniform, GrTexture, GrFramebuffer): GrTexture
   }
 
   RenderSystem: {
@@ -340,44 +347,30 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
-Systems.ManageSystem <- WashablePartEntity.DirtMapComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
 Systems.TransformSystem -> PlayerEntity.CameraComponent
-Systems.TransformSystem -> WashableEntity.TransformComponent
+Systems.TransformSystem -> PaintableEntity.TransformComponent
 
-# CleanSystem
-Systems.CleanSystem <- GameEntity.InputComponent
-Systems.CleanSystem <- PlayerEntity.CleanerComponent
-Systems.CleanSystem <- PlayerEntity.CameraComponent
-Systems.CleanSystem <- WashablePartEntity.TransformComponent
-Systems.CleanSystem <-> WashablePartEntity.CleanMarkComponent
-Systems.CleanSystem -> WashablePartEntity.DirtMapComponent
-
-# GrSyncSystem
-# - Relationships for GrSyncSystme are omitted for simplicity
-# Systems.GrSyncSystem <- WashablePartEntity.GeometryComponent
-# Systems.GrSyncSystem -> WashablePartEntity.GrGeometryComponent
-# Systems.GrSyncSystem <- WashableEntity.MaterialComponent
-# Systems.GrSyncSystem -> WashableEntity.GrMaterialComponent
-# Systems.GrSyncSystem <-> PlayerEntity.CameraComponent
-# Systems.GrSyncSystem -> PlayerEntity.CameraGrUniformComponent
-# Systems.GrSyncSystem <-> WashablePartEntity.TransformComponent
-# Systems.GrSyncSystem -> WashablePartEntity.TransformGrUniformComponent
-# Systems.GrSyncSystem <-> WashablePartEntity.DirtMapComponent
-# Systems.GrSyncSystem -> WashablePartEntity.DirtGrTextureComponent
+# PaintSystem
+Systems.PaintSystem <-> PaintablePartEntity.PaintedGrTextureComponent
+Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
+Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
+Systems.PaintSystem <- PaintablePartEntity.PaintedGrFramebufferComponent
+Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
+Systems.PaintSystem <- PlayerEntity.BrushGrShaderComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
 Systems.RenderSystem <- GameEntity.InputComponent
 Systems.RenderSystem <-> GameEntity.EventComponent
 Systems.RenderSystem -> PlayerEntity.CameraComponent
-Systems.RenderSystem <- WashablePartEntity.GrGeometryComponent
-Systems.RenderSystem <- WashableEntity.GrMaterialComponent
+Systems.RenderSystem <- PaintablePartEntity.GrGeometryComponent
+Systems.RenderSystem <- PaintableEntity.GrShaderComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
-Systems.RenderSystem <- WashablePartEntity.TransformGrUniformComponent
-Systems.RenderSystem <- WashablePartEntity.DirtGrTextureComponent
+Systems.RenderSystem <- PaintablePartEntity.TransformGrUniformComponent
+Systems.RenderSystem <- PaintablePartEntity.PaintedGrTextureComponent
 
 # FeedbackSystem
 Client.ClientFunctions <- Systems.FeedbackSystem

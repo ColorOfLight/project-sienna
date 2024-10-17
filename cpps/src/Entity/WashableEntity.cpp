@@ -24,10 +24,12 @@
 
 #include "./Entity/WashableEntity.h"
 
+#include "./shader/util.h"
+
 WashableEntity::WashableEntity(WashablePreset preset) {
-  material_component = std::make_unique<MaterialComponent>(MaterialType::PHONG);
+  material_component = std::make_unique<MaterialComponent>(ShaderType::PHONG);
   transform_component = std::make_unique<TransformComponent>();
-  gr_material_component = std::make_unique<GrMaterialComponent>();
+  gr_shader_component = std::make_unique<GrShaderComponent>();
 
   if (preset == WashablePreset::CUBE) {
     // front face

@@ -24,32 +24,13 @@
 
 #pragma once
 
-#include "./shader/source.h"
+#include <limits>
 
-enum class ShaderType { TEXTURE_TEST, PHONG, BRUSH_DECAL };
+class GrShaderComponent {
+ public:
+  GrShaderComponent();
 
-inline const char* getVertexShaderSource(ShaderType shader_type) {
-  switch (shader_type) {
-    case ShaderType::TEXTURE_TEST:
-    case ShaderType::PHONG:
-      return shader_source::basic_vertex.c_str();
-    case ShaderType::BRUSH_DECAL:
-      return shader_source::brush_decal_vertex.c_str();
-    default:
-      throw std::runtime_error("ERROR::SHADER::VERTEX::INVALID_SHADER_TYPE\n");
-  }
-};
+  ~GrShaderComponent();
 
-inline const char* getFragmentShaderSource(ShaderType shader_type) {
-  switch (shader_type) {
-    case ShaderType::TEXTURE_TEST:
-      return shader_source::texture_test_fragment.c_str();
-    case ShaderType::PHONG:
-      return shader_source::phong_fragment.c_str();
-    case ShaderType::BRUSH_DECAL:
-      return shader_source::brush_decal_fragment.c_str();
-    default:
-      throw std::runtime_error(
-          "ERROR::SHADER::FRAGMENT::INVALID_SHADER_TYPE\n");
-  }
+  unsigned int shader_program_id;
 };

@@ -24,8 +24,10 @@
 
 #pragma once
 
+#include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
 #include "./Component/CleanerComponent.h"
+#include "./Component/GrShaderComponent.h"
 #include "./Component/GrUniformComponent.h"
 
 class PlayerEntity {
@@ -33,11 +35,21 @@ class PlayerEntity {
   PlayerEntity() {
     camera_component = std::make_unique<CameraComponent>();
     cleaner_component = std::make_unique<CleanerComponent>();
+    brush_component = std::make_unique<BrushComponent>();
+
     gr_camera_uniform_component =
         std::make_unique<GrUniformComponent>("CameraBlock");
+    gr_decal_shader_component = std::make_unique<GrShaderComponent>();
+    gr_brush_uniform_component =
+        std::make_unique<GrUniformComponent>("BrushBlock");
   }
 
   std::unique_ptr<CameraComponent> camera_component;
-  std::unique_ptr<CleanerComponent> cleaner_component;
   std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
+  std::unique_ptr<BrushComponent> brush_component;
+  std::unique_ptr<GrShaderComponent> gr_decal_shader_component;
+  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
+
+  // TODO: remove later
+  std::unique_ptr<CleanerComponent> cleaner_component;
 };

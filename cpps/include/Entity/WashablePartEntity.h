@@ -29,6 +29,7 @@
 #include "./Component/CleanMarkComponent.h"
 #include "./Component/DirtMapComponent.h"
 #include "./Component/GeometryComponent.h"
+#include "./Component/GrFramebufferComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
@@ -41,11 +42,15 @@ class WashablePartEntity {
   WashablePartEntity(WashablePartPreset preset, glm::vec3 scale,
                      glm::quat rotation, glm::vec3 translation);
 
-  std::unique_ptr<CleanMarkComponent> clean_mark_component;
-  std::unique_ptr<DirtMapComponent> dirt_map_component;
   std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
-  std::unique_ptr<GrTextureComponent> gr_dirt_map_texture_component;
   std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
+  std::unique_ptr<GrTextureComponent> gr_painted_texture_component;
+  std::unique_ptr<GrFramebufferComponent> gr_painted_framebuffer_component;
+
+  // TODO: Remove later
+  std::unique_ptr<CleanMarkComponent> clean_mark_component;
+  std::unique_ptr<DirtMapComponent> dirt_map_component;
+  std::unique_ptr<GrTextureComponent> gr_dirt_map_texture_component;
 };

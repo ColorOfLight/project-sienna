@@ -65,6 +65,93 @@ inline const std::string basic_vertex = R"(#version 300 es
     }
 )";
 
+inline const std::string brush_decal_vertex = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_paintViscosity;
+        float u_brush_nozzleFov;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+
+    layout (std140) uniform ModelBlock
+    {
+        mat4 u_model_matrix;
+    };
+
+    layout (location = 0) in vec3 a_position;
+    layout (location = 1) in vec3 a_normal;
+    layout (location = 2) in vec2 a_texCoord;
+
+    out vec3 v_position;
+    out vec3 v_normal;
+    out vec3 v_projectedPosition;
+    out vec2 v_texCoord;
+
+    void main()
+    {
+        v_texCoord = a_texCoord;
+
+        vec4 modelPosition = u_model_matrix * vec4(a_position, 1.0);
+        v_position = modelPosition.xyz;
+
+        vec4 projectedPosition = u_brush_projectionMatrix * u_brush_viewMatrix * modelPosition;
+        v_projectedPosition = projectedPosition.xyz / projectedPosition.w;
+
+        mat3 normalMatrix = transpose(inverse(mat3(u_model_matrix)));
+        v_normal = normalize(normalMatrix * a_normal);
+
+        gl_Position = vec4(v_texCoord * 2.0 - 1.0, 0.0, 1.0);
+    }
+)";
+
+inline const std::string brush_decal_fragment = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_paintViscosity;
+        float u_brush_nozzleFov;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+
+    out vec4 FragColor;
+
+    in vec3 v_position;
+    in vec3 v_normal;
+    in vec3 v_projectedPosition;
+    in vec2 v_texCoord;
+
+    void main()
+    {
+        if (v_projectedPosition.x * v_projectedPosition.x + v_projectedPosition.y * v_projectedPosition.y > 1.0)
+        {
+            discard;
+        }
+
+        float k = 1.0;
+        float distance = min(length(v_position - u_brush_position), 0.1);
+        float distanceFactor = exp(-distance * u_brush_paintViscosity * 700.0);
+
+        float epsilon = 1e-6;
+        float tanFov = tan(u_brush_nozzleFov / 2.0) + epsilon;
+        float fovFactor = 1.0 / (tanFov * tanFov);
+
+        float intensity = k * u_brush_airPressure * distanceFactor * fovFactor;
+
+        FragColor = vec4(u_brush_paintColor, intensity);
+    }
+)";
+
 inline const std::string texture_test_fragment = R"(#version 300 es
     precision mediump float;
 
@@ -152,7 +239,7 @@ inline const std::string phong_fragment = R"(#version 300 es
         return material.specular * pow(max(0.0, dot(reflection, viewVector)), material.alpha) * material.color * point_light.color * point_light.intensity * attenuation;
     }
 
-    uniform sampler2D u_dirtMapTexture;
+    uniform sampler2D u_paintedMapTexture;
 
     in vec3 v_normal;
     in vec3 v_position;
@@ -189,8 +276,8 @@ inline const std::string phong_fragment = R"(#version 300 es
         g_material.specular = 0.5;
         g_material.alpha = 64.0;
 
-        float dirt = texture(u_dirtMapTexture, v_texCoord).r;
-        g_material.color = mix(g_material.color, vec3(0.40, 0.26, 0.13), dirt);
+        vec4 paintColor = texture(u_paintedMapTexture, v_texCoord);
+        g_material.color = mix(g_material.color, vec3(paintColor), paintColor.a);
 
         vec3 normal = normalize(v_normal);
         vec3 viewVector = normalize(u_camera_eye - v_position);
@@ -209,7 +296,7 @@ inline const std::string phong_fragment = R"(#version 300 es
         vec3 diffuseColor = ambientDiffuse + ceilingDiffuse + fillDiffuse + rimDiffuse;
         vec3 specularColor = ceilingSpecular + fillSpecular + rimSpecular;
         
-        vec3 color = diffuseColor + specularColor * (1.0 - dirt);
+        vec3 color = diffuseColor + specularColor;
         FragColor = vec4(color, 1.0);
     }
 )";
