@@ -156,9 +156,10 @@ int main() {
         std::ref(*paintable_entity.get().transform_component),
         paintable_transforms, paintable_gr_transform_uniforms);
 
-    render_system::render(std::ref(*game_entity.get().input_component),
-                          std::ref(*paintable_entity.get().gr_shader_component),
-                          render_items);
+    render_system::render(
+        std::ref(*game_entity.get().input_component),
+        std::ref(*paintable_entity.get().material_component),
+        std::ref(*game_entity.get().gr_shader_manager_component), render_items);
   };
 
   static_main_loop = main_loop;

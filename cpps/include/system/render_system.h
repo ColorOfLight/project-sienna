@@ -29,10 +29,11 @@
 #include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/GrGeometryComponent.h"
-#include "./Component/GrShaderComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
+#include "./Component/MaterialComponent.h"
 
 struct RenderItem {
   std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
@@ -50,7 +51,9 @@ void adjustViewportSize(
     std::reference_wrapper<CameraComponent> camera_component);
 
 void render(std::reference_wrapper<InputComponent> input_component,
-            std::reference_wrapper<GrShaderComponent> gr_shader_component,
+            std::reference_wrapper<MaterialComponent> material_component,
+            std::reference_wrapper<GrShaderManagerComponent>
+                gr_shader_manager_component,
             const std::vector<RenderItem>& render_items);
 
 }  // namespace render_system

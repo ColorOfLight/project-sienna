@@ -67,9 +67,13 @@ void adjustViewportSize(
 }
 
 void render(std::reference_wrapper<InputComponent> input_component,
-            std::reference_wrapper<GrShaderComponent> gr_shader_component,
+            std::reference_wrapper<MaterialComponent> material_component,
+            std::reference_wrapper<GrShaderManagerComponent>
+                gr_shader_manager_component,
             const std::vector<RenderItem>& render_items) {
-  GLuint shader_program_id = gr_shader_component.get().shader_program_id;
+  auto shader_type = material_component.get().shader_type;
+  GLuint shader_program_id =
+      gr_shader_manager_component.get().getShaderProgramId(shader_type);
 
   glViewport(0, 0, input_component.get().canvas_size.width,
              input_component.get().canvas_size.height);
