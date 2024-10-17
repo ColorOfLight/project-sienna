@@ -33,12 +33,12 @@
 #include "./Component/GrUniformComponent.h"
 #include "./Component/TransformComponent.h"
 
-enum class WashablePartPreset { CUBE_PART };
+enum class PaintablePartPreset { CUBE_PART };
 
-class WashablePartEntity {
+class PaintablePartEntity {
  public:
-  WashablePartEntity(WashablePartPreset preset, glm::vec3 scale,
-                     glm::quat rotation, glm::vec3 translation);
+  PaintablePartEntity(PaintablePartPreset preset, glm::vec3 scale,
+                      glm::quat rotation, glm::vec3 translation);
 
   std::unique_ptr<GeometryComponent> geometry_component;
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;

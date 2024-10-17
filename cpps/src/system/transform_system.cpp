@@ -57,7 +57,7 @@ void transformCamera(float delta_ms,
   }
 }
 
-void transformWashable(
+void transformPaintable(
     float delta_ms, std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<TransformComponent> transform_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;

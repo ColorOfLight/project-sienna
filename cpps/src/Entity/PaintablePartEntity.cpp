@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-#include "./Entity/WashablePartEntity.h"
+#include "./Entity/PaintablePartEntity.h"
 
-WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
-                                       glm::vec3 scale, glm::quat rotation,
-                                       glm::vec3 translation) {
+PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
+                                         glm::vec3 scale, glm::quat rotation,
+                                         glm::vec3 translation) {
   int painted_map_width = 400;
   int painted_map_height = 400;
 
@@ -45,10 +45,10 @@ WashablePartEntity::WashablePartEntity(WashablePartPreset preset,
   transform_component =
       std::make_unique<TransformComponent>(scale, rotation, translation);
 
-  if (preset == WashablePartPreset::CUBE_PART) {
+  if (preset == PaintablePartPreset::CUBE_PART) {
     geometry_component =
         std::make_unique<GeometryComponent>(GeometryPreset::PLANE);
   } else {
-    throw std::invalid_argument("Invalid washable part preset");
+    throw std::invalid_argument("Invalid paintable part preset");
   }
 }

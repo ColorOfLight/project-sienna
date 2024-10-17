@@ -29,16 +29,16 @@
 #include "./Component/GrShaderComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
-#include "./WashablePartEntity.h"
+#include "./PaintablePartEntity.h"
 
-enum class WashablePreset { CUBE };
+enum class PaintablePreset { CUBE };
 
-class WashableEntity {
+class PaintableEntity {
  public:
-  WashableEntity(WashablePreset preset);
+  PaintableEntity(PaintablePreset preset);
 
   std::unique_ptr<MaterialComponent> material_component;
   std::unique_ptr<TransformComponent> transform_component;
   std::unique_ptr<GrShaderComponent> gr_shader_component;
-  std::vector<std::unique_ptr<WashablePartEntity>> washable_part_entities;
+  std::vector<std::unique_ptr<PaintablePartEntity>> paintable_part_entities;
 };
