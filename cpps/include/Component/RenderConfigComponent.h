@@ -24,23 +24,12 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/GrShaderManagerComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/RenderConfigComponent.h"
+#include <glm/glm.hpp>
 
-class GameEntity {
+class RenderConfigComponent {
  public:
-  GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
-    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
-    render_config_component =
-        std::make_unique<RenderConfigComponent>(glm::vec3(0.1f, 0.1f, 0.1f));
-  }
+  RenderConfigComponent(const glm::vec3& clear_color)
+      : clear_color(clear_color) {}
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
-  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
-  std::unique_ptr<RenderConfigComponent> render_config_component;
+  glm::vec3 clear_color;
 };
