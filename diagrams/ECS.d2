@@ -64,6 +64,12 @@ vars: {
     + height: int
   }
 
+  vGrFramedTextureComponent: {
+    label: GrFramedTextureComponent
+
+    + framebuffer_id: uint
+  }
+
   vGrFrom: {
     style: {
       stroke-dash: 3
@@ -145,19 +151,9 @@ PaintablePartEntity: {
   label: PaintablePart
   class: Entity
 
-  PaintedGrTextureComponent: {
+  GrPaintedFramedTextureComponent: {
     ...${vGrTextureComponent}
-  }
-
-  PaintedGrFramebufferComponent: {
-    class: Component
-    shape: class
-
-    + framebuffer_id: uint
-  }
-
-  PaintedGrTextureComponent -> PaintedGrFramebufferComponent: data to {
-    ...${vGrFrom}
+    ...${vGrFramedTextureComponent}
   }
 
   TransformComponent: {
@@ -341,7 +337,7 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
 Systems.ManageSystem <- GameEntity.RenderConfigComponent
-Systems.ManageSystem -> PaintablePartEntity.PaintedGrFramebufferComponent
+Systems.ManageSystem -> PaintablePartEntity.GrPaintedFramedTextureComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
@@ -349,11 +345,10 @@ Systems.TransformSystem -> PlayerEntity.CameraComponent
 Systems.TransformSystem -> PaintableEntity.TransformComponent
 
 # PaintSystem
-Systems.PaintSystem <-> PaintablePartEntity.PaintedGrTextureComponent
+Systems.PaintSystem <-> PaintablePartEntity.GrPaintedFramedTextureComponent
 Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
-Systems.PaintSystem <- PaintablePartEntity.PaintedGrFramebufferComponent
 Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
 
 # RenderSystem
@@ -365,7 +360,7 @@ Systems.RenderSystem -> PlayerEntity.CameraComponent
 Systems.RenderSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- PaintablePartEntity.TransformGrUniformComponent
-Systems.RenderSystem <- PaintablePartEntity.PaintedGrTextureComponent
+Systems.RenderSystem <- PaintablePartEntity.GrPaintedFramedTextureComponent
 Systems.RenderSystem <- GameEntity.GrShaderManagerComponent
 Systems.RenderSystem <- PaintableEntity.MaterialComponent
 
