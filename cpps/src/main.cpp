@@ -69,8 +69,8 @@ int main() {
       std::vector<std::reference_wrapper<TransformComponent>>();
   auto paintable_gr_transform_uniforms =
       std::vector<std::reference_wrapper<GrUniformComponent>>();
-  auto paintable_gr_framebuffers =
-      std::vector<std::reference_wrapper<GrFramebufferComponent>>();
+  auto paintable_gr_framed_textures =
+      std::vector<std::reference_wrapper<GrFramedTextureComponent>>();
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_geometries.push_back(
@@ -79,8 +79,8 @@ int main() {
         std::ref(*paintable_part->transform_component));
     paintable_gr_transform_uniforms.push_back(
         std::ref(*paintable_part->gr_transform_uniform_component));
-    paintable_gr_framebuffers.push_back(
-        std::ref(*paintable_part->gr_painted_framebuffer_component));
+    paintable_gr_framed_textures.push_back(
+        std::ref(*paintable_part->gr_painted_framed_texture_component));
   }
 
   auto render_items = std::vector<RenderItem>();
@@ -99,7 +99,7 @@ int main() {
             }),
         .gr_texture_components =
             std::vector<std::reference_wrapper<GrTextureComponent>>({
-                std::ref(*paintable_part->gr_painted_texture_component),
+                std::ref(*paintable_part->gr_painted_framed_texture_component),
             }),
     });
   }
@@ -108,8 +108,9 @@ int main() {
                     player_entity = std::ref(*player_entity),
                     paintable_entity = std::ref(*paintable_entity),
                     render_items, paintable_geometries, paintable_transforms,
-                    paintable_gr_transform_uniforms, paintable_gr_framebuffers](
-                       float elapsed_ms, float delta_ms) {
+                    paintable_gr_transform_uniforms,
+                    paintable_gr_framed_textures](float elapsed_ms,
+                                                  float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
         std::ref(*game_entity.get().event_component));
@@ -135,7 +136,7 @@ int main() {
       manage_system::resetPainted(
           std::ref(*game_entity.get().event_component),
           std::ref(*game_entity.get().render_config_component),
-          paintable_gr_framebuffers);
+          paintable_gr_framed_textures);
     }
 
     if (game_entity.get().input_component->is_pointer_down) {
@@ -152,8 +153,7 @@ int main() {
             std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
-            std::ref(*paintable_part->gr_painted_texture_component),
-            std::ref(*paintable_part->gr_painted_framebuffer_component));
+            std::ref(*paintable_part->gr_painted_framed_texture_component));
       }
     }
 

@@ -34,9 +34,8 @@ void paint(
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
-    std::reference_wrapper<GrTextureComponent> gr_painted_texture_component,
-    std::reference_wrapper<GrFramebufferComponent>
-        gr_painted_framebuffer_component) {
+    std::reference_wrapper<GrFramedTextureComponent>
+        gr_painted_framed_texture_component) {
   auto shader_program_id = gr_shader_manager_component.get().getShaderProgramId(
       ShaderType::BRUSH_DECAL);
 
@@ -45,12 +44,12 @@ void paint(
       gr_brush_uniform_component.get().uniform_block_name.c_str();
   auto model_uniform_block_name =
       gr_model_uniform_component.get().uniform_block_name.c_str();
-  auto texture_name = gr_painted_texture_component.get().name.c_str();
+  auto texture_name = gr_painted_framed_texture_component.get().name.c_str();
 
   glBindFramebuffer(GL_FRAMEBUFFER,
-                    gr_painted_framebuffer_component.get().framebuffer_id);
-  glViewport(0, 0, gr_painted_texture_component.get().width,
-             gr_painted_texture_component.get().height);
+                    gr_painted_framed_texture_component.get().framebuffer_id);
+  glViewport(0, 0, gr_painted_framed_texture_component.get().width,
+             gr_painted_framed_texture_component.get().height);
 
   glEnable(GL_BLEND);
   glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);

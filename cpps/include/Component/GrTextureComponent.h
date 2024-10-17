@@ -39,4 +39,5 @@ class GrTextureComponent {
   std::string name;
   int width;
   int height;
+  TextureType texture_type;
 };

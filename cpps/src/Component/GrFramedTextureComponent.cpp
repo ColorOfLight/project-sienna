@@ -22,26 +22,21 @@
  * SOFTWARE.
  */
 
-#pragma once
-
-#include <glm/glm.hpp>
-
-#include "./Component/GeometryComponent.h"
 #include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrGeometryComponent.h"
-#include "./Component/GrUniformComponent.h"
-#include "./Component/TransformComponent.h"
 
-enum class PaintablePartPreset { CUBE_PART };
+#include <GLES3/gl3.h>
 
-class PaintablePartEntity {
- public:
-  PaintablePartEntity(PaintablePartPreset preset, glm::vec3 scale,
-                      glm::quat rotation, glm::vec3 translation);
+GrFramedTextureComponent::GrFramedTextureComponent(TextureType texture_type,
+                                                   const std::string& name,
+                                                   int width, int height)
+    : GrTextureComponent(texture_type, name, width, height) {
+  glGenFramebuffers(1, &framebuffer_id);
+  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                         texture_id, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
-  std::unique_ptr<GeometryComponent> geometry_component;
-  std::unique_ptr<GrGeometryComponent> gr_geometry_component;
-  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
-  std::unique_ptr<TransformComponent> transform_component;
-  std::unique_ptr<GrFramedTextureComponent> gr_painted_framed_texture_component;
-};
+GrFramedTextureComponent::~GrFramedTextureComponent() {
+  glDeleteFramebuffers(1, &framebuffer_id);
+}

@@ -29,7 +29,7 @@
 GrTextureComponent::GrTextureComponent(TextureType texture_type,
                                        const std::string& name, int width,
                                        int height)
-    : name(name), width(width), height(height) {
+    : name(name), width(width), height(height), texture_type(texture_type) {
   glGenTextures(1, &texture_id);
   glBindTexture(GL_TEXTURE_2D, texture_id);
 

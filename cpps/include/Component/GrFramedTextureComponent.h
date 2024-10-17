@@ -24,24 +24,14 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
+#include "./Component/GrTextureComponent.h"
 
-#include "./Component/GeometryComponent.h"
-#include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrGeometryComponent.h"
-#include "./Component/GrUniformComponent.h"
-#include "./Component/TransformComponent.h"
-
-enum class PaintablePartPreset { CUBE_PART };
-
-class PaintablePartEntity {
+class GrFramedTextureComponent : public GrTextureComponent {
  public:
-  PaintablePartEntity(PaintablePartPreset preset, glm::vec3 scale,
-                      glm::quat rotation, glm::vec3 translation);
+  GrFramedTextureComponent(TextureType texture_type, const std::string& name,
+                           int width, int height);
 
-  std::unique_ptr<GeometryComponent> geometry_component;
-  std::unique_ptr<GrGeometryComponent> gr_geometry_component;
-  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
-  std::unique_ptr<TransformComponent> transform_component;
-  std::unique_ptr<GrFramedTextureComponent> gr_painted_framed_texture_component;
+  ~GrFramedTextureComponent();
+
+  unsigned int framebuffer_id;
 };

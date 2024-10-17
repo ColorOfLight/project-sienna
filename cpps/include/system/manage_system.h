@@ -26,7 +26,7 @@
 
 #include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
-#include "./Component/GrFramebufferComponent.h"
+#include "./Component/GrFramedTextureComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/RenderConfigComponent.h"
 #include "./Component/TransformComponent.h"
@@ -36,7 +36,7 @@ namespace manage_system {
 void resetPainted(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
-    const std::vector<std::reference_wrapper<GrFramebufferComponent>>&
-        gr_painted_framebuffer_components);
+    const std::vector<std::reference_wrapper<GrFramedTextureComponent>>&
+        gr_painted_framed_texture_components);
 
 }  // namespace manage_system
