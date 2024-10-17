@@ -22,41 +22,22 @@
  * SOFTWARE.
  */
 
-#include "./system/paint_system.h"
-
-#include <GLES3/gl3.h>
+#pragma once
 
 #include <vector>
 
-#include "./render_util.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
+#include "./Component/GrTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./shader/util.h"
 
-namespace paint_system {
-
-void paint(
-    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+void drawGrComponents(
+    ShaderType shader_type,
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
-    std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
-    std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
-    std::reference_wrapper<GrFramedTextureComponent>
-        gr_painted_framed_texture_component) {
-  auto gr_uniform_components =
-      std::vector<std::reference_wrapper<GrUniformComponent>>{
-          gr_brush_uniform_component, gr_model_uniform_component};
-
-  glBindFramebuffer(GL_FRAMEBUFFER,
-                    gr_painted_framed_texture_component.get().framebuffer_id);
-  glViewport(0, 0, gr_painted_framed_texture_component.get().width,
-             gr_painted_framed_texture_component.get().height);
-
-  glEnable(GL_BLEND);
-  glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
-
-  drawGrComponents(ShaderType::BRUSH_DECAL, gr_shader_manager_component,
-                   gr_geometry_component, gr_uniform_components, {});
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glDisable(GL_BLEND);
-}
-
-}  // namespace paint_system
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    const std::vector<std::reference_wrapper<GrUniformComponent>>&
+        gr_uniform_components,
+    const std::vector<std::reference_wrapper<GrTextureComponent>>&
+        gr_texture_components);
