@@ -249,6 +249,13 @@ GameEntity: {
     + change_canvas_size: bool
   }
 
+  RenderConfigComponent: {
+    class: Component
+    shape: class
+
+    + clear_color: Vec3
+  }
+
   GrShaderManagerComponent: {
     class: Component
     shape: class
@@ -281,7 +288,7 @@ Systems: {
     class: System
     shape: class
 
-    + resetPaintedMap(Event): "GrTexture, Event"
+    + resetPaintedMap(Event, RenderConfig): "GrFramebuffer, Event"
   }
 
   TransformSystem: {
@@ -313,7 +320,7 @@ Systems: {
     class: System
     shape: class
 
-    + initContext(InputComponent): void
+    + initContext(RenderConfig): void
     + adjustViewportSize(Input, Event): Event
     + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture): void
   }
@@ -333,6 +340,8 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
+Systems.ManageSystem <- GameEntity.RenderConfigComponent
+Systems.ManageSystem -> PaintablePartEntity.PaintedGrFramebufferComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
@@ -349,6 +358,7 @@ Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem
+Systems.RenderSystem <- GameEntity.RenderConfigComponent
 Systems.RenderSystem <- GameEntity.InputComponent
 Systems.RenderSystem <-> GameEntity.EventComponent
 Systems.RenderSystem -> PlayerEntity.CameraComponent
