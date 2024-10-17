@@ -26,7 +26,7 @@
 
 #include <string>
 
-enum class TextureType { R8, RGBA };
+enum class TextureType { R8, RGBA, DEPTH };
 
 class GrTextureComponent {
  public:

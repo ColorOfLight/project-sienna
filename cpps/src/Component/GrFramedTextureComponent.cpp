@@ -32,8 +32,15 @@ GrFramedTextureComponent::GrFramedTextureComponent(TextureType texture_type,
     : GrTextureComponent(texture_type, name, width, height) {
   glGenFramebuffers(1, &framebuffer_id);
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                         texture_id, 0);
+
+  if (texture_type == TextureType::DEPTH) {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                           texture_id, 0);
+  } else {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           texture_id, 0);
+  }
+
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
