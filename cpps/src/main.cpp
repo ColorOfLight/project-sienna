@@ -55,9 +55,10 @@ void renderFrame() {
 }
 
 int main() {
-  render_system::initContext();
-
   auto game_entity = std::make_unique<GameEntity>();
+
+  render_system::initContext(std::ref(*game_entity->render_config_component));
+
   auto player_entity = std::make_unique<PlayerEntity>();
   auto paintable_entity =
       std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
@@ -68,6 +69,8 @@ int main() {
       std::vector<std::reference_wrapper<TransformComponent>>();
   auto paintable_gr_transform_uniforms =
       std::vector<std::reference_wrapper<GrUniformComponent>>();
+  auto paintable_gr_framebuffers =
+      std::vector<std::reference_wrapper<GrFramebufferComponent>>();
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_geometries.push_back(
@@ -76,6 +79,8 @@ int main() {
         std::ref(*paintable_part->transform_component));
     paintable_gr_transform_uniforms.push_back(
         std::ref(*paintable_part->gr_transform_uniform_component));
+    paintable_gr_framebuffers.push_back(
+        std::ref(*paintable_part->gr_painted_framebuffer_component));
   }
 
   auto render_items = std::vector<RenderItem>();
@@ -103,8 +108,8 @@ int main() {
                     player_entity = std::ref(*player_entity),
                     paintable_entity = std::ref(*paintable_entity),
                     render_items, paintable_geometries, paintable_transforms,
-                    paintable_gr_transform_uniforms](float elapsed_ms,
-                                                     float delta_ms) {
+                    paintable_gr_transform_uniforms, paintable_gr_framebuffers](
+                       float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
         std::ref(*game_entity.get().event_component));
@@ -125,6 +130,13 @@ int main() {
         std::ref(*game_entity.get().input_component),
         std::ref(*player_entity.get().camera_component),
         std::ref(*player_entity.get().gr_camera_uniform_component));
+
+    if (game_entity.get().event_component->reset) {
+      manage_system::resetPainted(
+          std::ref(*game_entity.get().event_component),
+          std::ref(*game_entity.get().render_config_component),
+          paintable_gr_framebuffers);
+    }
 
     if (game_entity.get().input_component->is_pointer_down) {
       gr_sync_system::updateBrushUniform(

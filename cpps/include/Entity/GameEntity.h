@@ -27,6 +27,7 @@
 #include "./Component/EventComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/InputComponent.h"
+#include "./Component/RenderConfigComponent.h"
 
 class GameEntity {
  public:
@@ -34,9 +35,12 @@ class GameEntity {
     event_component = std::make_unique<EventComponent>();
     input_component = std::make_unique<InputComponent>();
     gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
+    render_config_component =
+        std::make_unique<RenderConfigComponent>(glm::vec3(0.1f, 0.1f, 0.1f));
   }
 
   std::unique_ptr<EventComponent> event_component;
   std::unique_ptr<InputComponent> input_component;
   std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
+  std::unique_ptr<RenderConfigComponent> render_config_component;
 };

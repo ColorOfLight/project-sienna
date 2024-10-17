@@ -29,7 +29,8 @@
 
 namespace render_system {
 
-void initContext() {
+void initContext(
+    std::reference_wrapper<RenderConfigComponent> render_config_component) {
   EmscriptenWebGLContextAttributes attr;
   emscripten_webgl_init_context_attributes(&attr);
   attr.majorVersion = 2;  // WebGL 2.0
@@ -45,8 +46,9 @@ void initContext() {
 
   glEnable(GL_DEPTH_TEST);
 
-  // TODO: replace with actual clear color
-  glClearColor(0.1, 0.1, 0.1, 1);
+  glClearColor(render_config_component.get().clear_color.r,
+               render_config_component.get().clear_color.g,
+               render_config_component.get().clear_color.b, 1.0f);
 }
 
 void adjustViewportSize(

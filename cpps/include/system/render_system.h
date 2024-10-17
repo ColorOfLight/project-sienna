@@ -34,6 +34,7 @@
 #include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/MaterialComponent.h"
+#include "./Component/RenderConfigComponent.h"
 
 struct RenderItem {
   std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
@@ -43,7 +44,8 @@ struct RenderItem {
 
 namespace render_system {
 
-void initContext();
+void initContext(
+    std::reference_wrapper<RenderConfigComponent> render_config_component);
 
 void adjustViewportSize(
     std::reference_wrapper<InputComponent> input_component,

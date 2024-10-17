@@ -22,30 +22,14 @@
  * SOFTWARE.
  */
 
-#include "./system/manage_system.h"
+#pragma once
 
-#include <GLES3/gl3.h>
+#include <glm/glm.hpp>
 
-namespace manage_system {
+class RenderConfigComponent {
+ public:
+  RenderConfigComponent(const glm::vec3& clear_color)
+      : clear_color(clear_color) {}
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    const std::vector<std::reference_wrapper<GrFramebufferComponent>>&
-        gr_painted_framebuffer_components) {
-  for (auto& gr_painted_framebuffer : gr_painted_framebuffer_components) {
-    glBindFramebuffer(GL_FRAMEBUFFER,
-                      gr_painted_framebuffer.get().framebuffer_id);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(render_config_component.get().clear_color.r,
-                 render_config_component.get().clear_color.g,
-                 render_config_component.get().clear_color.b, 1.0f);
-  }
-
-  event_component.get().reset = false;
-}
-
-}  // namespace manage_system
+  glm::vec3 clear_color;
+};
