@@ -26,7 +26,7 @@
 
 #include <string>
 
-enum class TextureType { R8, RGBA };
+enum class TextureType { R8, RGBA, DEPTH };
 
 class GrTextureComponent {
  public:
@@ -39,4 +39,5 @@ class GrTextureComponent {
   std::string name;
   int width;
   int height;
+  TextureType texture_type;
 };

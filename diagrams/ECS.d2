@@ -25,7 +25,7 @@ classes: {
   }
 
   System: {
-    width: 1200
+    width: 1280
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -62,6 +62,12 @@ vars: {
     + name: string
     + width: int
     + height: int
+  }
+
+  vGrFramedTextureComponent: {
+    label: GrFramedTextureComponent
+
+    + framebuffer_id: uint
   }
 
   vGrFrom: {
@@ -105,6 +111,11 @@ PlayerEntity: {
     ...${vGrFrom}
   }
 
+  GrBrushDepthTextureComponent: {
+    ...${vGrTextureComponent}
+    ...${vGrFramedTextureComponent}
+  }
+
   CameraComponent: {
     class: Component
     shape: class
@@ -145,19 +156,9 @@ PaintablePartEntity: {
   label: PaintablePart
   class: Entity
 
-  PaintedGrTextureComponent: {
+  GrPaintedFramedTextureComponent: {
     ...${vGrTextureComponent}
-  }
-
-  PaintedGrFramebufferComponent: {
-    class: Component
-    shape: class
-
-    + framebuffer_id: uint
-  }
-
-  PaintedGrTextureComponent -> PaintedGrFramebufferComponent: data to {
-    ...${vGrFrom}
+    ...${vGrFramedTextureComponent}
   }
 
   TransformComponent: {
@@ -313,7 +314,8 @@ Systems: {
     class: System
     shape: class
 
-    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrTexture, GrFramebuffer): GrTexture
+    + updateBrushDepth(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
+    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
   }
 
   RenderSystem: {
@@ -341,7 +343,7 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
 Systems.ManageSystem <- GameEntity.RenderConfigComponent
-Systems.ManageSystem -> PaintablePartEntity.PaintedGrFramebufferComponent
+Systems.ManageSystem -> PaintablePartEntity.GrPaintedFramedTextureComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
@@ -349,11 +351,11 @@ Systems.TransformSystem -> PlayerEntity.CameraComponent
 Systems.TransformSystem -> PaintableEntity.TransformComponent
 
 # PaintSystem
-Systems.PaintSystem <-> PaintablePartEntity.PaintedGrTextureComponent
+Systems.PaintSystem <-> PaintablePartEntity.GrPaintedFramedTextureComponent
+Systems.PaintSystem <-> PlayerEntity.GrBrushDepthTextureComponent
 Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
-Systems.PaintSystem <- PaintablePartEntity.PaintedGrFramebufferComponent
 Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
 
 # RenderSystem
@@ -365,7 +367,7 @@ Systems.RenderSystem -> PlayerEntity.CameraComponent
 Systems.RenderSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- PaintablePartEntity.TransformGrUniformComponent
-Systems.RenderSystem <- PaintablePartEntity.PaintedGrTextureComponent
+Systems.RenderSystem <- PaintablePartEntity.GrPaintedFramedTextureComponent
 Systems.RenderSystem <- GameEntity.GrShaderManagerComponent
 Systems.RenderSystem <- PaintableEntity.MaterialComponent
 

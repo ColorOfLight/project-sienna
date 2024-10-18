@@ -190,7 +190,7 @@ void updateBrushUniform(
   };
 
   glm::mat4 projection_matrix =
-      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 100.0f);
+      glm::perspective(brush_component.get().nozzle_fov, 1.0f, 0.01f, 1000.0f);
 
   auto eye_position = getPositionOnSphere(camera_component.get().radius,
                                           camera_component.get().phi,
@@ -207,8 +207,10 @@ void updateBrushUniform(
       glm::vec2(canvas_size.width, canvas_size.height),
       camera_component.get().fovy, camera_view_matrix);
 
+  auto brush_position = eye_position + ray_direction * glm::vec3(0.1);
+
   auto brush_view_matrix =
-      getRayViewMatrix(eye_position, camera_up, ray_direction);
+      getRayViewMatrix(brush_position, camera_up, ray_direction);
 
   BrushUniformData brush_uniform_data = {
       .air_pressure = brush_component.get().air_pressure,
@@ -217,7 +219,7 @@ void updateBrushUniform(
       .nozzle_fov = brush_component.get().nozzle_fov,
       .view_matrix = brush_view_matrix,
       .projection_matrix = projection_matrix,
-      .position = eye_position + ray_direction * glm::vec3(0.2),
+      .position = brush_position,
   };
 
   glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);

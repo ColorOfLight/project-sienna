@@ -32,12 +32,10 @@ PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
 
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
 
-  gr_painted_texture_component = std::make_unique<GrTextureComponent>(
-      TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
-      painted_map_height);
-
-  gr_painted_framebuffer_component = std::make_unique<GrFramebufferComponent>(
-      gr_painted_texture_component->texture_id);
+  gr_painted_framed_texture_component =
+      std::make_unique<GrFramedTextureComponent>(
+          TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
+          painted_map_height);
 
   gr_transform_uniform_component =
       std::make_unique<GrUniformComponent>("ModelBlock");

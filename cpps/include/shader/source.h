@@ -110,6 +110,44 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
     }
 )";
 
+inline const std::string brush_depth_vertex = R"(#version 300 es
+    precision mediump float;
+
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_paintViscosity;
+        float u_brush_nozzleFov;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+
+    layout (std140) uniform ModelBlock
+    {
+        mat4 u_model_matrix;
+    };
+
+    layout (location = 0) in vec3 a_position;
+    layout (location = 1) in vec3 a_normal;
+    layout (location = 2) in vec2 a_texCoord;
+
+    void main()
+    {
+        vec4 modelPosition = u_model_matrix * vec4(a_position, 1.0);
+        gl_Position = u_brush_projectionMatrix * u_brush_viewMatrix * modelPosition;
+    }
+)";
+
+inline const std::string empty_fragment = R"(#version 300 es
+    precision mediump float;
+
+    void main()
+    {
+    }
+)";
+
 inline const std::string brush_decal_fragment = R"(#version 300 es
     precision mediump float;
 
@@ -124,6 +162,8 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         vec3 u_brush_position;
     };
 
+    uniform sampler2D u_brushDepthTexture;
+
     out vec4 FragColor;
 
     in vec3 v_position;
@@ -134,6 +174,14 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
     void main()
     {
         if (v_projectedPosition.x * v_projectedPosition.x + v_projectedPosition.y * v_projectedPosition.y > 1.0)
+        {
+            discard;
+        }
+
+        float brushDepth = texture(u_brushDepthTexture, v_projectedPosition.xy * 0.5 + 0.5).r;
+        float normalizedZ = v_projectedPosition.z * 0.5 + 0.5;
+
+        if (normalizedZ - brushDepth > 2.0 * 1e-5)
         {
             discard;
         }

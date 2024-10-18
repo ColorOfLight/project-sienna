@@ -24,30 +24,14 @@
 
 #pragma once
 
-#include "./Component/BrushComponent.h"
-#include "./Component/CameraComponent.h"
-#include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrUniformComponent.h"
+#include "./Component/GrTextureComponent.h"
 
-class PlayerEntity {
+class GrFramedTextureComponent : public GrTextureComponent {
  public:
-  PlayerEntity() {
-    camera_component = std::make_unique<CameraComponent>();
-    brush_component = std::make_unique<BrushComponent>();
+  GrFramedTextureComponent(TextureType texture_type, const std::string& name,
+                           int width, int height);
 
-    gr_camera_uniform_component =
-        std::make_unique<GrUniformComponent>("CameraBlock");
-    gr_brush_uniform_component =
-        std::make_unique<GrUniformComponent>("BrushBlock");
-    gr_brush_depth_framed_texture_component =
-        std::make_unique<GrFramedTextureComponent>(
-            TextureType::DEPTH, "u_brushDepthTexture", 1024, 1024);
-  }
+  ~GrFramedTextureComponent();
 
-  std::unique_ptr<CameraComponent> camera_component;
-  std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
-  std::unique_ptr<BrushComponent> brush_component;
-  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
-  std::unique_ptr<GrFramedTextureComponent>
-      gr_brush_depth_framed_texture_component;
+  unsigned int framebuffer_id;
 };
