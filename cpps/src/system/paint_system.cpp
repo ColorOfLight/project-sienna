@@ -67,11 +67,15 @@ void paint(
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
+    std::reference_wrapper<GrTextureComponent> gr_brush_depth_texture_component,
     std::reference_wrapper<GrFramedTextureComponent>
         gr_painted_framed_texture_component) {
   auto gr_uniform_components =
       std::vector<std::reference_wrapper<GrUniformComponent>>{
           gr_brush_uniform_component, gr_model_uniform_component};
+  auto gr_texture_components =
+      std::vector<std::reference_wrapper<GrTextureComponent>>{
+          gr_brush_depth_texture_component};
 
   glBindFramebuffer(GL_FRAMEBUFFER,
                     gr_painted_framed_texture_component.get().framebuffer_id);
@@ -82,7 +86,8 @@ void paint(
   glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
 
   drawGrComponents(ShaderType::BRUSH_DECAL, gr_shader_manager_component,
-                   gr_geometry_component, gr_uniform_components, {});
+                   gr_geometry_component, gr_uniform_components,
+                   gr_texture_components);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glDisable(GL_BLEND);

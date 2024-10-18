@@ -149,8 +149,8 @@ int main() {
           std::ref(*game_entity.get().input_component),
           std::ref(*player_entity.get().camera_component),
           std::ref(*player_entity.get().gr_brush_uniform_component));
-      paint_system::updateBrushDepth(
 
+      paint_system::updateBrushDepth(
           std::ref(*game_entity.get().gr_shader_manager_component),
           std::ref(*player_entity.get().gr_brush_uniform_component),
           paintable_gr_geometries, paintable_gr_transform_uniforms,
@@ -164,6 +164,8 @@ int main() {
             std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
+            std::ref(
+                *player_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_painted_framed_texture_component));
       }
     }

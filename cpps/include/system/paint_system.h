@@ -29,6 +29,7 @@
 #include "./Component/GrFramedTextureComponent.h"
 #include "./Component/GrGeometryComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
+#include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 
 namespace paint_system {
@@ -50,6 +51,7 @@ void paint(
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
     std::reference_wrapper<GrUniformComponent> gr_model_uniform_component,
+    std::reference_wrapper<GrTextureComponent> gr_brush_depth_texture_component,
     std::reference_wrapper<GrFramedTextureComponent>
         gr_painted_framed_texture_component);
 

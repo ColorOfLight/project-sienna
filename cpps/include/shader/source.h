@@ -162,6 +162,8 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         vec3 u_brush_position;
     };
 
+    uniform sampler2D u_brushDepthTexture;
+
     out vec4 FragColor;
 
     in vec3 v_position;
@@ -172,6 +174,14 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
     void main()
     {
         if (v_projectedPosition.x * v_projectedPosition.x + v_projectedPosition.y * v_projectedPosition.y > 1.0)
+        {
+            discard;
+        }
+
+        float brushDepth = texture(u_brushDepthTexture, v_projectedPosition.xy * 0.5 + 0.5).r;
+        float normalizedZ = v_projectedPosition.z * 0.5 + 0.5;
+
+        if (normalizedZ - brushDepth > 2.0 * 1e-5)
         {
             discard;
         }
