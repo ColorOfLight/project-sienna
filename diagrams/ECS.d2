@@ -25,7 +25,7 @@ classes: {
   }
 
   System: {
-    width: 1200
+    width: 1280
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -109,6 +109,11 @@ PlayerEntity: {
 
   BrushComponent -> BrushGrUniformComponent: data to {
     ...${vGrFrom}
+  }
+
+  GrBrushDepthTextureComponent: {
+    ...${vGrTextureComponent}
+    ...${vGrFramedTextureComponent}
   }
 
   CameraComponent: {
@@ -309,7 +314,8 @@ Systems: {
     class: System
     shape: class
 
-    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrTexture, GrFramebuffer): GrTexture
+    + updateBrushDepth(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
+    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
   }
 
   RenderSystem: {
@@ -346,6 +352,7 @@ Systems.TransformSystem -> PaintableEntity.TransformComponent
 
 # PaintSystem
 Systems.PaintSystem <-> PaintablePartEntity.GrPaintedFramedTextureComponent
+Systems.PaintSystem <-> PlayerEntity.GrBrushDepthTextureComponent
 Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
