@@ -44,7 +44,9 @@ struct RenderItem {
 
 namespace render_system {
 
-void initContext(
+void initContext();
+
+void setClearColor(
     std::reference_wrapper<RenderConfigComponent> render_config_component);
 
 void adjustViewportSize(

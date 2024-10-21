@@ -56,10 +56,9 @@ void renderFrame() {
 }
 
 int main() {
+  render_system::initContext();
+
   auto game_entity = std::make_unique<GameEntity>();
-
-  render_system::initContext(std::ref(*game_entity->render_config_component));
-
   auto player_entity = std::make_unique<PlayerEntity>();
   auto paintable_entity =
       std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
@@ -109,6 +108,9 @@ int main() {
     });
   }
 
+  render_system::setClearColor(
+      std::ref(*game_entity.get()->render_config_component));
+
   auto main_loop = [game_entity = std::ref(*game_entity),
                     player_entity = std::ref(*player_entity),
                     paintable_entity = std::ref(*paintable_entity),
@@ -137,6 +139,9 @@ int main() {
         std::ref(*game_entity.get().input_component),
         std::ref(*player_entity.get().camera_component),
         std::ref(*player_entity.get().gr_camera_uniform_component));
+    gr_sync_system::updateTimeUniform(
+        elapsed_ms, delta_ms,
+        std::ref(*game_entity.get().gr_time_uniform_component));
 
     if (game_entity.get().event_component->reset) {
       manage_system::resetPainted(
@@ -170,6 +175,7 @@ int main() {
             std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
+            std::ref(*game_entity.get().gr_time_uniform_component),
             std::ref(
                 *player_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_painted_framed_texture_component));

@@ -267,6 +267,10 @@ GameEntity: {
     - shader_program_ids: "uomap<ShaderType, unsigned int>"
     + getShaderProgram(ShaderType): unsigned int
   }
+
+  GrTimeUniformComponent: {
+    ...${vGrUniformComponent}
+  }
 }
 
 # Relationships
@@ -318,6 +322,7 @@ Systems: {
     + updateCameraUniform(Input, Camera): GrUniform
     + updateTransformUniform(Transform, Transform\[\]): GrUniform
     + updateBrushUniform(Brush, Input, Camera): GrUniform
+    + updateTimeUniform(): GrUniform
   }
 
   PaintSystem: {
@@ -325,14 +330,15 @@ Systems: {
     shape: class
 
     + updateBrushDepth(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
-    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
+    + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
   }
 
   RenderSystem: {
     class: System
     shape: class
 
-    + initContext(RenderConfig): void
+    + initContext(): void
+    + setClearColor(RenderConfig): void
     + adjustViewportSize(Input, Event): Event
     + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture): void
   }
@@ -371,6 +377,7 @@ Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
 Systems.PaintSystem <- PlayerEntity.BrushGrUniformComponent
+Systems.PaintSystem <- GameEntity.GrTimeUniformComponent
 
 # RenderSystem
 Client.Canvas <- Systems.RenderSystem

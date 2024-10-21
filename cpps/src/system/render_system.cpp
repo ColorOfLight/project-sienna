@@ -31,8 +31,7 @@
 
 namespace render_system {
 
-void initContext(
-    std::reference_wrapper<RenderConfigComponent> render_config_component) {
+void initContext() {
   EmscriptenWebGLContextAttributes attr;
   emscripten_webgl_init_context_attributes(&attr);
   attr.majorVersion = 2;  // WebGL 2.0
@@ -47,7 +46,10 @@ void initContext(
   emscripten_webgl_make_context_current(context);
 
   glEnable(GL_DEPTH_TEST);
+}
 
+void setClearColor(
+    std::reference_wrapper<RenderConfigComponent> render_config_component) {
   glClearColor(render_config_component.get().clear_color.r,
                render_config_component.get().clear_color.g,
                render_config_component.get().clear_color.b, 1.0f);
