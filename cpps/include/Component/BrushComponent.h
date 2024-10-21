@@ -30,13 +30,11 @@ class BrushComponent {
  public:
   BrushComponent() {
     nozzle_fov = glm::radians(45.0f);
-    air_pressure = 0.5f;
+    air_pressure = 1.5f;
     paint_color = glm::vec3(1.0f, 0.5f, 0.0f);
-    paint_viscosity = 0.1f;
   }
 
   float nozzle_fov;
   float air_pressure;
   glm::vec3 paint_color;
-  float paint_viscosity;
 };

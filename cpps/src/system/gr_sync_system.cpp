@@ -182,7 +182,6 @@ void updateBrushUniform(
   struct BrushUniformData {
     float air_pressure;
     alignas(16) glm::vec3 paint_color;
-    float paint_viscosity;
     float nozzle_fov;
     alignas(16) glm::mat4 view_matrix;
     alignas(16) glm::mat4 projection_matrix;
@@ -215,7 +214,6 @@ void updateBrushUniform(
   BrushUniformData brush_uniform_data = {
       .air_pressure = brush_component.get().air_pressure,
       .paint_color = brush_component.get().paint_color,
-      .paint_viscosity = brush_component.get().paint_viscosity,
       .nozzle_fov = brush_component.get().nozzle_fov,
       .view_matrix = brush_view_matrix,
       .projection_matrix = projection_matrix,
