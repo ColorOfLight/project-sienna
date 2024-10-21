@@ -24,56 +24,12 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-#include <map>
+#include "./Component/BrushComponent.h"
+#include "./Component/InputComponent.h"
 
-enum class InputKey {
-  UP = 0,
-  DOWN = 1,
-  LEFT = 2,
-  RIGHT = 3,
-  FORWARD = 4,
-  BACKWARD = 5,
-};
+namespace input_sync_system {
 
-struct PointerPosition {
-  float x;
-  float y;
-};
+void syncBrush(std::reference_wrapper<InputComponent> input_component,
+               std::reference_wrapper<BrushComponent> brush_component);
 
-struct CanvasSize {
-  int width;
-  int height;
-};
-
-struct BrushInput {
-  float air_pressure;
-  float nozzle_fov;
-  glm::vec3 paint_color;
-};
-
-class InputComponent {
- public:
-  InputComponent() {
-    pressed_key_map[InputKey::UP] = false;
-    pressed_key_map[InputKey::LEFT] = false;
-    pressed_key_map[InputKey::DOWN] = false;
-    pressed_key_map[InputKey::RIGHT] = false;
-    pressed_key_map[InputKey::FORWARD] = false;
-    pressed_key_map[InputKey::BACKWARD] = false;
-    is_pointer_down = false;
-    pointer_position.x = 0;
-    pointer_position.y = 0;
-    canvas_size.width = 0;
-    canvas_size.height = 0;
-    brush_input.air_pressure = 0.5f;
-    brush_input.nozzle_fov = glm::radians(15.0f);
-    brush_input.paint_color = glm::vec3(1.0f, 0.0f, 0.0f);
-  }
-
-  std::unordered_map<InputKey, bool> pressed_key_map;
-  bool is_pointer_down;
-  PointerPosition pointer_position;
-  CanvasSize canvas_size;
-  BrushInput brush_input;
-};
+}  // namespace input_sync_system
