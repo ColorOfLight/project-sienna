@@ -139,6 +139,9 @@ int main() {
         std::ref(*game_entity.get().input_component),
         std::ref(*player_entity.get().camera_component),
         std::ref(*player_entity.get().gr_camera_uniform_component));
+    gr_sync_system::updateTimeUniform(
+        elapsed_ms, delta_ms,
+        std::ref(*game_entity.get().gr_time_uniform_component));
 
     if (game_entity.get().event_component->reset) {
       manage_system::resetPainted(

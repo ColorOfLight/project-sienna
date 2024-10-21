@@ -26,6 +26,7 @@
 
 #include "./Component/EventComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
+#include "./Component/GrUniformComponent.h"
 #include "./Component/InputComponent.h"
 #include "./Component/RenderConfigComponent.h"
 
@@ -37,10 +38,13 @@ class GameEntity {
     gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
     render_config_component =
         std::make_unique<RenderConfigComponent>(glm::vec3(0.1f, 0.1f, 0.1f));
+    gr_time_uniform_component =
+        std::make_unique<GrUniformComponent>("TimeBlock");
   }
 
   std::unique_ptr<EventComponent> event_component;
   std::unique_ptr<InputComponent> input_component;
   std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
   std::unique_ptr<RenderConfigComponent> render_config_component;
+  std::unique_ptr<GrUniformComponent> gr_time_uniform_component;
 };

@@ -227,4 +227,24 @@ void updateBrushUniform(
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
+void updateTimeUniform(
+    float elapsed_ms, float delta_ms,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
+  struct TimeUniformData {
+    float elapsed_ms;
+    float delta_ms;
+  };
+
+  TimeUniformData time_uniform_data = {
+      .elapsed_ms = elapsed_ms,
+      .delta_ms = delta_ms,
+  };
+
+  glBindBuffer(GL_UNIFORM_BUFFER, gr_uniform_component.get().uniform_buffer_id);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(time_uniform_data), &time_uniform_data,
+               GL_STATIC_DRAW);
+
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
 }  // namespace gr_sync_system

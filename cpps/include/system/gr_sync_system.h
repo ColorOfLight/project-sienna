@@ -58,4 +58,8 @@ void updateBrushUniform(
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
+void updateTimeUniform(
+    float elapsed_ms, float delta_ms,
+    std::reference_wrapper<GrUniformComponent> gr_uniform_component);
+
 }  // namespace gr_sync_system
