@@ -197,7 +197,7 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         float distance = length(v_position - u_brush_position);
         float brushRange = strongK * 0.8 - pow((distance - strongK), 2.0);
 
-        float intensity = centerDistance < brushRange ? 0.1 : 0.01;
+        float intensity = centerDistance < brushRange ? 0.05 : 0.05 * max(0.0, smoothstep(1.0, brushRange, centerDistance));
 
         FragColor = vec4(u_brush_paintColor, intensity);
     }
