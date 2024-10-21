@@ -14,6 +14,11 @@ const ClientInputComponent = {
   isPointerDown: false,
   pointerPosition: [0, 0],
   canvasSize: getCanvasSize(),
+  brush: {
+    nozzleFov: 15,
+    airPressure: 0.5,
+    paintColor: {r: 1, g: 0.5, b: 0},
+  }
 };
 
 const ClientEventComponent = {
