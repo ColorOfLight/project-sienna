@@ -26,6 +26,8 @@
 
 #include <emscripten/val.h>
 
+#include <glm/glm.hpp>
+
 namespace client_sync_system {
 
 void syncInput(std::reference_wrapper<InputComponent> input_component) {
@@ -60,6 +62,20 @@ void syncInput(std::reference_wrapper<InputComponent> input_component) {
 
   input_component.get().canvas_size.width = canvas_size[0].as<int>();
   input_component.get().canvas_size.height = canvas_size[1].as<int>();
+
+  emscripten::val brush_input = client_input_component["brush"];
+
+  input_component.get().brush_input.air_pressure =
+      brush_input["airPressure"].as<float>();
+  input_component.get().brush_input.nozzle_fov =
+      glm::radians(brush_input["nozzleFov"].as<float>());
+
+  input_component.get().brush_input.paint_color.r =
+      brush_input["paintColor"]["r"].as<float>();
+  input_component.get().brush_input.paint_color.g =
+      brush_input["paintColor"]["g"].as<float>();
+  input_component.get().brush_input.paint_color.b =
+      brush_input["paintColor"]["b"].as<float>();
 }
 
 void consumeEvent(std::reference_wrapper<EventComponent> event_component) {

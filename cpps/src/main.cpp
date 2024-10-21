@@ -33,6 +33,7 @@
 #include "./Entity/PlayerEntity.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
+#include "./system/input_sync_system.h"
 #include "./system/manage_system.h"
 #include "./system/paint_system.h"
 #include "./system/render_system.h"
@@ -144,6 +145,10 @@ int main() {
     }
 
     if (game_entity.get().input_component->is_pointer_down) {
+      input_sync_system::syncBrush(
+          std::ref(*game_entity.get().input_component),
+          std::ref(*player_entity.get().brush_component));
+
       gr_sync_system::updateBrushUniform(
           std::ref(*player_entity.get().brush_component),
           std::ref(*game_entity.get().input_component),

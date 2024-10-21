@@ -100,7 +100,6 @@ PlayerEntity: {
     + nozzle_fov: float
     + air_pressure: float
     + paint_color: Vec3
-    + paint_viscosity: float
   }
 
   BrushGrUniformComponent: {
@@ -207,6 +206,9 @@ Client: {
     + isPointerDown: boolean
     + pointerPosition: "[number, number]"
     + canvasSize: "[number, number]"
+    + brush_airPreesure: number
+    + brush_nozzleFov: number
+    + brush_paintColor: "[number, number, number]"
   }
 
   ClientEventComponent: {
@@ -240,6 +242,7 @@ GameEntity: {
     + is_pointer_down: bool
     + pointer_position: "[float, float]"
     + canvas_size: "[int, int]"
+    + brush_input: BrushInput
   }
 
   EventComponent: {
@@ -290,6 +293,13 @@ Systems: {
     shape: class
 
     + resetPaintedMap(Event, RenderConfig): "GrFramebuffer, Event"
+  }
+
+  InputSyncSystem: {
+    class: System
+    shape: class
+
+    + syncBrush(Input): Brush
   }
 
   TransformSystem: {
@@ -344,6 +354,10 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 Systems.ManageSystem <-> GameEntity.EventComponent
 Systems.ManageSystem <- GameEntity.RenderConfigComponent
 Systems.ManageSystem -> PaintablePartEntity.GrPaintedFramedTextureComponent
+
+# InputSyncSystem
+Systems.InputSyncSystem <- GameEntity.InputComponent
+Systems.InputSyncSystem -> PlayerEntity.BrushComponent
 
 # TransformSystem
 Systems.TransformSystem <- GameEntity.InputComponent
