@@ -72,7 +72,6 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
     {
         float u_brush_airPressure;
         vec3 u_brush_paintColor;
-        float u_brush_paintViscosity;
         float u_brush_nozzleFov;
         mat4 u_brush_viewMatrix;
         mat4 u_brush_projectionMatrix;
@@ -117,7 +116,6 @@ inline const std::string brush_depth_vertex = R"(#version 300 es
     {
         float u_brush_airPressure;
         vec3 u_brush_paintColor;
-        float u_brush_paintViscosity;
         float u_brush_nozzleFov;
         mat4 u_brush_viewMatrix;
         mat4 u_brush_projectionMatrix;
@@ -155,7 +153,6 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
     {
         float u_brush_airPressure;
         vec3 u_brush_paintColor;
-        float u_brush_paintViscosity;
         float u_brush_nozzleFov;
         mat4 u_brush_viewMatrix;
         mat4 u_brush_projectionMatrix;
