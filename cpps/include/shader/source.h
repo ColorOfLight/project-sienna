@@ -173,7 +173,10 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
 
     void main()
     {
-        if (v_projectedPosition.x * v_projectedPosition.x + v_projectedPosition.y * v_projectedPosition.y > 1.0)
+        float centerDistance = length(v_projectedPosition.xy);
+
+        // Discard fragments outside the unit circle
+        if (centerDistance > 1.0)
         {
             discard;
         }
@@ -181,20 +184,20 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         float brushDepth = texture(u_brushDepthTexture, v_projectedPosition.xy * 0.5 + 0.5).r;
         float normalizedZ = v_projectedPosition.z * 0.5 + 0.5;
 
+        // Discard fragments behind the brush
         if (normalizedZ - brushDepth > 2.0 * 1e-5)
         {
             discard;
         }
 
-        float k = 1.0;
-        float distance = min(length(v_position - u_brush_position), 0.1);
-        float distanceFactor = exp(-distance * u_brush_paintViscosity * 700.0);
+        float strongFactor = 0.04;
+        float tanHalfFov = tan(u_brush_nozzleFov / 2.0);
 
-        float epsilon = 1e-6;
-        float tanFov = tan(u_brush_nozzleFov / 2.0) + epsilon;
-        float fovFactor = 1.0 / (tanFov * tanFov);
+        float strongK = strongFactor * u_brush_airPressure * u_brush_airPressure / pow(tanHalfFov + 0.0001, 2.0);
+        float distance = length(v_position - u_brush_position);
+        float brushRange = strongK * 0.8 - pow((distance - strongK), 2.0);
 
-        float intensity = k * u_brush_airPressure * distanceFactor * fovFactor;
+        float intensity = centerDistance < brushRange ? 0.1 : 0.01;
 
         FragColor = vec4(u_brush_paintColor, intensity);
     }
