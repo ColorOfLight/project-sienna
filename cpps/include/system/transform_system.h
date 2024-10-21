@@ -37,6 +37,7 @@ void transformCamera(float delta_ms,
 // TODO: rename later
 void transformPaintable(
     float delta_ms, std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<TransformComponent> transform_component);
 
 }  // namespace transform_system

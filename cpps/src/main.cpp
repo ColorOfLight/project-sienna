@@ -130,6 +130,7 @@ int main() {
         std::ref(*player_entity.get().camera_component));
     transform_system::transformPaintable(
         delta_ms, std::ref(*game_entity.get().input_component),
+        std::ref(*player_entity.get().camera_component),
         std::ref(*paintable_entity.get().transform_component));
 
     gr_sync_system::updateCameraUniform(

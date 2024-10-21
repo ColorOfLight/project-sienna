@@ -27,6 +27,8 @@
 #include <cmath>
 #include <glm/gtc/constants.hpp>
 
+#include "./math_util.h"
+
 namespace transform_system {
 
 const float rotation_speed = glm::pi<float>() * 1.0f / 1000.0f;
@@ -59,6 +61,7 @@ void transformCamera(float delta_ms,
 
 void transformPaintable(
     float delta_ms, std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<TransformComponent> transform_component) {
   const auto& pressed_key_map = input_component.get().pressed_key_map;
   auto& current_rotation = transform_component.get().rotation;
@@ -72,30 +75,35 @@ void transformPaintable(
   bool is_right = !pressed_key_map.at(InputKey::LEFT) &&
                   pressed_key_map.at(InputKey::RIGHT);
 
+  auto camera_up =
+      getUpOnSphere(camera_component.get().phi, camera_component.get().theta);
+  auto camera_right = getRightOnSphere(camera_component.get().phi,
+                                       camera_component.get().theta);
+
   if (is_up) {
     auto new_rotation_quat =
-        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::angleAxis(rotation_speed * delta_ms, camera_right);
     current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_down) {
     auto new_rotation_quat =
-        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::angleAxis(-rotation_speed * delta_ms, camera_right);
     current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_left) {
     auto new_rotation_quat =
-        glm::angleAxis(rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::angleAxis(rotation_speed * delta_ms, camera_up);
     current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
 
   if (is_right) {
     auto new_rotation_quat =
-        glm::angleAxis(-rotation_speed * delta_ms, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::angleAxis(-rotation_speed * delta_ms, camera_up);
     current_rotation = new_rotation_quat * current_rotation;
     transform_component.get().needs_update = true;
   }
