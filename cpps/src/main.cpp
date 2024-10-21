@@ -56,10 +56,9 @@ void renderFrame() {
 }
 
 int main() {
+  render_system::initContext();
+
   auto game_entity = std::make_unique<GameEntity>();
-
-  render_system::initContext(std::ref(*game_entity->render_config_component));
-
   auto player_entity = std::make_unique<PlayerEntity>();
   auto paintable_entity =
       std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
@@ -108,6 +107,9 @@ int main() {
             }),
     });
   }
+
+  render_system::setClearColor(
+      std::ref(*game_entity.get()->render_config_component));
 
   auto main_loop = [game_entity = std::ref(*game_entity),
                     player_entity = std::ref(*player_entity),
