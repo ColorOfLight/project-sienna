@@ -149,6 +149,12 @@ inline const std::string empty_fragment = R"(#version 300 es
 inline const std::string brush_decal_fragment = R"(#version 300 es
     precision mediump float;
 
+    layout (std140) uniform TimeBlock
+    {
+        float u_time_elapsed_ms;
+        float u_time_delta_ms;
+    };
+
     layout (std140) uniform BrushBlock
     {
         float u_brush_airPressure;
@@ -194,7 +200,8 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         float distance = length(v_position - u_brush_position);
         float brushRange = strongK * 0.8 - pow((distance - strongK), 2.0);
 
-        float intensity = centerDistance < brushRange ? 0.05 : 0.05 * max(0.0, smoothstep(1.0, brushRange, centerDistance));
+        float baseIntensity = 2.0 / 1000.0 * u_time_delta_ms;
+        float intensity = centerDistance < brushRange ? baseIntensity : baseIntensity * max(0.0, smoothstep(1.0, brushRange, centerDistance));
 
         FragColor = vec4(u_brush_paintColor, intensity);
     }

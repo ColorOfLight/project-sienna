@@ -175,6 +175,7 @@ int main() {
             std::ref(*game_entity.get().gr_shader_manager_component),
             std::ref(*player_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
+            std::ref(*game_entity.get().gr_time_uniform_component),
             std::ref(
                 *player_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_painted_framed_texture_component));
