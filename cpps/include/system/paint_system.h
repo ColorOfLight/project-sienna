@@ -55,7 +55,7 @@ void paint(
     std::reference_wrapper<GrUniformComponent> gr_time_uniform_component,
     std::reference_wrapper<GrTextureComponent> gr_brush_depth_texture_component,
     std::reference_wrapper<GrFramedTextureComponent>
-        gr_painted_framed_texture_component);
+        gr_paint_framed_texture_component);
 
 void updatePaintedMap(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,

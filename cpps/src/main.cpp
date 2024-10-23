@@ -101,9 +101,10 @@ int main() {
                 std::ref(*player_entity->gr_camera_uniform_component),
                 std::ref(*paintable_part->gr_transform_uniform_component),
             }),
-        .gr_texture_components =
-            std::vector<std::reference_wrapper<GrTextureComponent>>({
-                std::ref(*paintable_part->gr_painted_framed_texture_component),
+        .gr_ping_pong_texture_components =
+            std::vector<std::reference_wrapper<GrPingPongTextureComponent>>({
+                std::ref(
+                    *paintable_part->gr_painted_ping_pong_texture_component),
             }),
     });
   }
@@ -182,12 +183,11 @@ int main() {
             std::ref(*game_entity.get().gr_time_uniform_component),
             std::ref(
                 *player_entity.get().gr_brush_depth_framed_texture_component),
-            std::ref(*paintable_part->gr_painted_framed_texture_component));
+            std::ref(*paintable_part->gr_paint_framed_texture_component));
         paint_system::updatePaintedMap(
-            std::ref(*paintable_part->gr_geometry_component),
+            std::ref(*player_entity.get().gr_brush_quad_geometry_component),
             std::ref(*game_entity.get().gr_shader_manager_component),
-            std::ref(
-                *player_entity.get().gr_brush_depth_framed_texture_component),
+            std::ref(*paintable_part->gr_paint_framed_texture_component),
             std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
       }
     }
