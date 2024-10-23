@@ -32,16 +32,20 @@ PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
 
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
 
-  gr_painted_framed_texture_component =
-      std::make_unique<GrFramedTextureComponent>(
-          TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
-          painted_map_height);
-
   gr_transform_uniform_component =
       std::make_unique<GrUniformComponent>("ModelBlock");
 
   transform_component =
       std::make_unique<TransformComponent>(scale, rotation, translation);
+
+  gr_paint_framed_texture_component =
+      std::make_unique<GrFramedTextureComponent>(
+          TextureType::RGBA, "u_paintMapTexture", painted_map_width,
+          painted_map_height);
+  gr_painted_ping_pong_texture_component =
+      std::make_unique<GrPingPongTextureComponent>(
+          TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
+          painted_map_height);
 
   if (preset == PaintablePartPreset::CUBE_PART) {
     geometry_component =

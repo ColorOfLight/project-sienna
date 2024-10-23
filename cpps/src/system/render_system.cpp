@@ -79,6 +79,9 @@ void render(std::reference_wrapper<InputComponent> input_component,
             const std::vector<RenderItem>& render_items) {
   glViewport(0, 0, input_component.get().canvas_size.width,
              input_component.get().canvas_size.height);
+  // TOOD: remove setClearColor & use clear color from render config
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   auto shader_type = material_component.get().shader_type;
@@ -87,10 +90,22 @@ void render(std::reference_wrapper<InputComponent> input_component,
     const auto& gr_geometry_component = render_item.gr_geometry_component;
     const auto& gr_uniform_components = render_item.gr_uniform_components;
     const auto& gr_texture_components = render_item.gr_texture_components;
+    const auto& gr_texture_components_ping_pong =
+        render_item.gr_ping_pong_texture_components;
+
+    auto merged_gr_textures =
+        std::vector<std::reference_wrapper<GrTextureComponent>>();
+    merged_gr_textures.insert(merged_gr_textures.end(),
+                              gr_texture_components.begin(),
+                              gr_texture_components.end());
+
+    for (const auto& gr_texture : gr_texture_components_ping_pong) {
+      merged_gr_textures.push_back(gr_texture.get().getCurrentFramedTexture());
+    }
 
     drawGrComponents(shader_type, gr_shader_manager_component,
                      gr_geometry_component, gr_uniform_components,
-                     gr_texture_components);
+                     merged_gr_textures);
   }
 }
 

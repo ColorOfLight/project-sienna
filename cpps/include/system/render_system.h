@@ -29,6 +29,7 @@
 #include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/GrGeometryComponent.h"
+#include "./Component/GrPingPongTextureComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
@@ -40,6 +41,8 @@ struct RenderItem {
   std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
   std::vector<std::reference_wrapper<GrUniformComponent>> gr_uniform_components;
   std::vector<std::reference_wrapper<GrTextureComponent>> gr_texture_components;
+  std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
+      gr_ping_pong_texture_components;
 };
 
 namespace render_system {

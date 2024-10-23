@@ -109,6 +109,22 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
     }
 )";
 
+inline const std::string texture_quad_vertex = R"(#version 300 es
+    precision mediump float;
+
+    layout (location = 0) in vec3 a_position;
+    layout (location = 1) in vec3 a_normal;
+    layout (location = 2) in vec2 a_texCoord;
+
+    out vec2 v_texCoord;
+
+    void main()
+    {
+        gl_Position = vec4(a_position, 1.0);
+        v_texCoord = a_texCoord;
+    }
+)";
+
 inline const std::string brush_depth_vertex = R"(#version 300 es
     precision mediump float;
 
@@ -204,6 +220,36 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
         float intensity = centerDistance < brushRange ? baseIntensity : baseIntensity * max(0.0, smoothstep(1.0, brushRange, centerDistance));
 
         FragColor = vec4(u_brush_paintColor, intensity);
+    }
+)";
+
+inline const std::string paint_blend_fragment = R"(#version 300 es
+    precision mediump float;
+
+    uniform sampler2D u_paintMapTexture;
+    uniform sampler2D u_paintedMapTexture;
+
+    out vec4 FragColor;
+
+    in vec2 v_texCoord;
+
+    void main() {
+        vec4 prevPaintedColor = texture(u_paintedMapTexture, v_texCoord);
+        vec4 paintColor = texture(u_paintMapTexture, v_texCoord);
+
+        float prevIntensity = prevPaintedColor.a;
+        float paintIntensity = paintColor.a;
+
+        float newIntensity = prevIntensity + paintIntensity * (1.0 - prevIntensity);
+        newIntensity = clamp(newIntensity, 0.0, 1.0);
+
+        float prevColorIntensity = prevIntensity * (1.0 - paintIntensity);
+
+        float blendFactor = paintIntensity / (prevColorIntensity + paintIntensity);
+
+        vec3 newColor = mix(prevPaintedColor.rgb, paintColor.rgb, blendFactor);
+
+        FragColor = vec4(newColor.rgb, newIntensity);
     }
 )";
 

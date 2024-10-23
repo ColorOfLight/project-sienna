@@ -47,7 +47,9 @@ void updateBrushDepth(
       gr_brush_depth_framed_texture_component.get().framebuffer_id);
   glViewport(0, 0, gr_brush_depth_framed_texture_component.get().width,
              gr_brush_depth_framed_texture_component.get().height);
-  glClear(GL_DEPTH_BUFFER_BIT);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   for (int i = 0; i < gr_geometry_components.size(); i++) {
     auto gr_uniform_components =
@@ -70,7 +72,7 @@ void paint(
     std::reference_wrapper<GrUniformComponent> gr_time_uniform_component,
     std::reference_wrapper<GrTextureComponent> gr_brush_depth_texture_component,
     std::reference_wrapper<GrFramedTextureComponent>
-        gr_painted_framed_texture_component) {
+        gr_paint_framed_texture_component) {
   auto gr_uniform_components =
       std::vector<std::reference_wrapper<GrUniformComponent>>{
           gr_brush_uniform_component, gr_model_uniform_component,
@@ -80,19 +82,47 @@ void paint(
           gr_brush_depth_texture_component};
 
   glBindFramebuffer(GL_FRAMEBUFFER,
-                    gr_painted_framed_texture_component.get().framebuffer_id);
-  glViewport(0, 0, gr_painted_framed_texture_component.get().width,
-             gr_painted_framed_texture_component.get().height);
+                    gr_paint_framed_texture_component.get().framebuffer_id);
+  glViewport(0, 0, gr_paint_framed_texture_component.get().width,
+             gr_paint_framed_texture_component.get().height);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-  glEnable(GL_BLEND);
-  glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
+  glClear(GL_COLOR_BUFFER_BIT);
 
   drawGrComponents(ShaderType::BRUSH_DECAL, gr_shader_manager_component,
                    gr_geometry_component, gr_uniform_components,
                    gr_texture_components);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glDisable(GL_BLEND);
+}
+
+void updatePaintedMap(
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrTextureComponent> gr_paint_texture_component,
+    std::reference_wrapper<GrPingPongTextureComponent>
+        gr_painted_ping_pong_texture_component) {
+  gr_painted_ping_pong_texture_component.get().switchTexture();
+
+  auto prev_framed_texture =
+      gr_painted_ping_pong_texture_component.get().getPrevFramedTexture();
+  auto current_framed_texture =
+      gr_painted_ping_pong_texture_component.get().getCurrentFramedTexture();
+
+  auto gr_texture_components =
+      std::vector<std::reference_wrapper<GrTextureComponent>>{
+          gr_paint_texture_component, prev_framed_texture};
+
+  glBindFramebuffer(GL_FRAMEBUFFER,
+                    current_framed_texture.get().framebuffer_id);
+  glViewport(0, 0, current_framed_texture.get().width,
+             current_framed_texture.get().height);
+
+  drawGrComponents(ShaderType::PAINT_BLEND, gr_shader_manager_component,
+                   gr_geometry_component, {}, gr_texture_components);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 }  // namespace paint_system

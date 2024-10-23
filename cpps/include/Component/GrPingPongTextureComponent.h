@@ -24,28 +24,33 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
+#include <string>
 
-#include "./Component/GeometryComponent.h"
 #include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrGeometryComponent.h"
-#include "./Component/GrPingPongTextureComponent.h"
-#include "./Component/GrUniformComponent.h"
-#include "./Component/TransformComponent.h"
 
-enum class PaintablePartPreset { CUBE_PART };
-
-class PaintablePartEntity {
+class GrPingPongTextureComponent {
  public:
-  PaintablePartEntity(PaintablePartPreset preset, glm::vec3 scale,
-                      glm::quat rotation, glm::vec3 translation);
+  GrPingPongTextureComponent(TextureType texture_type, const std::string& name,
+                             int width, int height) {
+    ping_framed_texture_component = std::make_unique<GrFramedTextureComponent>(
+        texture_type, name, width, height);
+    pong_framed_texture_component = std::make_unique<GrFramedTextureComponent>(
+        texture_type, name, width, height);
+  }
 
-  std::unique_ptr<GeometryComponent> geometry_component;
-  std::unique_ptr<GrGeometryComponent> gr_geometry_component;
-  std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
-  std::unique_ptr<TransformComponent> transform_component;
+  void switchTexture() { is_ping = !is_ping; }
+  std::reference_wrapper<GrFramedTextureComponent> getCurrentFramedTexture() {
+    return is_ping ? std::ref(*ping_framed_texture_component)
+                   : std::ref(*pong_framed_texture_component);
+  }
+  std::reference_wrapper<GrFramedTextureComponent> getPrevFramedTexture() {
+    return !is_ping ? std::ref(*ping_framed_texture_component)
+                    : std::ref(*pong_framed_texture_component);
+  }
 
-  std::unique_ptr<GrFramedTextureComponent> gr_paint_framed_texture_component;
-  std::unique_ptr<GrPingPongTextureComponent>
-      gr_painted_ping_pong_texture_component;
+  std::unique_ptr<GrFramedTextureComponent> ping_framed_texture_component;
+  std::unique_ptr<GrFramedTextureComponent> pong_framed_texture_component;
+
+ private:
+  bool is_ping = true;
 };

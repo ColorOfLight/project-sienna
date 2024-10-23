@@ -26,7 +26,9 @@
 
 #include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
+#include "./Component/GeometryComponent.h"
 #include "./Component/GrFramedTextureComponent.h"
+#include "./Component/GrGeometryComponent.h"
 #include "./Component/GrUniformComponent.h"
 
 class PlayerEntity {
@@ -42,6 +44,9 @@ class PlayerEntity {
     gr_brush_depth_framed_texture_component =
         std::make_unique<GrFramedTextureComponent>(
             TextureType::DEPTH, "u_brushDepthTexture", 1024, 1024);
+    brush_quad_geometry_component =
+        std::make_unique<GeometryComponent>(GeometryPreset::QUAD);
+    gr_brush_quad_geometry_component = std::make_unique<GrGeometryComponent>();
   }
 
   std::unique_ptr<CameraComponent> camera_component;
@@ -50,4 +55,8 @@ class PlayerEntity {
   std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
   std::unique_ptr<GrFramedTextureComponent>
       gr_brush_depth_framed_texture_component;
+
+  // TODO: Integrate to global gr manager
+  std::unique_ptr<GeometryComponent> brush_quad_geometry_component;
+  std::unique_ptr<GrGeometryComponent> gr_brush_quad_geometry_component;
 };
