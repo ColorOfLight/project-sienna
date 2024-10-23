@@ -198,6 +198,7 @@ int main() {
 
     render_system::render(
         std::ref(*game_entity.get().input_component),
+        std::ref(*game_entity.get().render_config_component),
         std::ref(*paintable_entity.get().material_component),
         std::ref(*game_entity.get().gr_shader_manager_component), render_items);
   };

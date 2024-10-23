@@ -57,10 +57,12 @@ void adjustViewportSize(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
-void render(std::reference_wrapper<InputComponent> input_component,
-            std::reference_wrapper<MaterialComponent> material_component,
-            std::reference_wrapper<GrShaderManagerComponent>
-                gr_shader_manager_component,
-            const std::vector<RenderItem>& render_items);
+void render(
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
+    std::reference_wrapper<MaterialComponent> material_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    const std::vector<RenderItem>& render_items);
 
 }  // namespace render_system
