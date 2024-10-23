@@ -15,8 +15,8 @@ const ClientInputComponent = {
   pointerPosition: [0, 0],
   canvasSize: getCanvasSize(),
   brush: {
-    nozzleFov: 15,
-    airPressure: 0.5,
+    nozzleFov: 5,
+    airPressure: 1.0,
     paintColor: {r: 1, g: 0.5, b: 0},
   }
 };

@@ -10,14 +10,14 @@ const brushFolder = pane.addFolder({
 });
 
 brushFolder.addBinding(window.ClientInputComponent.brush, 'airPressure', {
-  step: 0.01,
-  min: 0.5,
-  max: 2,
+  step: 0.1,
+  min: 1,
+  max: 8,
 });
 
 brushFolder.addBinding(window.ClientInputComponent.brush, 'nozzleFov', {
   step: 5,
-  min: 15,
+  min: 5,
   max: 45,
 });
 
