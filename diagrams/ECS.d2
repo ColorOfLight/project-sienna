@@ -86,6 +86,17 @@ vars: {
     + translation: Vec3
     + needs_update: bool
   }
+
+  vGrGeometryComponent: {
+    class: Component
+    shape: class
+    label: GrGeometryComponent
+
+    + vao_id: uint
+    + vbo_id: uint
+    + ebo_id: unit
+    + vertex_count: int
+  }
 }
 
 # Entity & Components
@@ -113,6 +124,10 @@ PlayerEntity: {
   GrBrushDepthTextureComponent: {
     ...${vGrTextureComponent}
     ...${vGrFramedTextureComponent}
+  }
+
+  GrBrushQuadGeometryComponent: {
+    ...${vGrGeometryComponent}
   }
 
   CameraComponent: {
@@ -155,9 +170,19 @@ PaintablePartEntity: {
   label: PaintablePart
   class: Entity
 
-  GrPaintedFramedTextureComponent: {
+  GrPaintFramedTextureComponent: {
     ...${vGrTextureComponent}
     ...${vGrFramedTextureComponent}
+  }
+
+  GrPaintedPingPongTextureComponent: {
+    class: Component
+    shape: class
+
+    label: GrPingPongTextureComponent
+
+    + ping: GrFramedTexture
+    + pong: GrFramedTexture
   }
 
   TransformComponent: {
@@ -177,13 +202,7 @@ PaintablePartEntity: {
   }
 
   GrGeometryComponent: {
-    class: Component
-    shape: class
-
-    + vao_id: uint
-    + vbo_id: uint
-    + ebo_id: unit
-    + vertex_count: int
+    ...${vGrGeometryComponent}
   }
 
   TransformComponent -> TransformGrUniformComponent: data to {
@@ -331,6 +350,7 @@ Systems: {
 
     + updateBrushDepth(GrGeometry, GrShaderM, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
     + paint(GrGeometry, GrShaderM, GrUniform, GrUniform, GrUniform, GrFramedTexture): GrFramedTexture
+    + updatePaintedMap(GrGeometry, GrShaderM, GrFramedTexture, GrPingPongTex): GrPingPongTex
   }
 
   RenderSystem: {
@@ -340,7 +360,7 @@ Systems: {
     + initContext(): void
     + setClearColor(RenderConfig): void
     + adjustViewportSize(Input, Event): Event
-    + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture): void
+    + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture\[\], GrPingPongTex\[\]): void
   }
 
   FeedbackSystem: {
@@ -359,7 +379,7 @@ Systems.ClientSyncSystem -> GameEntity.EventComponent
 # ManageSystem
 Systems.ManageSystem <-> GameEntity.EventComponent
 Systems.ManageSystem <- GameEntity.RenderConfigComponent
-Systems.ManageSystem -> PaintablePartEntity.GrPaintedFramedTextureComponent
+Systems.ManageSystem -> PaintablePartEntity.GrPaintedPingPongTextureComponent
 
 # InputSyncSystem
 Systems.InputSyncSystem <- GameEntity.InputComponent
@@ -371,8 +391,9 @@ Systems.TransformSystem -> PlayerEntity.CameraComponent
 Systems.TransformSystem -> PaintableEntity.TransformComponent
 
 # PaintSystem
-Systems.PaintSystem <-> PaintablePartEntity.GrPaintedFramedTextureComponent
+Systems.PaintSystem <-> PaintablePartEntity.GrPaintFramedTextureComponent
 Systems.PaintSystem <-> PlayerEntity.GrBrushDepthTextureComponent
+Systems.PaintSystem <-> PaintableEntity.GrPaintedPingPongTextureComponent
 Systems.PaintSystem <- GameEntity.GrShaderManagerComponent
 Systems.PaintSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.PaintSystem <- PaintablePartEntity.TransformGrUniformComponent
@@ -388,7 +409,7 @@ Systems.RenderSystem -> PlayerEntity.CameraComponent
 Systems.RenderSystem <- PaintablePartEntity.GrGeometryComponent
 Systems.RenderSystem <- PlayerEntity.CameraGrUniformComponent
 Systems.RenderSystem <- PaintablePartEntity.TransformGrUniformComponent
-Systems.RenderSystem <- PaintablePartEntity.GrPaintedFramedTextureComponent
+Systems.RenderSystem <- PaintablePartEntity.GrPaintFramedTextureComponent
 Systems.RenderSystem <- GameEntity.GrShaderManagerComponent
 Systems.RenderSystem <- PaintableEntity.MaterialComponent
 
