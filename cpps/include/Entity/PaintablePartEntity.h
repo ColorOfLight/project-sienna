@@ -44,7 +44,6 @@ class PaintablePartEntity {
   std::unique_ptr<GrGeometryComponent> gr_geometry_component;
   std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
-  std::unique_ptr<GrFramedTextureComponent> gr_painted_framed_texture_component;
 
   std::unique_ptr<GrFramedTextureComponent> gr_paint_framed_texture_component;
   std::unique_ptr<GrPingPongTextureComponent>
