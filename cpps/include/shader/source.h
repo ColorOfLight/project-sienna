@@ -240,13 +240,16 @@ inline const std::string paint_blend_fragment = R"(#version 300 es
         float prevIntensity = prevPaintedColor.a;
         float paintIntensity = paintColor.a;
 
-        float newIntensity = min(1.0, prevIntensity + paintIntensity * (1.0 - prevIntensity));
+        float newIntensity = prevIntensity + paintIntensity * (1.0 - prevIntensity);
+        newIntensity = clamp(newIntensity, 0.0, 1.0);
 
-        float blendFactor = paintIntensity * (1.0 - prevIntensity);
+        float prevColorIntensity = prevIntensity * (1.0 - paintIntensity);
+
+        float blendFactor = paintIntensity / (prevColorIntensity + paintIntensity);
 
         vec3 newColor = mix(prevPaintedColor.rgb, paintColor.rgb, blendFactor);
 
-        FragColor = vec4(newColor, newIntensity);
+        FragColor = vec4(newColor.rgb, newIntensity);
     }
 )";
 
