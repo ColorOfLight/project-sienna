@@ -49,9 +49,6 @@ namespace render_system {
 
 void initContext();
 
-void setClearColor(
-    std::reference_wrapper<RenderConfigComponent> render_config_component);
-
 void adjustViewportSize(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,

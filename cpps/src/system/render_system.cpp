@@ -48,13 +48,6 @@ void initContext() {
   glEnable(GL_DEPTH_TEST);
 }
 
-void setClearColor(
-    std::reference_wrapper<RenderConfigComponent> render_config_component) {
-  glClearColor(render_config_component.get().clear_color.r,
-               render_config_component.get().clear_color.g,
-               render_config_component.get().clear_color.b, 1.0f);
-}
-
 void adjustViewportSize(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
