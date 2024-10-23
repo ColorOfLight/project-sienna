@@ -25,7 +25,7 @@ classes: {
   }
 
   System: {
-    width: 1280
+    width: 1400
     style: {
       stroke-width: 0
       fill: "#87CEEB" # sky blue
@@ -360,7 +360,7 @@ Systems: {
     + initContext(): void
     + setClearColor(RenderConfig): void
     + adjustViewportSize(Input, Event): Event
-    + render(Material, GrShaderM, GrGeometry, GrUniform\[\], GrTexture\[\], GrPingPongTex\[\]): void
+    + render(Input, Material, RenderConfig, GrShaderM, GrGeometry, GrUniform\[\], GrTexture\[\], GrPingPongTex\[\]): void
   }
 
   FeedbackSystem: {
