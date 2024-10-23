@@ -95,4 +95,33 @@ void paint(
   glDisable(GL_BLEND);
 }
 
+void updatePaintedMap(
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrTextureComponent> gr_paint_texture_component,
+    std::reference_wrapper<GrPingPongTextureComponent>
+        gr_painted_ping_pong_texture_component) {
+  gr_painted_ping_pong_texture_component.get().switchTexture();
+
+  auto prev_framed_texture =
+      gr_painted_ping_pong_texture_component.get().getPrevFramedTexture();
+  auto current_framed_texture =
+      gr_painted_ping_pong_texture_component.get().getCurrentFramedTexture();
+
+  auto gr_texture_components =
+      std::vector<std::reference_wrapper<GrTextureComponent>>{
+          gr_paint_texture_component, prev_framed_texture};
+
+  glBindFramebuffer(GL_FRAMEBUFFER,
+                    current_framed_texture.get().framebuffer_id);
+  glViewport(0, 0, current_framed_texture.get().width,
+             current_framed_texture.get().height);
+
+  drawGrComponents(ShaderType::PAINT_BLEND, gr_shader_manager_component,
+                   gr_geometry_component, {}, gr_texture_components);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 }  // namespace paint_system

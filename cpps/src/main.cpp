@@ -183,6 +183,12 @@ int main() {
             std::ref(
                 *player_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_painted_framed_texture_component));
+        paint_system::updatePaintedMap(
+            std::ref(*paintable_part->gr_geometry_component),
+            std::ref(*game_entity.get().gr_shader_manager_component),
+            std::ref(
+                *player_entity.get().gr_brush_depth_framed_texture_component),
+            std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
       }
     }
 

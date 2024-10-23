@@ -28,6 +28,7 @@
 
 #include "./Component/GrFramedTextureComponent.h"
 #include "./Component/GrGeometryComponent.h"
+#include "./Component/GrPingPongTextureComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
@@ -55,5 +56,13 @@ void paint(
     std::reference_wrapper<GrTextureComponent> gr_brush_depth_texture_component,
     std::reference_wrapper<GrFramedTextureComponent>
         gr_painted_framed_texture_component);
+
+void updatePaintedMap(
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    std::reference_wrapper<GrTextureComponent> gr_paint_texture_component,
+    std::reference_wrapper<GrPingPongTextureComponent>
+        gr_painted_ping_pong_texture_component);
 
 }  // namespace paint_system

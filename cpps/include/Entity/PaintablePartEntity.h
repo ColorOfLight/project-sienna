@@ -29,6 +29,7 @@
 #include "./Component/GeometryComponent.h"
 #include "./Component/GrFramedTextureComponent.h"
 #include "./Component/GrGeometryComponent.h"
+#include "./Component/GrPingPongTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
 #include "./Component/TransformComponent.h"
 
@@ -44,4 +45,8 @@ class PaintablePartEntity {
   std::unique_ptr<GrUniformComponent> gr_transform_uniform_component;
   std::unique_ptr<TransformComponent> transform_component;
   std::unique_ptr<GrFramedTextureComponent> gr_painted_framed_texture_component;
+
+  std::unique_ptr<GrFramedTextureComponent> gr_paint_framed_texture_component;
+  std::unique_ptr<GrPingPongTextureComponent>
+      gr_painted_ping_pong_texture_component;
 };
