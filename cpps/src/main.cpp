@@ -108,6 +108,10 @@ int main() {
     });
   }
 
+  gr_sync_system::updateGeometry(
+      std::ref(*player_entity.get()->brush_quad_geometry_component),
+      std::ref(*player_entity.get()->gr_brush_quad_geometry_component));
+
   render_system::setClearColor(
       std::ref(*game_entity.get()->render_config_component));
 

@@ -41,6 +41,11 @@ GeometryComponent::GeometryComponent(GeometryPreset preset) {
                                      glm::vec3(0.0f, 1.0f, 0.0f), 0.5f, 0.5f,
                                      0.0f, 1, 1);
     indices = generatePlaneIndices(1, 1);
+  } else if (preset == GeometryPreset::QUAD) {
+    vertices = generatePlaneVertices(glm::vec3(1.0f, 0.0f, 0.0f),
+                                     glm::vec3(0.0f, 0.0f, 1.0f), 0.5f, 0.5f,
+                                     0.0f, 1, 1);
+    indices = generatePlaneIndices(1, 1);
   } else {
     throw std::invalid_argument("Invalid geometry preset");
   }
