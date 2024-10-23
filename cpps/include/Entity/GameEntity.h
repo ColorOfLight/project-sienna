@@ -36,8 +36,8 @@ class GameEntity {
     event_component = std::make_unique<EventComponent>();
     input_component = std::make_unique<InputComponent>();
     gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
-    render_config_component =
-        std::make_unique<RenderConfigComponent>(glm::vec3(0.1f, 0.1f, 0.1f));
+    render_config_component = std::make_unique<RenderConfigComponent>(
+        glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
     gr_time_uniform_component =
         std::make_unique<GrUniformComponent>("TimeBlock");
   }

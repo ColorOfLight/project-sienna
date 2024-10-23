@@ -28,8 +28,8 @@
 
 class RenderConfigComponent {
  public:
-  RenderConfigComponent(const glm::vec3& clear_color)
+  RenderConfigComponent(const glm::vec4& clear_color)
       : clear_color(clear_color) {}
 
-  glm::vec3 clear_color;
+  glm::vec4 clear_color;
 };

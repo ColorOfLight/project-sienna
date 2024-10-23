@@ -48,13 +48,6 @@ void initContext() {
   glEnable(GL_DEPTH_TEST);
 }
 
-void setClearColor(
-    std::reference_wrapper<RenderConfigComponent> render_config_component) {
-  glClearColor(render_config_component.get().clear_color.r,
-               render_config_component.get().clear_color.g,
-               render_config_component.get().clear_color.b, 1.0f);
-}
-
 void adjustViewportSize(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
@@ -72,15 +65,18 @@ void adjustViewportSize(
   }
 }
 
-void render(std::reference_wrapper<InputComponent> input_component,
-            std::reference_wrapper<MaterialComponent> material_component,
-            std::reference_wrapper<GrShaderManagerComponent>
-                gr_shader_manager_component,
-            const std::vector<RenderItem>& render_items) {
+void render(
+    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
+    std::reference_wrapper<MaterialComponent> material_component,
+    std::reference_wrapper<GrShaderManagerComponent>
+        gr_shader_manager_component,
+    const std::vector<RenderItem>& render_items) {
   glViewport(0, 0, input_component.get().canvas_size.width,
              input_component.get().canvas_size.height);
-  // TOOD: remove setClearColor & use clear color from render config
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
+  const auto& clear_color = render_config_component.get().clear_color;
+  glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

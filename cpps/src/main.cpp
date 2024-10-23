@@ -113,9 +113,6 @@ int main() {
       std::ref(*player_entity.get()->brush_quad_geometry_component),
       std::ref(*player_entity.get()->gr_brush_quad_geometry_component));
 
-  render_system::setClearColor(
-      std::ref(*game_entity.get()->render_config_component));
-
   auto main_loop = [game_entity = std::ref(*game_entity),
                     player_entity = std::ref(*player_entity),
                     paintable_entity = std::ref(*paintable_entity),
@@ -198,6 +195,7 @@ int main() {
 
     render_system::render(
         std::ref(*game_entity.get().input_component),
+        std::ref(*game_entity.get().render_config_component),
         std::ref(*paintable_entity.get().material_component),
         std::ref(*game_entity.get().gr_shader_manager_component), render_items);
   };
