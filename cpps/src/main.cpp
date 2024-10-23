@@ -71,8 +71,8 @@ int main() {
       std::vector<std::reference_wrapper<TransformComponent>>();
   auto paintable_gr_transform_uniforms =
       std::vector<std::reference_wrapper<GrUniformComponent>>();
-  auto paintable_gr_framed_textures =
-      std::vector<std::reference_wrapper<GrFramedTextureComponent>>();
+  auto paintable_gr_ping_pong_textures =
+      std::vector<std::reference_wrapper<GrPingPongTextureComponent>>();
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_geometries.push_back(
@@ -83,8 +83,8 @@ int main() {
         std::ref(*paintable_part->transform_component));
     paintable_gr_transform_uniforms.push_back(
         std::ref(*paintable_part->gr_transform_uniform_component));
-    paintable_gr_framed_textures.push_back(
-        std::ref(*paintable_part->gr_painted_framed_texture_component));
+    paintable_gr_ping_pong_textures.push_back(
+        std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
   }
 
   auto render_items = std::vector<RenderItem>();
@@ -121,7 +121,7 @@ int main() {
                     paintable_entity = std::ref(*paintable_entity),
                     render_items, paintable_geometries, paintable_transforms,
                     paintable_gr_transform_uniforms,
-                    paintable_gr_framed_textures,
+                    paintable_gr_ping_pong_textures,
                     paintable_gr_geometries](float elapsed_ms, float delta_ms) {
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
@@ -152,7 +152,7 @@ int main() {
       manage_system::resetPainted(
           std::ref(*game_entity.get().event_component),
           std::ref(*game_entity.get().render_config_component),
-          paintable_gr_framed_textures);
+          paintable_gr_ping_pong_textures);
     }
 
     if (game_entity.get().input_component->is_pointer_down) {

@@ -31,11 +31,13 @@ namespace manage_system {
 void resetPainted(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
-    const std::vector<std::reference_wrapper<GrFramedTextureComponent>>&
-        gr_painted_framed_texture_components) {
-  for (auto& gr_painted_framed_texture : gr_painted_framed_texture_components) {
-    glBindFramebuffer(GL_FRAMEBUFFER,
-                      gr_painted_framed_texture.get().framebuffer_id);
+    const std::vector<std::reference_wrapper<GrPingPongTextureComponent>>&
+        gr_painted_components) {
+  for (const auto& gr_painted_component : gr_painted_components) {
+    const auto& gr_painted_texture =
+        gr_painted_component.get().getCurrentFramedTexture();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, gr_painted_texture.get().framebuffer_id);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
