@@ -190,6 +190,8 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
     in vec3 v_projectedPosition;
     in vec2 v_texCoord;
 
+    float g_intensity_coff = 0.05;
+
     void main()
     {
         float centerDistance = length(v_projectedPosition.xy);
@@ -209,15 +211,14 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
             discard;
         }
 
-        float strongFactor = 0.04;
         float tanHalfFov = tan(u_brush_nozzleFov / 2.0);
-
-        float strongK = strongFactor * u_brush_airPressure * u_brush_airPressure / pow(tanHalfFov + 0.0001, 2.0);
         float distance = length(v_position - u_brush_position);
-        float brushRange = strongK * 0.8 - pow((distance - strongK), 2.0);
+
+        float strength_coff = g_intensity_coff * u_brush_airPressure / (tanHalfFov * tanHalfFov * distance * distance);
+        float strength = strength_coff * (1.0 - smoothstep(0.0, 1.0, centerDistance));
 
         float baseIntensity = 2.0 / 1000.0 * u_time_delta_ms;
-        float intensity = centerDistance < brushRange ? baseIntensity : baseIntensity * max(0.0, smoothstep(1.0, brushRange, centerDistance));
+        float intensity = clamp(strength * baseIntensity, 0.0, 1.0);
 
         FragColor = vec4(u_brush_paintColor, intensity);
     }
