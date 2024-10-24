@@ -1,6 +1,8 @@
 # Project Sienna
 
-A 3d web game, with an concept of cleaning an object
+3D airbrush simulator on web.
+
+[Live Webpage](https://project-sienna.coloroflight.dev/)
 
 ## Project Structure
 
@@ -57,8 +59,6 @@ npm run dev
 ```
 
 ## Versioning
-
-This project uses a very robust versioning method
 
 ### How to upgrade version
 
