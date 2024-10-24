@@ -33,3 +33,10 @@ body {
 #tweak-pane > * {
   font-size: 12px;
 }
+
+#tweak-pane-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px;
+}
