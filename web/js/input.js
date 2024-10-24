@@ -48,11 +48,6 @@ window.addEventListener('pointermove', (event) => {
   ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
 
-document.getElementById('reset').addEventListener('click', () => {
-  ClientEventComponent.reset = true;
-});
-
-
 window.addEventListener('DOMContentLoaded', () => {
   ClientEventComponent.changeCanvasSize = true;
   ClientInputComponent.canvasSize = getCanvasSize();
