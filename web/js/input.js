@@ -35,7 +35,10 @@ window.addEventListener('keyup', (event) => {
 });
 
 window.addEventListener('pointerdown', (event) => {
-  ClientInputComponent.isPointerDown = true;
+  if (event.target === canvas) {
+    ClientInputComponent.isPointerDown = true;
+  }
+  
   ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
 
@@ -47,11 +50,6 @@ window.addEventListener('pointerup', (event) => {
 window.addEventListener('pointermove', (event) => {
   ClientInputComponent.pointerPosition = getPointerPosition(event);
 });
-
-document.getElementById('reset').addEventListener('click', () => {
-  ClientEventComponent.reset = true;
-});
-
 
 window.addEventListener('DOMContentLoaded', () => {
   ClientEventComponent.changeCanvasSize = true;

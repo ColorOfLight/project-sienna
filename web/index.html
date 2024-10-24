@@ -10,9 +10,16 @@
   <body>
     <div id="app">
       <canvas id="canvas"></canvas>
-      <button id="reset">Reset</button>
-      <div id="tweak-pane"></div>
-      <p id="version">v</p>
+      <div class="tweakpane" id="tweakpane-params"></div>
+      <div class="tweakpane" id="tweakpane-controls"></div>
+      <div class="version-container">
+        <div>
+          <a href="https://github.com/ColorOfLight/project-sienna" target="_blank">Github</a>
+        </div>
+        <div>
+          ProjectSienna - <span id="version">v</span>
+        </div>
+      </div>
     </div>
     <script type="module" src="/main.js"></script>
     <script type="module" src="/ProjectSienna.js"></script>
