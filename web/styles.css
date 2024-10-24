@@ -22,19 +22,15 @@ body {
   font-size: 16px;
 }
 
-/* TweakPane */
-#tweak-pane-params {
+/* Tweakpane */
+#tweakpane-params {
   position: absolute;
   top: 0;
   right: 0;
   margin: 20px;
 }
 
-#tweak-pane > * {
-  font-size: 12px;
-}
-
-#tweak-pane-controls {
+#tweakpane-controls {
   position: absolute;
   top: 0;
   left: 0;

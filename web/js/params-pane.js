@@ -2,7 +2,7 @@ import {Pane} from 'tweakpane';
 
 
 const pane = new Pane(
-  {container: document.getElementById('tweak-pane-params'),}
+  {container: document.getElementById('tweakpane-params'),}
 );
 
 const paramsFolder = pane.addFolder({

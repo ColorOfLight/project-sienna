@@ -19,7 +19,7 @@ const controlStrings = {
 
 
 const pane = new Pane(
-  {container: document.getElementById('tweak-pane-controls'),}
+  {container: document.getElementById('tweakpane-controls'),}
 );
 
 const controlsFolder = pane.addFolder({
