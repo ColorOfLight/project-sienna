@@ -32,8 +32,11 @@ button#reset {
 /* TweakPane */
 #tweak-pane {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  top: 0;
+  right: 0;
   margin: 20px;
-  /* optional, for spacing from edges */
+}
+
+#tweak-pane > * {
+  font-size: 12px;
 }

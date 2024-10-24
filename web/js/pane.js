@@ -24,6 +24,7 @@ brushFolder.addBinding(window.ClientInputComponent.brush, 'nozzleFov', {
 brushFolder.addBinding(window.ClientInputComponent.brush, 'paintColor', {
   color: {type: 'float'},
   picker: 'inline',
+  expanded: true,
 });
 
 const actionsFolder = pane.addFolder({
