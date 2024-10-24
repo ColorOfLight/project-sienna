@@ -23,7 +23,7 @@ body {
 }
 
 /* TweakPane */
-#tweak-pane {
+#tweak-pane-params {
   position: absolute;
   top: 0;
   right: 0;

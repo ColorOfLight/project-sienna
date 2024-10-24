@@ -2,10 +2,14 @@ import {Pane} from 'tweakpane';
 
 
 const pane = new Pane(
-  {container: document.getElementById('tweak-pane'),}
+  {container: document.getElementById('tweak-pane-params'),}
 );
 
-const brushFolder = pane.addFolder({
+const paramsFolder = pane.addFolder({
+  title: 'Parameters',
+});
+
+const brushFolder = paramsFolder.addFolder({
   title: 'Brush',
 });
 
@@ -27,7 +31,7 @@ brushFolder.addBinding(window.ClientInputComponent.brush, 'paintColor', {
   expanded: true,
 });
 
-const actionsFolder = pane.addFolder({
+const actionsFolder = paramsFolder.addFolder({
   title: 'Actions'
 });
 
