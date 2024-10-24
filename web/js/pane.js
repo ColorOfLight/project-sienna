@@ -25,3 +25,17 @@ brushFolder.addBinding(window.ClientInputComponent.brush, 'paintColor', {
   color: {type: 'float'},
   picker: 'inline',
 });
+
+const actionsFolder = pane.addFolder({
+  title: 'Actions'
+});
+
+const resetButton = actionsFolder.addButton({
+  title: 'Reset'
+});
+
+resetButton.on('click',
+  () => {
+    window.ClientEventComponent.reset = true;
+  }
+);
