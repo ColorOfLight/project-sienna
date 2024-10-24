@@ -35,11 +35,11 @@ const actionsFolder = paramsFolder.addFolder({
   title: 'Actions'
 });
 
-const resetButton = actionsFolder.addButton({
-  title: 'Reset'
+const resetPaintButton = actionsFolder.addButton({
+  title: 'Reset Paint'
 });
 
-resetButton.on('click',
+resetPaintButton.on('click',
   () => {
     window.ClientEventComponent.reset = true;
   }
