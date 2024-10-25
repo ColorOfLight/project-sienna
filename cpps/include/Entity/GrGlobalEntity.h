@@ -24,22 +24,17 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrUniformComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/RenderConfigComponent.h"
 
-class GameEntity {
+class GrGlobalEntity {
  public:
-  GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
-    render_config_component = std::make_unique<RenderConfigComponent>(
-        glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+  GrGlobalEntity() {
+    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
+    gr_time_uniform_component =
+        std::make_unique<GrUniformComponent>("TimeBlock");
   }
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
-  std::unique_ptr<RenderConfigComponent> render_config_component;
+  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
+  std::unique_ptr<GrUniformComponent> gr_time_uniform_component;
 };
