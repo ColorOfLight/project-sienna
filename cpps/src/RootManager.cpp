@@ -38,6 +38,8 @@ RootManager::RootManager() {
       std::make_unique<PaintedTexturesView>(std::ref(*paintable_entity));
   transform_updating_view =
       std::make_unique<TransformUpdatingView>(std::ref(*paintable_entity));
+  gr_model_geometries_view =
+      std::make_unique<GrModelGeometriesView>(std::ref(*paintable_entity));
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_gr_geometries.push_back(

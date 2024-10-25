@@ -30,6 +30,7 @@
 #include "./Entity/ConfigEntity.h"
 #include "./Entity/GrGlobalEntity.h"
 #include "./Entity/PaintableEntity.h"
+#include "./View/GrModelGeometriesView.h"
 #include "./View/PaintedTexturesView.h"
 #include "./View/RenderItemsView.h"
 #include "./View/TransformUpdatingView.h"
@@ -55,4 +56,5 @@ class RootManager {
   std::unique_ptr<RenderItemsView> render_items_view;
   std::unique_ptr<PaintedTexturesView> painted_textures_view;
   std::unique_ptr<TransformUpdatingView> transform_updating_view;
+  std::unique_ptr<GrModelGeometriesView> gr_model_geometries_view;
 };

@@ -91,6 +91,8 @@ int main() {
         std::ref(*root_manager.get().painted_textures_view);
     auto transform_updating_view =
         std::ref(*root_manager.get().transform_updating_view);
+    auto gr_model_geometries_view =
+        std::ref(*root_manager.get().gr_model_geometries_view);
 
     client_sync_system::syncInput(
         std::ref(*client_input_entity.get().input_component));
@@ -139,9 +141,8 @@ int main() {
       paint_system::updateBrushDepth(
           std::ref(*gr_global_entity.get().gr_shader_manager_component),
           std::ref(*brush_entity.get().gr_brush_uniform_component),
-          paintable_gr_geometries, paintable_gr_transform_uniforms,
-          std::ref(
-              *brush_entity.get().gr_brush_depth_framed_texture_component));
+          std::ref(*brush_entity.get().gr_brush_depth_framed_texture_component),
+          gr_model_geometries_view);
 
       for (auto& paintable_part :
            paintable_entity.get().paintable_part_entities) {

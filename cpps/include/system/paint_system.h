@@ -32,6 +32,7 @@
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
+#include "./View/GrModelGeometriesView.h"
 
 namespace paint_system {
 
@@ -39,12 +40,9 @@ void updateBrushDepth(
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
-    const std::vector<std::reference_wrapper<GrGeometryComponent>>&
-        gr_geometry_components,
-    const std::vector<std::reference_wrapper<GrUniformComponent>>&
-        gr_model_uniform_components,
     std::reference_wrapper<GrFramedTextureComponent>
-        gr_brush_depth_framed_texture_component);
+        gr_brush_depth_framed_texture_component,
+    std::reference_wrapper<GrModelGeometriesView> gr_model_geometries_view);
 
 void paint(
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component,
