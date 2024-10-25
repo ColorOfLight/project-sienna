@@ -43,7 +43,6 @@ class RootManager {
   std::unique_ptr<CameraEntity> camera_entity;
   std::unique_ptr<BrushEntity> brush_entity;
   std::unique_ptr<PaintableEntity> paintable_entity;
-  std::vector<std::reference_wrapper<GeometryComponent>> paintable_geometries;
   std::vector<std::reference_wrapper<GrGeometryComponent>>
       paintable_gr_geometries;
   std::vector<std::reference_wrapper<TransformComponent>> paintable_transforms;

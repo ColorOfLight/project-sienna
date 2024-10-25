@@ -36,8 +36,6 @@ RootManager::RootManager() {
       std::ref(*paintable_entity), std::ref(*camera_entity));
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
-    paintable_geometries.push_back(
-        std::ref(*paintable_part->geometry_component));
     paintable_gr_geometries.push_back(
         std::ref(*paintable_part->gr_geometry_component));
     paintable_transforms.push_back(
