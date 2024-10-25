@@ -28,7 +28,6 @@
 #include <memory>
 #include <vector>
 
-#include "./Entity/GameEntity.h"
 #include "./Entity/PaintableEntity.h"
 #include "./RootManager.h"
 #include "./system/client_sync_system.h"
@@ -74,7 +73,7 @@ int main() {
 
   auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
                                                             float delta_ms) {
-    auto game_entity = std::ref(*root_manager.get().game_entity);
+    auto config_entity = std::ref(*root_manager.get().config_entity);
     auto client_input_entity =
         std::ref(*root_manager.get().client_input_entity);
     auto gr_global_entity = std::ref(*root_manager.get().gr_global_entity);
@@ -119,7 +118,7 @@ int main() {
     if (client_input_entity.get().event_component->reset) {
       manage_system::resetPainted(
           std::ref(*client_input_entity.get().event_component),
-          std::ref(*game_entity.get().render_config_component),
+          std::ref(*config_entity.get().render_config_component),
           paintable_gr_ping_pong_textures);
     }
 
@@ -166,7 +165,7 @@ int main() {
 
     render_system::render(
         std::ref(*client_input_entity.get().input_component),
-        std::ref(*game_entity.get().render_config_component),
+        std::ref(*config_entity.get().render_config_component),
         std::ref(*paintable_entity.get().material_component),
         std::ref(*gr_global_entity.get().gr_shader_manager_component),
         render_items);

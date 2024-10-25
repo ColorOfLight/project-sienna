@@ -24,11 +24,13 @@
 
 #pragma once
 
+#include <memory>
+
 #include "./Component/RenderConfigComponent.h"
 
-class GameEntity {
+class ConfigEntity {
  public:
-  GameEntity() {
+  ConfigEntity() {
     render_config_component = std::make_unique<RenderConfigComponent>(
         glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
   }

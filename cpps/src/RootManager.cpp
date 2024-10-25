@@ -25,9 +25,9 @@
 #include "./RootManager.h"
 
 RootManager::RootManager() {
+  config_entity = std::make_unique<ConfigEntity>();
   client_input_entity = std::make_unique<ClientInputEntity>();
   gr_global_entity = std::make_unique<GrGlobalEntity>();
-  game_entity = std::make_unique<GameEntity>();
   camera_entity = std::make_unique<CameraEntity>();
   brush_entity = std::make_unique<BrushEntity>();
   paintable_entity = std::make_unique<PaintableEntity>(PaintablePreset::CUBE);

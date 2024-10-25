@@ -27,7 +27,7 @@
 #include "./Entity/BrushEntity.h"
 #include "./Entity/CameraEntity.h"
 #include "./Entity/ClientInputEntity.h"
-#include "./Entity/GameEntity.h"
+#include "./Entity/ConfigEntity.h"
 #include "./Entity/GrGlobalEntity.h"
 #include "./Entity/PaintableEntity.h"
 #include "./system/render_system.h"
@@ -36,7 +36,7 @@ class RootManager {
  public:
   RootManager();
 
-  std::unique_ptr<GameEntity> game_entity;
+  std::unique_ptr<ConfigEntity> config_entity;
   std::unique_ptr<ClientInputEntity> client_input_entity;
   std::unique_ptr<GrGlobalEntity> gr_global_entity;
   std::unique_ptr<CameraEntity> camera_entity;
