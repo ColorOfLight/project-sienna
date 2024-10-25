@@ -24,19 +24,15 @@
 
 #pragma once
 
-#include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
-#include "./Component/GrPingPongTextureComponent.h"
-#include "./Component/InputComponent.h"
 #include "./Component/RenderConfigComponent.h"
-#include "./Component/TransformComponent.h"
+#include "./View/PaintedTexturesView.h"
 
 namespace manage_system {
 
 void resetPainted(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
-    const std::vector<std::reference_wrapper<GrPingPongTextureComponent>>&
-        gr_painted_components);
+    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
 
 }  // namespace manage_system

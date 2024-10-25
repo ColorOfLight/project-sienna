@@ -87,6 +87,8 @@ int main() {
         root_manager.get().paintable_gr_ping_pong_textures;
     auto& paintable_gr_geometries = root_manager.get().paintable_gr_geometries;
     auto render_items_view = std::ref(*root_manager.get().render_items_view);
+    auto painted_textures_view =
+        std::ref(*root_manager.get().painted_textures_view);
 
     client_sync_system::syncInput(
         std::ref(*client_input_entity.get().input_component));
@@ -118,7 +120,7 @@ int main() {
       manage_system::resetPainted(
           std::ref(*client_input_entity.get().event_component),
           std::ref(*config_entity.get().render_config_component),
-          paintable_gr_ping_pong_textures);
+          painted_textures_view);
     }
 
     if (client_input_entity.get().input_component->is_pointer_down) {

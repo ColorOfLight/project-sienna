@@ -34,6 +34,8 @@ RootManager::RootManager() {
 
   render_items_view = std::make_unique<RenderItemsView>(
       std::ref(*paintable_entity), std::ref(*camera_entity));
+  painted_textures_view =
+      std::make_unique<PaintedTexturesView>(std::ref(*paintable_entity));
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_gr_geometries.push_back(

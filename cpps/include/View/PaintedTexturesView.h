@@ -24,33 +24,20 @@
 
 #pragma once
 
-#include "./Entity/BrushEntity.h"
-#include "./Entity/CameraEntity.h"
-#include "./Entity/ClientInputEntity.h"
-#include "./Entity/ConfigEntity.h"
-#include "./Entity/GrGlobalEntity.h"
+#include "./Component/GrPingPongTextureComponent.h"
 #include "./Entity/PaintableEntity.h"
-#include "./View/PaintedTexturesView.h"
-#include "./View/RenderItemsView.h"
-#include "./system/render_system.h"
 
-class RootManager {
+class PaintedTexturesView {
  public:
-  RootManager();
+  PaintedTexturesView(
+      std::reference_wrapper<PaintableEntity> paintable_entity) {
+    for (const auto& paintable_part :
+         paintable_entity.get().paintable_part_entities) {
+      paintable_gr_ping_pong_textures.push_back(
+          std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
+    }
+  }
 
-  std::unique_ptr<ConfigEntity> config_entity;
-  std::unique_ptr<ClientInputEntity> client_input_entity;
-  std::unique_ptr<GrGlobalEntity> gr_global_entity;
-  std::unique_ptr<CameraEntity> camera_entity;
-  std::unique_ptr<BrushEntity> brush_entity;
-  std::unique_ptr<PaintableEntity> paintable_entity;
-  std::vector<std::reference_wrapper<GrGeometryComponent>>
-      paintable_gr_geometries;
-  std::vector<std::reference_wrapper<TransformComponent>> paintable_transforms;
-  std::vector<std::reference_wrapper<GrUniformComponent>>
-      paintable_gr_transform_uniforms;
   std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
       paintable_gr_ping_pong_textures;
-  std::unique_ptr<RenderItemsView> render_items_view;
-  std::unique_ptr<PaintedTexturesView> painted_textures_view;
 };
