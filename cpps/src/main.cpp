@@ -31,6 +31,7 @@
 #include "./Entity/GameEntity.h"
 #include "./Entity/PaintableEntity.h"
 #include "./Entity/PlayerEntity.h"
+#include "./RootManager.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
 #include "./system/input_sync_system.h"
@@ -58,68 +59,37 @@ void renderFrame() {
 int main() {
   render_system::initContext();
 
-  auto game_entity = std::make_unique<GameEntity>();
-  auto player_entity = std::make_unique<PlayerEntity>();
-  auto paintable_entity =
-      std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
+  auto root_manager = std::make_unique<RootManager>();
 
-  auto paintable_geometries =
-      std::vector<std::reference_wrapper<GeometryComponent>>();
-  auto paintable_gr_geometries =
-      std::vector<std::reference_wrapper<GrGeometryComponent>>();
-  auto paintable_transforms =
-      std::vector<std::reference_wrapper<TransformComponent>>();
-  auto paintable_gr_transform_uniforms =
-      std::vector<std::reference_wrapper<GrUniformComponent>>();
-  auto paintable_gr_ping_pong_textures =
-      std::vector<std::reference_wrapper<GrPingPongTextureComponent>>();
-
-  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
-    paintable_geometries.push_back(
-        std::ref(*paintable_part->geometry_component));
-    paintable_gr_geometries.push_back(
-        std::ref(*paintable_part->gr_geometry_component));
-    paintable_transforms.push_back(
-        std::ref(*paintable_part->transform_component));
-    paintable_gr_transform_uniforms.push_back(
-        std::ref(*paintable_part->gr_transform_uniform_component));
-    paintable_gr_ping_pong_textures.push_back(
-        std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
-  }
-
-  auto render_items = std::vector<RenderItem>();
-  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
+  for (const auto& paintable_part :
+       root_manager.get()->paintable_entity->paintable_part_entities) {
     gr_sync_system::updateGeometry(
         std::ref(*paintable_part->geometry_component),
         std::ref(*paintable_part->gr_geometry_component));
-
-    render_items.push_back({
-        .gr_geometry_component =
-            std::ref(*paintable_part->gr_geometry_component),
-        .gr_uniform_components =
-            std::vector<std::reference_wrapper<GrUniformComponent>>({
-                std::ref(*player_entity->gr_camera_uniform_component),
-                std::ref(*paintable_part->gr_transform_uniform_component),
-            }),
-        .gr_ping_pong_texture_components =
-            std::vector<std::reference_wrapper<GrPingPongTextureComponent>>({
-                std::ref(
-                    *paintable_part->gr_painted_ping_pong_texture_component),
-            }),
-    });
   }
 
   gr_sync_system::updateGeometry(
-      std::ref(*player_entity.get()->brush_quad_geometry_component),
-      std::ref(*player_entity.get()->gr_brush_quad_geometry_component));
+      std::ref(*root_manager.get()
+                    ->player_entity.get()
+                    ->brush_quad_geometry_component),
+      std::ref(*root_manager.get()
+                    ->player_entity.get()
+                    ->gr_brush_quad_geometry_component));
 
-  auto main_loop = [game_entity = std::ref(*game_entity),
-                    player_entity = std::ref(*player_entity),
-                    paintable_entity = std::ref(*paintable_entity),
-                    render_items, paintable_geometries, paintable_transforms,
-                    paintable_gr_transform_uniforms,
-                    paintable_gr_ping_pong_textures,
-                    paintable_gr_geometries](float elapsed_ms, float delta_ms) {
+  auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
+                                                            float delta_ms) {
+    auto game_entity = std::ref(*root_manager.get().game_entity);
+    auto player_entity = std::ref(*root_manager.get().player_entity);
+    auto paintable_entity = std::ref(*root_manager.get().paintable_entity);
+    auto& render_items = root_manager.get().render_items;
+    auto& paintable_geometries = root_manager.get().paintable_geometries;
+    auto& paintable_transforms = root_manager.get().paintable_transforms;
+    auto& paintable_gr_transform_uniforms =
+        root_manager.get().paintable_gr_transform_uniforms;
+    auto& paintable_gr_ping_pong_textures =
+        root_manager.get().paintable_gr_ping_pong_textures;
+    auto& paintable_gr_geometries = root_manager.get().paintable_gr_geometries;
+
     client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
     client_sync_system::consumeEvent(
         std::ref(*game_entity.get().event_component));
