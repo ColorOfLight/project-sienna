@@ -98,19 +98,21 @@ void updateGeometry(
 }
 
 void updateTransformUniforms(
-    std::reference_wrapper<TransformComponent> parent_transform_component,
-    const std::vector<std::reference_wrapper<TransformComponent>>&
-        child_transform_components,
-    const std::vector<std::reference_wrapper<GrUniformComponent>>&
-        gr_uniform_components) {
+    std::reference_wrapper<TransformUpdatingView> transform_updating_view) {
+  const auto& parent_transform_component =
+      transform_updating_view.get().parent_transform_component;
+  const auto& children_transforms =
+      transform_updating_view.get().children_transforms;
+
   auto parent_needs_update = parent_transform_component.get().needs_update;
   const auto& parent_model_matrix =
       getTransformMatrix(parent_transform_component.get().scale,
                          parent_transform_component.get().rotation,
                          parent_transform_component.get().translation);
 
-  for (int i = 0; i < child_transform_components.size(); i++) {
-    auto& child_transform_component = child_transform_components[i];
+  for (auto& child_transform : children_transforms) {
+    auto& child_transform_component = child_transform.transform_component;
+    auto& gr_uniform_component = child_transform.gr_uniform_component;
 
     if (!parent_transform_component.get().needs_update &&
         !child_transform_component.get().needs_update) {
@@ -122,8 +124,6 @@ void updateTransformUniforms(
         getTransformMatrix(child_transform_component.get().scale,
                            child_transform_component.get().rotation,
                            child_transform_component.get().translation);
-
-    auto& gr_uniform_component = gr_uniform_components[i];
 
     glBindBuffer(GL_UNIFORM_BUFFER,
                  gr_uniform_component.get().uniform_buffer_id);

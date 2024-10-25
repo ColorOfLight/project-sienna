@@ -32,6 +32,7 @@
 #include "./Entity/PaintableEntity.h"
 #include "./View/PaintedTexturesView.h"
 #include "./View/RenderItemsView.h"
+#include "./View/TransformUpdatingView.h"
 #include "./system/render_system.h"
 
 class RootManager {
@@ -53,4 +54,5 @@ class RootManager {
       paintable_gr_ping_pong_textures;
   std::unique_ptr<RenderItemsView> render_items_view;
   std::unique_ptr<PaintedTexturesView> painted_textures_view;
+  std::unique_ptr<TransformUpdatingView> transform_updating_view;
 };

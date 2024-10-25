@@ -89,6 +89,8 @@ int main() {
     auto render_items_view = std::ref(*root_manager.get().render_items_view);
     auto painted_textures_view =
         std::ref(*root_manager.get().painted_textures_view);
+    auto transform_updating_view =
+        std::ref(*root_manager.get().transform_updating_view);
 
     client_sync_system::syncInput(
         std::ref(*client_input_entity.get().input_component));
@@ -160,9 +162,7 @@ int main() {
       }
     }
 
-    gr_sync_system::updateTransformUniforms(
-        std::ref(*paintable_entity.get().transform_component),
-        paintable_transforms, paintable_gr_transform_uniforms);
+    gr_sync_system::updateTransformUniforms(transform_updating_view);
 
     render_system::render(
         std::ref(*client_input_entity.get().input_component),

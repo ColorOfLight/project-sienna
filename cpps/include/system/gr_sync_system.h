@@ -33,6 +33,7 @@
 #include "./Component/InputComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/TransformComponent.h"
+#include "./View/TransformUpdatingView.h"
 
 namespace gr_sync_system {
 
@@ -50,11 +51,7 @@ void updateCameraUniform(
     std::reference_wrapper<GrUniformComponent> gr_uniform_component);
 
 void updateTransformUniforms(
-    std::reference_wrapper<TransformComponent> parent_transform_component,
-    const std::vector<std::reference_wrapper<TransformComponent>>&
-        child_transform_components,
-    const std::vector<std::reference_wrapper<GrUniformComponent>>&
-        gr_uniform_components);
+    std::reference_wrapper<TransformUpdatingView> transform_updating_view);
 
 void updateBrushUniform(
     std::reference_wrapper<BrushComponent> brush_component,
