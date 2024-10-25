@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "./Entity/BrushEntity.h"
 #include "./Entity/CameraEntity.h"
 #include "./Entity/GameEntity.h"
 #include "./Entity/PaintableEntity.h"
@@ -36,6 +37,7 @@ class RootManager {
 
   std::unique_ptr<GameEntity> game_entity;
   std::unique_ptr<CameraEntity> camera_entity;
+  std::unique_ptr<BrushEntity> brush_entity;
   std::unique_ptr<PlayerEntity> player_entity;
   std::unique_ptr<PaintableEntity> paintable_entity;
   std::vector<std::reference_wrapper<GeometryComponent>> paintable_geometries;

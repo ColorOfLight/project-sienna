@@ -80,6 +80,7 @@ int main() {
                                                             float delta_ms) {
     auto game_entity = std::ref(*root_manager.get().game_entity);
     auto camera_entity = std::ref(*root_manager.get().camera_entity);
+    auto brush_entity = std::ref(*root_manager.get().brush_entity);
     auto player_entity = std::ref(*root_manager.get().player_entity);
     auto paintable_entity = std::ref(*root_manager.get().paintable_entity);
     auto& render_items = root_manager.get().render_items;
@@ -126,31 +127,31 @@ int main() {
     if (game_entity.get().input_component->is_pointer_down) {
       input_sync_system::syncBrush(
           std::ref(*game_entity.get().input_component),
-          std::ref(*player_entity.get().brush_component));
+          std::ref(*brush_entity.get().brush_component));
 
       gr_sync_system::updateBrushUniform(
-          std::ref(*player_entity.get().brush_component),
+          std::ref(*brush_entity.get().brush_component),
           std::ref(*game_entity.get().input_component),
           std::ref(*camera_entity.get().camera_component),
-          std::ref(*player_entity.get().gr_brush_uniform_component));
+          std::ref(*brush_entity.get().gr_brush_uniform_component));
 
       paint_system::updateBrushDepth(
           std::ref(*game_entity.get().gr_shader_manager_component),
-          std::ref(*player_entity.get().gr_brush_uniform_component),
+          std::ref(*brush_entity.get().gr_brush_uniform_component),
           paintable_gr_geometries, paintable_gr_transform_uniforms,
           std::ref(
-              *player_entity.get().gr_brush_depth_framed_texture_component));
+              *brush_entity.get().gr_brush_depth_framed_texture_component));
 
       for (auto& paintable_part :
            paintable_entity.get().paintable_part_entities) {
         paint_system::paint(
             std::ref(*paintable_part->gr_geometry_component),
             std::ref(*game_entity.get().gr_shader_manager_component),
-            std::ref(*player_entity.get().gr_brush_uniform_component),
+            std::ref(*brush_entity.get().gr_brush_uniform_component),
             std::ref(*paintable_part->gr_transform_uniform_component),
             std::ref(*game_entity.get().gr_time_uniform_component),
             std::ref(
-                *player_entity.get().gr_brush_depth_framed_texture_component),
+                *brush_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_paint_framed_texture_component));
         paint_system::updatePaintedMap(
             std::ref(*player_entity.get().gr_brush_quad_geometry_component),

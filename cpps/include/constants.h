@@ -24,22 +24,5 @@
 
 #pragma once
 
-#include "./Component/BrushComponent.h"
-#include "./Component/CameraComponent.h"
-#include "./Component/GeometryComponent.h"
-#include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrGeometryComponent.h"
-#include "./Component/GrUniformComponent.h"
-
-class PlayerEntity {
- public:
-  PlayerEntity() {
-    brush_quad_geometry_component =
-        std::make_unique<GeometryComponent>(GeometryPreset::QUAD);
-    gr_brush_quad_geometry_component = std::make_unique<GrGeometryComponent>();
-  }
-
-  // TODO: Integrate to global gr manager
-  std::unique_ptr<GeometryComponent> brush_quad_geometry_component;
-  std::unique_ptr<GrGeometryComponent> gr_brush_quad_geometry_component;
-};
+inline const int BRUSH_DEPTH_TEXTURE_WIDTH = 1024;
+inline const int BRUSH_DEPTH_TEXTURE_HEIGHT = 1024;
