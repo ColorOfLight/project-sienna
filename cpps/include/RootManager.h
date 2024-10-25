@@ -46,13 +46,6 @@ class RootManager {
   std::unique_ptr<CameraEntity> camera_entity;
   std::unique_ptr<BrushEntity> brush_entity;
   std::unique_ptr<PaintableEntity> paintable_entity;
-  std::vector<std::reference_wrapper<GrGeometryComponent>>
-      paintable_gr_geometries;
-  std::vector<std::reference_wrapper<TransformComponent>> paintable_transforms;
-  std::vector<std::reference_wrapper<GrUniformComponent>>
-      paintable_gr_transform_uniforms;
-  std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
-      paintable_gr_ping_pong_textures;
   std::unique_ptr<RenderItemsView> render_items_view;
   std::unique_ptr<PaintedTexturesView> painted_textures_view;
   std::unique_ptr<TransformUpdatingView> transform_updating_view;

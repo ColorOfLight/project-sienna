@@ -80,12 +80,6 @@ int main() {
     auto camera_entity = std::ref(*root_manager.get().camera_entity);
     auto brush_entity = std::ref(*root_manager.get().brush_entity);
     auto paintable_entity = std::ref(*root_manager.get().paintable_entity);
-    auto& paintable_transforms = root_manager.get().paintable_transforms;
-    auto& paintable_gr_transform_uniforms =
-        root_manager.get().paintable_gr_transform_uniforms;
-    auto& paintable_gr_ping_pong_textures =
-        root_manager.get().paintable_gr_ping_pong_textures;
-    auto& paintable_gr_geometries = root_manager.get().paintable_gr_geometries;
     auto render_items_view = std::ref(*root_manager.get().render_items_view);
     auto painted_textures_view =
         std::ref(*root_manager.get().painted_textures_view);

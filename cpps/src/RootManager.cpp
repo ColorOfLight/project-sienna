@@ -40,15 +40,4 @@ RootManager::RootManager() {
       std::make_unique<TransformUpdatingView>(std::ref(*paintable_entity));
   gr_model_geometries_view =
       std::make_unique<GrModelGeometriesView>(std::ref(*paintable_entity));
-
-  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
-    paintable_gr_geometries.push_back(
-        std::ref(*paintable_part->gr_geometry_component));
-    paintable_transforms.push_back(
-        std::ref(*paintable_part->transform_component));
-    paintable_gr_transform_uniforms.push_back(
-        std::ref(*paintable_part->gr_transform_uniform_component));
-    paintable_gr_ping_pong_textures.push_back(
-        std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
-  }
 }
