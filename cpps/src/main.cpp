@@ -114,14 +114,16 @@ int main() {
         elapsed_ms, delta_ms,
         std::ref(*gr_global_entity.get().gr_time_uniform_component));
 
-    if (client_input_entity.get().event_component->reset) {
+    if (manage_system::isResetTrue(
+            std::ref(*client_input_entity.get().event_component))) {
       manage_system::resetPainted(
           std::ref(*client_input_entity.get().event_component),
           std::ref(*config_entity.get().render_config_component),
           painted_textures_view);
     }
 
-    if (client_input_entity.get().input_component->is_pointer_down) {
+    if (input_sync_system::isPointerDown(
+            std::ref(*client_input_entity.get().input_component))) {
       input_sync_system::syncBrush(
           std::ref(*client_input_entity.get().input_component),
           std::ref(*brush_entity.get().brush_component));

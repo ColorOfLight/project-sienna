@@ -32,4 +32,9 @@ namespace input_sync_system {
 void syncBrush(std::reference_wrapper<InputComponent> input_component,
                std::reference_wrapper<BrushComponent> brush_component);
 
+inline bool isPointerDown(
+    std::reference_wrapper<InputComponent> input_component) {
+  return input_component.get().is_pointer_down;
+}
+
 }  // namespace input_sync_system
