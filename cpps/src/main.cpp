@@ -79,6 +79,7 @@ int main() {
   auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
                                                             float delta_ms) {
     auto game_entity = std::ref(*root_manager.get().game_entity);
+    auto camera_entity = std::ref(*root_manager.get().camera_entity);
     auto player_entity = std::ref(*root_manager.get().player_entity);
     auto paintable_entity = std::ref(*root_manager.get().paintable_entity);
     auto& render_items = root_manager.get().render_items;
@@ -97,20 +98,20 @@ int main() {
     render_system::adjustViewportSize(
         std::ref(*game_entity.get().input_component),
         std::ref(*game_entity.get().event_component),
-        std::ref(*player_entity.get().camera_component));
+        std::ref(*camera_entity.get().camera_component));
 
     transform_system::transformCamera(
         delta_ms, std::ref(*game_entity.get().input_component),
-        std::ref(*player_entity.get().camera_component));
+        std::ref(*camera_entity.get().camera_component));
     transform_system::transformPaintable(
         delta_ms, std::ref(*game_entity.get().input_component),
-        std::ref(*player_entity.get().camera_component),
+        std::ref(*camera_entity.get().camera_component),
         std::ref(*paintable_entity.get().transform_component));
 
     gr_sync_system::updateCameraUniform(
         std::ref(*game_entity.get().input_component),
-        std::ref(*player_entity.get().camera_component),
-        std::ref(*player_entity.get().gr_camera_uniform_component));
+        std::ref(*camera_entity.get().camera_component),
+        std::ref(*camera_entity.get().gr_camera_uniform_component));
     gr_sync_system::updateTimeUniform(
         elapsed_ms, delta_ms,
         std::ref(*game_entity.get().gr_time_uniform_component));
@@ -130,7 +131,7 @@ int main() {
       gr_sync_system::updateBrushUniform(
           std::ref(*player_entity.get().brush_component),
           std::ref(*game_entity.get().input_component),
-          std::ref(*player_entity.get().camera_component),
+          std::ref(*camera_entity.get().camera_component),
           std::ref(*player_entity.get().gr_brush_uniform_component));
 
       paint_system::updateBrushDepth(

@@ -26,6 +26,7 @@
 
 RootManager::RootManager() {
   game_entity = std::make_unique<GameEntity>();
+  camera_entity = std::make_unique<CameraEntity>();
   player_entity = std::make_unique<PlayerEntity>();
   paintable_entity = std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
 
@@ -48,7 +49,7 @@ RootManager::RootManager() {
             std::ref(*paintable_part->gr_geometry_component),
         .gr_uniform_components =
             std::vector<std::reference_wrapper<GrUniformComponent>>({
-                std::ref(*player_entity->gr_camera_uniform_component),
+                std::ref(*camera_entity->gr_camera_uniform_component),
                 std::ref(*paintable_part->gr_transform_uniform_component),
             }),
         .gr_ping_pong_texture_components =

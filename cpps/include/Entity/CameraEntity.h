@@ -24,27 +24,17 @@
 
 #pragma once
 
-#include "./Entity/CameraEntity.h"
-#include "./Entity/GameEntity.h"
-#include "./Entity/PaintableEntity.h"
-#include "./Entity/PlayerEntity.h"
-#include "./system/render_system.h"
+#include "./Component/CameraComponent.h"
+#include "./Component/GrUniformComponent.h"
 
-class RootManager {
+class CameraEntity {
  public:
-  RootManager();
+  CameraEntity() {
+    camera_component = std::make_unique<CameraComponent>();
+    gr_camera_uniform_component =
+        std::make_unique<GrUniformComponent>("CameraBlock");
+  }
 
-  std::unique_ptr<GameEntity> game_entity;
-  std::unique_ptr<CameraEntity> camera_entity;
-  std::unique_ptr<PlayerEntity> player_entity;
-  std::unique_ptr<PaintableEntity> paintable_entity;
-  std::vector<std::reference_wrapper<GeometryComponent>> paintable_geometries;
-  std::vector<std::reference_wrapper<GrGeometryComponent>>
-      paintable_gr_geometries;
-  std::vector<std::reference_wrapper<TransformComponent>> paintable_transforms;
-  std::vector<std::reference_wrapper<GrUniformComponent>>
-      paintable_gr_transform_uniforms;
-  std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
-      paintable_gr_ping_pong_textures;
-  std::vector<RenderItem> render_items;
+  std::unique_ptr<CameraComponent> camera_component;
+  std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
 };
