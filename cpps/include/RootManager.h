@@ -30,6 +30,7 @@
 #include "./Entity/ConfigEntity.h"
 #include "./Entity/GrGlobalEntity.h"
 #include "./Entity/PaintableEntity.h"
+#include "./View/RenderItemsView.h"
 #include "./system/render_system.h"
 
 class RootManager {
@@ -50,5 +51,5 @@ class RootManager {
       paintable_gr_transform_uniforms;
   std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
       paintable_gr_ping_pong_textures;
-  std::vector<RenderItem> render_items;
+  std::unique_ptr<RenderItemsView> render_items_view;
 };

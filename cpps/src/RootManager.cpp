@@ -32,6 +32,9 @@ RootManager::RootManager() {
   brush_entity = std::make_unique<BrushEntity>();
   paintable_entity = std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
 
+  render_items_view = std::make_unique<RenderItemsView>(
+      std::ref(*paintable_entity), std::ref(*camera_entity));
+
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
     paintable_geometries.push_back(
         std::ref(*paintable_part->geometry_component));
@@ -43,22 +46,5 @@ RootManager::RootManager() {
         std::ref(*paintable_part->gr_transform_uniform_component));
     paintable_gr_ping_pong_textures.push_back(
         std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
-  }
-
-  for (const auto& paintable_part : paintable_entity->paintable_part_entities) {
-    render_items.push_back({
-        .gr_geometry_component =
-            std::ref(*paintable_part->gr_geometry_component),
-        .gr_uniform_components =
-            std::vector<std::reference_wrapper<GrUniformComponent>>({
-                std::ref(*camera_entity->gr_camera_uniform_component),
-                std::ref(*paintable_part->gr_transform_uniform_component),
-            }),
-        .gr_ping_pong_texture_components =
-            std::vector<std::reference_wrapper<GrPingPongTextureComponent>>({
-                std::ref(
-                    *paintable_part->gr_painted_ping_pong_texture_component),
-            }),
-    });
   }
 }

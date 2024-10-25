@@ -36,14 +36,7 @@
 #include "./Component/InputComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/RenderConfigComponent.h"
-
-struct RenderItem {
-  std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
-  std::vector<std::reference_wrapper<GrUniformComponent>> gr_uniform_components;
-  std::vector<std::reference_wrapper<GrTextureComponent>> gr_texture_components;
-  std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
-      gr_ping_pong_texture_components;
-};
+#include "./View/RenderItemsView.h"
 
 namespace render_system {
 
@@ -60,6 +53,6 @@ void render(
     std::reference_wrapper<MaterialComponent> material_component,
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
-    const std::vector<RenderItem>& render_items);
+    std::reference_wrapper<RenderItemsView> render_items_view);
 
 }  // namespace render_system

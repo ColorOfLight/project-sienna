@@ -71,7 +71,7 @@ void render(
     std::reference_wrapper<MaterialComponent> material_component,
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
-    const std::vector<RenderItem>& render_items) {
+    std::reference_wrapper<RenderItemsView> render_items_view) {
   glViewport(0, 0, input_component.get().canvas_size.width,
              input_component.get().canvas_size.height);
 
@@ -82,7 +82,7 @@ void render(
 
   auto shader_type = material_component.get().shader_type;
 
-  for (const auto& render_item : render_items) {
+  for (const auto& render_item : render_items_view.get().render_items) {
     const auto& gr_geometry_component = render_item.gr_geometry_component;
     const auto& gr_uniform_components = render_item.gr_uniform_components;
     const auto& gr_texture_components = render_item.gr_texture_components;
