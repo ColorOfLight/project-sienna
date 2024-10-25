@@ -24,31 +24,16 @@
 
 #pragma once
 
-#include "./Entity/BrushEntity.h"
-#include "./Entity/CameraEntity.h"
-#include "./Entity/ClientInputEntity.h"
-#include "./Entity/GameEntity.h"
-#include "./Entity/GrGlobalEntity.h"
-#include "./Entity/PaintableEntity.h"
-#include "./system/render_system.h"
+#include "./Component/EventComponent.h"
+#include "./Component/InputComponent.h"
 
-class RootManager {
+class ClientInputEntity {
  public:
-  RootManager();
+  ClientInputEntity() {
+    event_component = std::make_unique<EventComponent>();
+    input_component = std::make_unique<InputComponent>();
+  }
 
-  std::unique_ptr<GameEntity> game_entity;
-  std::unique_ptr<ClientInputEntity> client_input_entity;
-  std::unique_ptr<GrGlobalEntity> gr_global_entity;
-  std::unique_ptr<CameraEntity> camera_entity;
-  std::unique_ptr<BrushEntity> brush_entity;
-  std::unique_ptr<PaintableEntity> paintable_entity;
-  std::vector<std::reference_wrapper<GeometryComponent>> paintable_geometries;
-  std::vector<std::reference_wrapper<GrGeometryComponent>>
-      paintable_gr_geometries;
-  std::vector<std::reference_wrapper<TransformComponent>> paintable_transforms;
-  std::vector<std::reference_wrapper<GrUniformComponent>>
-      paintable_gr_transform_uniforms;
-  std::vector<std::reference_wrapper<GrPingPongTextureComponent>>
-      paintable_gr_ping_pong_textures;
-  std::vector<RenderItem> render_items;
+  std::unique_ptr<EventComponent> event_component;
+  std::unique_ptr<InputComponent> input_component;
 };

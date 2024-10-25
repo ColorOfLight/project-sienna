@@ -75,6 +75,8 @@ int main() {
   auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
                                                             float delta_ms) {
     auto game_entity = std::ref(*root_manager.get().game_entity);
+    auto client_input_entity =
+        std::ref(*root_manager.get().client_input_entity);
     auto gr_global_entity = std::ref(*root_manager.get().gr_global_entity);
     auto camera_entity = std::ref(*root_manager.get().camera_entity);
     auto brush_entity = std::ref(*root_manager.get().brush_entity);
@@ -88,46 +90,47 @@ int main() {
         root_manager.get().paintable_gr_ping_pong_textures;
     auto& paintable_gr_geometries = root_manager.get().paintable_gr_geometries;
 
-    client_sync_system::syncInput(std::ref(*game_entity.get().input_component));
+    client_sync_system::syncInput(
+        std::ref(*client_input_entity.get().input_component));
     client_sync_system::consumeEvent(
-        std::ref(*game_entity.get().event_component));
+        std::ref(*client_input_entity.get().event_component));
 
     render_system::adjustViewportSize(
-        std::ref(*game_entity.get().input_component),
-        std::ref(*game_entity.get().event_component),
+        std::ref(*client_input_entity.get().input_component),
+        std::ref(*client_input_entity.get().event_component),
         std::ref(*camera_entity.get().camera_component));
 
     transform_system::transformCamera(
-        delta_ms, std::ref(*game_entity.get().input_component),
+        delta_ms, std::ref(*client_input_entity.get().input_component),
         std::ref(*camera_entity.get().camera_component));
     transform_system::transformPaintable(
-        delta_ms, std::ref(*game_entity.get().input_component),
+        delta_ms, std::ref(*client_input_entity.get().input_component),
         std::ref(*camera_entity.get().camera_component),
         std::ref(*paintable_entity.get().transform_component));
 
     gr_sync_system::updateCameraUniform(
-        std::ref(*game_entity.get().input_component),
+        std::ref(*client_input_entity.get().input_component),
         std::ref(*camera_entity.get().camera_component),
         std::ref(*camera_entity.get().gr_camera_uniform_component));
     gr_sync_system::updateTimeUniform(
         elapsed_ms, delta_ms,
         std::ref(*gr_global_entity.get().gr_time_uniform_component));
 
-    if (game_entity.get().event_component->reset) {
+    if (client_input_entity.get().event_component->reset) {
       manage_system::resetPainted(
-          std::ref(*game_entity.get().event_component),
+          std::ref(*client_input_entity.get().event_component),
           std::ref(*game_entity.get().render_config_component),
           paintable_gr_ping_pong_textures);
     }
 
-    if (game_entity.get().input_component->is_pointer_down) {
+    if (client_input_entity.get().input_component->is_pointer_down) {
       input_sync_system::syncBrush(
-          std::ref(*game_entity.get().input_component),
+          std::ref(*client_input_entity.get().input_component),
           std::ref(*brush_entity.get().brush_component));
 
       gr_sync_system::updateBrushUniform(
           std::ref(*brush_entity.get().brush_component),
-          std::ref(*game_entity.get().input_component),
+          std::ref(*client_input_entity.get().input_component),
           std::ref(*camera_entity.get().camera_component),
           std::ref(*brush_entity.get().gr_brush_uniform_component));
 
@@ -162,7 +165,7 @@ int main() {
         paintable_transforms, paintable_gr_transform_uniforms);
 
     render_system::render(
-        std::ref(*game_entity.get().input_component),
+        std::ref(*client_input_entity.get().input_component),
         std::ref(*game_entity.get().render_config_component),
         std::ref(*paintable_entity.get().material_component),
         std::ref(*gr_global_entity.get().gr_shader_manager_component),

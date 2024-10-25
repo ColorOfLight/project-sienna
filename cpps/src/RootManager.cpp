@@ -25,6 +25,7 @@
 #include "./RootManager.h"
 
 RootManager::RootManager() {
+  client_input_entity = std::make_unique<ClientInputEntity>();
   gr_global_entity = std::make_unique<GrGlobalEntity>();
   game_entity = std::make_unique<GameEntity>();
   camera_entity = std::make_unique<CameraEntity>();

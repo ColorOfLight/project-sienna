@@ -24,22 +24,14 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/GrShaderManagerComponent.h"
-#include "./Component/GrUniformComponent.h"
-#include "./Component/InputComponent.h"
 #include "./Component/RenderConfigComponent.h"
 
 class GameEntity {
  public:
   GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
     render_config_component = std::make_unique<RenderConfigComponent>(
         glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
   }
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
   std::unique_ptr<RenderConfigComponent> render_config_component;
 };
