@@ -29,7 +29,6 @@ RootManager::RootManager() {
   game_entity = std::make_unique<GameEntity>();
   camera_entity = std::make_unique<CameraEntity>();
   brush_entity = std::make_unique<BrushEntity>();
-  player_entity = std::make_unique<PlayerEntity>();
   paintable_entity = std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
 
   for (const auto& paintable_part : paintable_entity->paintable_part_entities) {

@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "./Component/GrGeometryComponent.h"
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrUniformComponent.h"
 
@@ -33,8 +34,13 @@ class GrGlobalEntity {
     gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
     gr_time_uniform_component =
         std::make_unique<GrUniformComponent>("TimeBlock");
+    gr_quad_geometry_component = std::make_unique<GrGeometryComponent>();
   }
 
   std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
   std::unique_ptr<GrUniformComponent> gr_time_uniform_component;
+
+  // NOTICE: if you use more global geometries, you should implement Manager
+  // class like GrShaderManagerComponent
+  std::unique_ptr<GrGeometryComponent> gr_quad_geometry_component;
 };

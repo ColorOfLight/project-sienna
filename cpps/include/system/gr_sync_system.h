@@ -40,6 +40,10 @@ void updateGeometry(
     std::reference_wrapper<GeometryComponent> geometry_component,
     std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
 
+void updateGeometry(
+    GeometryPreset geometry_preset,
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component);
+
 void updateCameraUniform(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<CameraComponent> camera_component,

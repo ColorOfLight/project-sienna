@@ -89,6 +89,14 @@ void updateGeometry(
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void updateGeometry(
+    GeometryPreset geometry_preset,
+    std::reference_wrapper<GrGeometryComponent> gr_geometry_component) {
+  auto geometry_component = GeometryComponent(geometry_preset);
+
+  updateGeometry(std::ref(geometry_component), gr_geometry_component);
+}
+
 void updateTransformUniforms(
     std::reference_wrapper<TransformComponent> parent_transform_component,
     const std::vector<std::reference_wrapper<TransformComponent>>&

@@ -30,7 +30,6 @@
 
 #include "./Entity/GameEntity.h"
 #include "./Entity/PaintableEntity.h"
-#include "./Entity/PlayerEntity.h"
 #include "./RootManager.h"
 #include "./system/client_sync_system.h"
 #include "./system/gr_sync_system.h"
@@ -61,6 +60,11 @@ int main() {
 
   auto root_manager = std::make_unique<RootManager>();
 
+  gr_sync_system::updateGeometry(
+      GeometryPreset::QUAD,
+      std::ref(
+          *root_manager.get()->gr_global_entity->gr_quad_geometry_component));
+
   for (const auto& paintable_part :
        root_manager.get()->paintable_entity->paintable_part_entities) {
     gr_sync_system::updateGeometry(
@@ -68,21 +72,12 @@ int main() {
         std::ref(*paintable_part->gr_geometry_component));
   }
 
-  gr_sync_system::updateGeometry(
-      std::ref(*root_manager.get()
-                    ->player_entity.get()
-                    ->brush_quad_geometry_component),
-      std::ref(*root_manager.get()
-                    ->player_entity.get()
-                    ->gr_brush_quad_geometry_component));
-
   auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
                                                             float delta_ms) {
     auto game_entity = std::ref(*root_manager.get().game_entity);
     auto gr_global_entity = std::ref(*root_manager.get().gr_global_entity);
     auto camera_entity = std::ref(*root_manager.get().camera_entity);
     auto brush_entity = std::ref(*root_manager.get().brush_entity);
-    auto player_entity = std::ref(*root_manager.get().player_entity);
     auto paintable_entity = std::ref(*root_manager.get().paintable_entity);
     auto& render_items = root_manager.get().render_items;
     auto& paintable_geometries = root_manager.get().paintable_geometries;
@@ -155,7 +150,7 @@ int main() {
                 *brush_entity.get().gr_brush_depth_framed_texture_component),
             std::ref(*paintable_part->gr_paint_framed_texture_component));
         paint_system::updatePaintedMap(
-            std::ref(*player_entity.get().gr_brush_quad_geometry_component),
+            std::ref(*gr_global_entity.get().gr_quad_geometry_component),
             std::ref(*gr_global_entity.get().gr_shader_manager_component),
             std::ref(*paintable_part->gr_paint_framed_texture_component),
             std::ref(*paintable_part->gr_painted_ping_pong_texture_component));
