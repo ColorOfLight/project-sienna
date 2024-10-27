@@ -13,7 +13,6 @@ const ClientInputComponent = {
   },
   isPointerDown: false,
   pointerPosition: [0, 0],
-  canvasSize: getCanvasSize(),
   brush: {
     nozzleFov: 5,
     airPressure: 1.0,
@@ -22,8 +21,8 @@ const ClientInputComponent = {
 };
 
 const ClientEventComponent = {
-  reset: false,
-  changeCanvasSize: false,
+  reset: undefined,
+  updateCanvasSize: undefined,
 };
 
 window.addEventListener('keydown', (event) => {
@@ -52,13 +51,11 @@ window.addEventListener('pointermove', (event) => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  ClientEventComponent.changeCanvasSize = true;
-  ClientInputComponent.canvasSize = getCanvasSize();
+  ClientEventComponent.updateCanvasSize = getCanvasSize();
 });
 
 window.addEventListener('resize', () => {
-  ClientEventComponent.changeCanvasSize = true;
-  ClientInputComponent.canvasSize = getCanvasSize();
+  ClientEventComponent.updateCanvasSize = getCanvasSize();
 });
 
 window.ClientInputComponent = ClientInputComponent;

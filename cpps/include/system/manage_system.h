@@ -37,7 +37,7 @@ void resetPainted(
 
 inline bool isResetTrue(
     std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
+  return event_component.get().reset.has_value();
 }
 
 }  // namespace manage_system

@@ -64,8 +64,6 @@ class InputComponent {
     is_pointer_down = false;
     pointer_position.x = 0;
     pointer_position.y = 0;
-    canvas_size.width = 0;
-    canvas_size.height = 0;
     brush_input.air_pressure = 0.5f;
     brush_input.nozzle_fov = glm::radians(15.0f);
     brush_input.paint_color = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -74,6 +72,5 @@ class InputComponent {
   std::unordered_map<InputKey, bool> pressed_key_map;
   bool is_pointer_down;
   PointerPosition pointer_position;
-  CanvasSize canvas_size;
   BrushInput brush_input;
 };

@@ -137,7 +137,7 @@ void updateTransformUniforms(
 }
 
 void updateCameraUniform(
-    std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
   if (!camera_component.get().needs_update) {
@@ -161,8 +161,8 @@ void updateCameraUniform(
 
   const auto fovy = camera_component.get().fovy;
   float aspect_ratio =
-      static_cast<float>(input_component.get().canvas_size.width) /
-      input_component.get().canvas_size.height;
+      static_cast<float>(render_config_component.get().canvas_size.x) /
+      render_config_component.get().canvas_size.y;
 
   CameraUniformData camera_uniform_data = {
       .view_matrix = glm::lookAt(position, position + front, up),
@@ -182,10 +182,11 @@ void updateCameraUniform(
 void updateBrushUniform(
     std::reference_wrapper<BrushComponent> brush_component,
     std::reference_wrapper<InputComponent> input_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<CameraComponent> camera_component,
     std::reference_wrapper<GrUniformComponent> gr_uniform_component) {
   const auto& pointer_position = input_component.get().pointer_position;
-  const auto& canvas_size = input_component.get().canvas_size;
+  const auto& canvas_size = render_config_component.get().canvas_size;
 
   struct BrushUniformData {
     float air_pressure;
@@ -210,8 +211,7 @@ void updateBrushUniform(
       glm::lookAt(eye_position, glm::vec3(0.0f), camera_up);
 
   auto ray_direction = getRayDirectionFromScreen(
-      glm::vec2(pointer_position.x, pointer_position.y),
-      glm::vec2(canvas_size.width, canvas_size.height),
+      glm::vec2(pointer_position.x, pointer_position.y), glm::vec2(canvas_size),
       camera_component.get().fovy, camera_view_matrix);
 
   auto brush_position = eye_position + ray_direction * glm::vec3(0.1);
