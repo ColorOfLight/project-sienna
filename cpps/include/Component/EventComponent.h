@@ -24,13 +24,16 @@
 
 #pragma once
 
+#include <optional>
+
 class EventComponent {
  public:
   EventComponent() {
-    reset = false;
     change_canvas_size = false;
+    reset = std::nullopt;
   }
 
-  bool reset;
   bool change_canvas_size;
+
+  std::optional<std::monostate> reset;
 };

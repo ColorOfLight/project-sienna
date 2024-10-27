@@ -47,7 +47,7 @@ void resetPainted(
                  render_config_component.get().clear_color.b, 1.0f);
   }
 
-  event_component.get().reset = false;
+  event_component.get().reset = std::nullopt;
 }
 
 }  // namespace manage_system

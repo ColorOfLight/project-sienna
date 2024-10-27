@@ -22,7 +22,7 @@ const ClientInputComponent = {
 };
 
 const ClientEventComponent = {
-  reset: false,
+  reset: undefined,
   changeCanvasSize: false,
 };
 
