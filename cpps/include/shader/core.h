@@ -36,50 +36,74 @@ enum class ShaderType {
   PAINT_BLEND
 };
 
-inline const char* getVertexShaderSource(ShaderType shader_type) {
+inline const std::string SHADER_DEFAULT_HEADER = R"(#version 300 es
+    precision mediump float;
+)";
+
+inline std::string getVertexShaderSource(ShaderType shader_type) {
+  std::string shader_source = SHADER_DEFAULT_HEADER;
+
   switch (shader_type) {
     case ShaderType::TEXTURE_TEST:
     case ShaderType::PHONG:
-      return shader_source::basic_vertex.c_str();
+      shader_source += shader_source::basic_vertex;
+      break;
     case ShaderType::PAINT_BLEND:
-      return shader_source::texture_quad_vertex.c_str();
+      shader_source += shader_source::texture_quad_vertex;
+      break;
     case ShaderType::BRUSH_DECAL:
-      return shader_source::brush_decal_vertex.c_str();
+      shader_source += shader_source::brush_decal_vertex;
+      break;
     case ShaderType::BRUSH_DEPTH:
-      return shader_source::brush_depth_vertex.c_str();
+      shader_source += shader_source::brush_depth_vertex;
+      break;
     default:
       throw std::runtime_error("ERROR::SHADER::VERTEX::INVALID_SHADER_TYPE\n");
   }
+
+  return shader_source;
 };
 
-inline const char* getFragmentShaderSource(ShaderType shader_type) {
+inline std::string getFragmentShaderSource(ShaderType shader_type) {
+  std::string shader_source = SHADER_DEFAULT_HEADER;
+
   switch (shader_type) {
     case ShaderType::TEXTURE_TEST:
-      return shader_source::texture_test_fragment.c_str();
+      shader_source += shader_source::texture_test_fragment;
+      break;
     case ShaderType::PHONG:
-      return shader_source::phong_fragment.c_str();
+      shader_source += shader_source::phong_fragment;
+      break;
     case ShaderType::BRUSH_DECAL:
-      return shader_source::brush_decal_fragment.c_str();
+      shader_source += shader_source::brush_decal_fragment;
+      break;
     case ShaderType::BRUSH_DEPTH:
-      return shader_source::empty_fragment.c_str();
+      shader_source += shader_source::empty_fragment;
+      break;
     case ShaderType::PAINT_BLEND:
-      return shader_source::paint_blend_fragment.c_str();
+      shader_source += shader_source::paint_blend_fragment;
+      break;
     default:
       throw std::runtime_error(
           "ERROR::SHADER::FRAGMENT::INVALID_SHADER_TYPE\n");
   }
+
+  return shader_source;
 };
 
 inline unsigned int generateShaderProgram(ShaderType shader_type) {
   int success;
   char info_log[512];
 
-  const char* vertex_shader_source = getVertexShaderSource(shader_type);
-  const char* fragment_shader_source = getFragmentShaderSource(shader_type);
+  std::string vertex_shader_source = getVertexShaderSource(shader_type);
+  std::string fragment_shader_source = getFragmentShaderSource(shader_type);
+
+  const char* vertex_shader_source_cstr = vertex_shader_source.c_str();
+  const char* fragment_shader_source_cstr = fragment_shader_source.c_str();
 
   // Compile the vertex shader
   GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertex_shader_id, 1, &vertex_shader_source, nullptr);
+  glShaderSource(vertex_shader_id, 1, &vertex_shader_source_cstr, nullptr);
   glCompileShader(vertex_shader_id);
 
   // Check for vertex shader compile errors
@@ -92,7 +116,7 @@ inline unsigned int generateShaderProgram(ShaderType shader_type) {
 
   // Compile the fragment shader
   GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader_id, 1, &fragment_shader_source, nullptr);
+  glShaderSource(fragment_shader_id, 1, &fragment_shader_source_cstr, nullptr);
   glCompileShader(fragment_shader_id);
 
   // Check for fragment shader compile errors

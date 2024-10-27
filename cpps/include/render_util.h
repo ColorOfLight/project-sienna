@@ -30,7 +30,7 @@
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
-#include "./shader/util.h"
+#include "./shader/core.h"
 
 void drawGrComponents(
     ShaderType shader_type,

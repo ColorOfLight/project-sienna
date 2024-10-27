@@ -28,9 +28,7 @@
 
 namespace shader_source {
 
-inline const std::string basic_vertex = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string basic_vertex = R"(
     layout (std140) uniform CameraBlock
     {
         mat4 u_camera_viewMatrix;
@@ -65,9 +63,7 @@ inline const std::string basic_vertex = R"(#version 300 es
     }
 )";
 
-inline const std::string brush_decal_vertex = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string brush_decal_vertex = R"(
     layout (std140) uniform BrushBlock
     {
         float u_brush_airPressure;
@@ -109,9 +105,7 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
     }
 )";
 
-inline const std::string texture_quad_vertex = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string texture_quad_vertex = R"(
     layout (location = 0) in vec3 a_position;
     layout (location = 1) in vec3 a_normal;
     layout (location = 2) in vec2 a_texCoord;
@@ -125,9 +119,7 @@ inline const std::string texture_quad_vertex = R"(#version 300 es
     }
 )";
 
-inline const std::string brush_depth_vertex = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string brush_depth_vertex = R"(
     layout (std140) uniform BrushBlock
     {
         float u_brush_airPressure;
@@ -154,17 +146,13 @@ inline const std::string brush_depth_vertex = R"(#version 300 es
     }
 )";
 
-inline const std::string empty_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string empty_fragment = R"(
     void main()
     {
     }
 )";
 
-inline const std::string brush_decal_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string brush_decal_fragment = R"(
     layout (std140) uniform TimeBlock
     {
         float u_time_elapsed_ms;
@@ -224,9 +212,7 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
     }
 )";
 
-inline const std::string paint_blend_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string paint_blend_fragment = R"(
     uniform sampler2D u_paintMapTexture;
     uniform sampler2D u_paintedMapTexture;
 
@@ -254,9 +240,7 @@ inline const std::string paint_blend_fragment = R"(#version 300 es
     }
 )";
 
-inline const std::string texture_test_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string texture_test_fragment = R"(
     out vec4 FragColor;
 
     in vec2 v_texCoord;
@@ -267,9 +251,7 @@ inline const std::string texture_test_fragment = R"(#version 300 es
     }
 )";
 
-inline const std::string phong_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const std::string phong_fragment = R"(
     layout (std140) uniform CameraBlock
     {
         mat4 u_camera_viewMatrix;

@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "./shader/util.h"
+#include "./shader/core.h"
 
 class MaterialComponent {
  public:

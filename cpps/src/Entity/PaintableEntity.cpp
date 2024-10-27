@@ -24,7 +24,7 @@
 
 #include "./Entity/PaintableEntity.h"
 
-#include "./shader/util.h"
+#include "./shader/core.h"
 
 PaintableEntity::PaintableEntity(PaintablePreset preset) {
   material_component = std::make_unique<MaterialComponent>(ShaderType::PHONG);
