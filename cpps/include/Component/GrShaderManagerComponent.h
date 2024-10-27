@@ -26,7 +26,7 @@
 
 #include <map>
 
-#include "./shader/util.h"
+#include "./shader/core.h"
 
 class GrShaderManagerComponent {
  public:

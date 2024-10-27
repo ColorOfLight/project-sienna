@@ -29,7 +29,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "./math_util.h"
-#include "./shader/util.h"
+#include "./shader/core.h"
 
 namespace gr_sync_system {
 

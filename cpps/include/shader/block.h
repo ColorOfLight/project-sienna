@@ -24,13 +24,44 @@
 
 #pragma once
 
-#include "./shader/core.h"
+#include <string>
 
-class MaterialComponent {
- public:
-  MaterialComponent() { shader_type = ShaderType::TEXTURE_TEST; }
+namespace shader_source {
 
-  MaterialComponent(ShaderType shader_type) : shader_type(shader_type) {}
+inline const std::string camera_block = R"(
+    layout (std140) uniform CameraBlock
+    {
+        mat4 u_camera_viewMatrix;
+        mat4 u_camera_projectionMatrix;
+        vec3 u_camera_eye;
+    };
+)";
 
-  ShaderType shader_type;
-};
+inline const std::string model_block = R"(
+    layout (std140) uniform ModelBlock
+    {
+        mat4 u_model_matrix;
+    };
+)";
+
+inline const std::string brush_block = R"(
+    layout (std140) uniform BrushBlock
+    {
+        float u_brush_airPressure;
+        vec3 u_brush_paintColor;
+        float u_brush_nozzleFov;
+        mat4 u_brush_viewMatrix;
+        mat4 u_brush_projectionMatrix;
+        vec3 u_brush_position;
+    };
+)";
+
+inline const std::string time_block = R"(
+    layout (std140) uniform TimeBlock
+    {
+        float u_time_elapsed_ms;
+        float u_time_delta_ms;
+    };
+)";
+
+}  // namespace shader_source

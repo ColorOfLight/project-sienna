@@ -25,24 +25,19 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+#include "./shader/block.h"
 
 namespace shader_source {
 
-inline const std::string basic_vertex = R"(#version 300 es
-    precision mediump float;
+struct ShaderSourceGroup {
+  std::vector<std::reference_wrapper<const std::string>> blocks;
+  std::string source;
+};
 
-    layout (std140) uniform CameraBlock
-    {
-        mat4 u_camera_viewMatrix;
-        mat4 u_camera_projectionMatrix;
-        vec3 u_camera_eye;
-    };
-
-    layout (std140) uniform ModelBlock
-    {
-        mat4 u_model_matrix;
-    };
-
+inline const ShaderSourceGroup basic_vertex = {
+    .blocks = {camera_block, model_block}, .source = R"(
     layout (location = 0) in vec3 a_position;
     layout (location = 1) in vec3 a_normal;
     layout (location = 2) in vec2 a_texCoord;
@@ -63,26 +58,10 @@ inline const std::string basic_vertex = R"(#version 300 es
 
         v_texCoord = a_texCoord;
     }
-)";
+)"};
 
-inline const std::string brush_decal_vertex = R"(#version 300 es
-    precision mediump float;
-
-    layout (std140) uniform BrushBlock
-    {
-        float u_brush_airPressure;
-        vec3 u_brush_paintColor;
-        float u_brush_nozzleFov;
-        mat4 u_brush_viewMatrix;
-        mat4 u_brush_projectionMatrix;
-        vec3 u_brush_position;
-    };
-
-    layout (std140) uniform ModelBlock
-    {
-        mat4 u_model_matrix;
-    };
-
+inline const ShaderSourceGroup brush_decal_vertex = {
+    .blocks = {brush_block, model_block}, .source = R"(
     layout (location = 0) in vec3 a_position;
     layout (location = 1) in vec3 a_normal;
     layout (location = 2) in vec2 a_texCoord;
@@ -107,11 +86,9 @@ inline const std::string brush_decal_vertex = R"(#version 300 es
 
         gl_Position = vec4(v_texCoord * 2.0 - 1.0, 0.0, 1.0);
     }
-)";
+)"};
 
-inline const std::string texture_quad_vertex = R"(#version 300 es
-    precision mediump float;
-
+inline const ShaderSourceGroup texture_quad_vertex = {.source = R"(
     layout (location = 0) in vec3 a_position;
     layout (location = 1) in vec3 a_normal;
     layout (location = 2) in vec2 a_texCoord;
@@ -123,26 +100,10 @@ inline const std::string texture_quad_vertex = R"(#version 300 es
         gl_Position = vec4(a_position, 1.0);
         v_texCoord = a_texCoord;
     }
-)";
+)"};
 
-inline const std::string brush_depth_vertex = R"(#version 300 es
-    precision mediump float;
-
-    layout (std140) uniform BrushBlock
-    {
-        float u_brush_airPressure;
-        vec3 u_brush_paintColor;
-        float u_brush_nozzleFov;
-        mat4 u_brush_viewMatrix;
-        mat4 u_brush_projectionMatrix;
-        vec3 u_brush_position;
-    };
-
-    layout (std140) uniform ModelBlock
-    {
-        mat4 u_model_matrix;
-    };
-
+inline const ShaderSourceGroup brush_depth_vertex = {
+    .blocks = {brush_block, model_block}, .source = R"(
     layout (location = 0) in vec3 a_position;
     layout (location = 1) in vec3 a_normal;
     layout (location = 2) in vec2 a_texCoord;
@@ -152,35 +113,16 @@ inline const std::string brush_depth_vertex = R"(#version 300 es
         vec4 modelPosition = u_model_matrix * vec4(a_position, 1.0);
         gl_Position = u_brush_projectionMatrix * u_brush_viewMatrix * modelPosition;
     }
-)";
+)"};
 
-inline const std::string empty_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const ShaderSourceGroup empty_fragment = {.source = R"(
     void main()
     {
     }
-)";
+)"};
 
-inline const std::string brush_decal_fragment = R"(#version 300 es
-    precision mediump float;
-
-    layout (std140) uniform TimeBlock
-    {
-        float u_time_elapsed_ms;
-        float u_time_delta_ms;
-    };
-
-    layout (std140) uniform BrushBlock
-    {
-        float u_brush_airPressure;
-        vec3 u_brush_paintColor;
-        float u_brush_nozzleFov;
-        mat4 u_brush_viewMatrix;
-        mat4 u_brush_projectionMatrix;
-        vec3 u_brush_position;
-    };
-
+inline const ShaderSourceGroup brush_decal_fragment = {
+    .blocks = {time_block, brush_block}, .source = R"(
     uniform sampler2D u_brushDepthTexture;
 
     out vec4 FragColor;
@@ -222,11 +164,9 @@ inline const std::string brush_decal_fragment = R"(#version 300 es
 
         FragColor = vec4(u_brush_paintColor, intensity);
     }
-)";
+)"};
 
-inline const std::string paint_blend_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const ShaderSourceGroup paint_blend_fragment = {.source = R"(
     uniform sampler2D u_paintMapTexture;
     uniform sampler2D u_paintedMapTexture;
 
@@ -252,11 +192,9 @@ inline const std::string paint_blend_fragment = R"(#version 300 es
 
         FragColor = vec4(newColor.rgb, newIntensity);
     }
-)";
+)"};
 
-inline const std::string texture_test_fragment = R"(#version 300 es
-    precision mediump float;
-
+inline const ShaderSourceGroup texture_test_fragment = {.source = R"(
     out vec4 FragColor;
 
     in vec2 v_texCoord;
@@ -265,18 +203,10 @@ inline const std::string texture_test_fragment = R"(#version 300 es
     {
         FragColor = vec4(v_texCoord, 0.0, 1.0);
     }
-)";
+)"};
 
-inline const std::string phong_fragment = R"(#version 300 es
-    precision mediump float;
-
-    layout (std140) uniform CameraBlock
-    {
-        mat4 u_camera_viewMatrix;
-        mat4 u_camera_projectionMatrix;
-        vec3 u_camera_eye;
-    };
-
+inline const ShaderSourceGroup phong_fragment = {.blocks = {camera_block},
+                                                 .source = R"(
     struct AmbientLight
     {
         vec3 color;
@@ -401,6 +331,6 @@ inline const std::string phong_fragment = R"(#version 300 es
         vec3 color = diffuseColor + specularColor;
         FragColor = vec4(color, 1.0);
     }
-)";
+)"};
 
 }  // namespace shader_source
