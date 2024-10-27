@@ -24,20 +24,26 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
+#include "./Component/BrushComponent.h"
+#include "./Component/GrFramedTextureComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./constants.h"
 
-namespace manage_system {
+class BrushEntity {
+ public:
+  BrushEntity() {
+    brush_component = std::make_unique<BrushComponent>();
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
+    gr_brush_uniform_component =
+        std::make_unique<GrUniformComponent>("BrushBlock");
+    gr_brush_depth_framed_texture_component =
+        std::make_unique<GrFramedTextureComponent>(
+            TextureType::DEPTH, "u_brushDepthTexture",
+            BRUSH_DEPTH_TEXTURE_WIDTH, BRUSH_DEPTH_TEXTURE_HEIGHT);
+  }
 
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
-}
-
-}  // namespace manage_system
+  std::unique_ptr<BrushComponent> brush_component;
+  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
+  std::unique_ptr<GrFramedTextureComponent>
+      gr_brush_depth_framed_texture_component;
+};

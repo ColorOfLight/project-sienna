@@ -24,20 +24,5 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
-
-namespace manage_system {
-
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
-
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
-}
-
-}  // namespace manage_system
+inline const int BRUSH_DEPTH_TEXTURE_WIDTH = 1024;
+inline const int BRUSH_DEPTH_TEXTURE_HEIGHT = 1024;

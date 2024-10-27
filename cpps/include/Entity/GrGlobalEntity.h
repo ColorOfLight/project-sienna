@@ -24,20 +24,23 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrShaderManagerComponent.h"
+#include "./Component/GrUniformComponent.h"
 
-namespace manage_system {
+class GrGlobalEntity {
+ public:
+  GrGlobalEntity() {
+    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
+    gr_time_uniform_component =
+        std::make_unique<GrUniformComponent>("TimeBlock");
+    gr_quad_geometry_component = std::make_unique<GrGeometryComponent>();
+  }
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
+  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
+  std::unique_ptr<GrUniformComponent> gr_time_uniform_component;
 
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
-}
-
-}  // namespace manage_system
+  // NOTICE: if you use more global geometries, you should implement Manager
+  // class like GrShaderManagerComponent
+  std::unique_ptr<GrGeometryComponent> gr_quad_geometry_component;
+};

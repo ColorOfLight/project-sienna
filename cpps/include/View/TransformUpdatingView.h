@@ -24,20 +24,33 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
+#include <vector>
 
-namespace manage_system {
+#include "./Component/GrUniformComponent.h"
+#include "./Component/TransformComponent.h"
+#include "./Entity/PaintableEntity.h"
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
+struct TransformUpdatingChild {
+  std::reference_wrapper<TransformComponent> transform_component;
+  std::reference_wrapper<GrUniformComponent> gr_uniform_component;
+};
 
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
-}
+class TransformUpdatingView {
+ public:
+  TransformUpdatingView(
+      std::reference_wrapper<PaintableEntity> paintable_entity)
+      : parent_transform_component(
+            std::ref(*paintable_entity.get().transform_component)) {
+    for (const auto& paintable_part :
+         paintable_entity.get().paintable_part_entities) {
+      children_transforms.push_back(
+          {.transform_component =
+               std::ref(*paintable_part->transform_component),
+           .gr_uniform_component =
+               std::ref(*paintable_part->gr_transform_uniform_component)});
+    }
+  }
 
-}  // namespace manage_system
+  std::reference_wrapper<TransformComponent> parent_transform_component;
+  std::vector<TransformUpdatingChild> children_transforms;
+};

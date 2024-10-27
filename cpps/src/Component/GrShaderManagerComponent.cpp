@@ -26,8 +26,6 @@
 
 #include <GLES3/gl3.h>
 
-unsigned int generateShaderProgram(ShaderType shader_type);
-
 GrShaderManagerComponent::GrShaderManagerComponent() {
   shader_program_ids = std::unordered_map<ShaderType, unsigned int>();
 }

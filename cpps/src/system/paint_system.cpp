@@ -36,12 +36,9 @@ void updateBrushDepth(
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
     std::reference_wrapper<GrUniformComponent> gr_brush_uniform_component,
-    const std::vector<std::reference_wrapper<GrGeometryComponent>>&
-        gr_geometry_components,
-    const std::vector<std::reference_wrapper<GrUniformComponent>>&
-        gr_model_uniform_components,
     std::reference_wrapper<GrFramedTextureComponent>
-        gr_brush_depth_framed_texture_component) {
+        gr_brush_depth_framed_texture_component,
+    std::reference_wrapper<GrModelGeometriesView> gr_model_geometries_view) {
   glBindFramebuffer(
       GL_FRAMEBUFFER,
       gr_brush_depth_framed_texture_component.get().framebuffer_id);
@@ -51,13 +48,15 @@ void updateBrushDepth(
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (int i = 0; i < gr_geometry_components.size(); i++) {
+  for (const auto& gr_model_geometry :
+       gr_model_geometries_view.get().gr_model_geometries) {
     auto gr_uniform_components =
         std::vector<std::reference_wrapper<GrUniformComponent>>{
-            gr_brush_uniform_component, gr_model_uniform_components[i]};
+            gr_brush_uniform_component, gr_model_geometry.gr_uniform_component};
 
     drawGrComponents(ShaderType::BRUSH_DEPTH, gr_shader_manager_component,
-                     gr_geometry_components[i], gr_uniform_components, {});
+                     gr_model_geometry.gr_geometry_component,
+                     gr_uniform_components, {});
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

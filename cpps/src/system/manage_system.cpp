@@ -31,9 +31,9 @@ namespace manage_system {
 void resetPainted(
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
-    const std::vector<std::reference_wrapper<GrPingPongTextureComponent>>&
-        gr_painted_components) {
-  for (const auto& gr_painted_component : gr_painted_components) {
+    std::reference_wrapper<PaintedTexturesView> painted_textures_view) {
+  for (const auto& gr_painted_component :
+       painted_textures_view.get().paintable_gr_ping_pong_textures) {
     const auto& gr_painted_texture =
         gr_painted_component.get().getCurrentFramedTexture();
 

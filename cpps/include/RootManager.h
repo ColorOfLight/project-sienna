@@ -24,27 +24,30 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/GrShaderManagerComponent.h"
-#include "./Component/GrUniformComponent.h"
-#include "./Component/InputComponent.h"
-#include "./Component/RenderConfigComponent.h"
+#include "./Entity/BrushEntity.h"
+#include "./Entity/CameraEntity.h"
+#include "./Entity/ClientInputEntity.h"
+#include "./Entity/ConfigEntity.h"
+#include "./Entity/GrGlobalEntity.h"
+#include "./Entity/PaintableEntity.h"
+#include "./View/GrModelGeometriesView.h"
+#include "./View/PaintedTexturesView.h"
+#include "./View/RenderItemsView.h"
+#include "./View/TransformUpdatingView.h"
+#include "./system/render_system.h"
 
-class GameEntity {
+class RootManager {
  public:
-  GameEntity() {
-    event_component = std::make_unique<EventComponent>();
-    input_component = std::make_unique<InputComponent>();
-    gr_shader_manager_component = std::make_unique<GrShaderManagerComponent>();
-    render_config_component = std::make_unique<RenderConfigComponent>(
-        glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-    gr_time_uniform_component =
-        std::make_unique<GrUniformComponent>("TimeBlock");
-  }
+  RootManager();
 
-  std::unique_ptr<EventComponent> event_component;
-  std::unique_ptr<InputComponent> input_component;
-  std::unique_ptr<GrShaderManagerComponent> gr_shader_manager_component;
-  std::unique_ptr<RenderConfigComponent> render_config_component;
-  std::unique_ptr<GrUniformComponent> gr_time_uniform_component;
+  std::unique_ptr<ConfigEntity> config_entity;
+  std::unique_ptr<ClientInputEntity> client_input_entity;
+  std::unique_ptr<GrGlobalEntity> gr_global_entity;
+  std::unique_ptr<CameraEntity> camera_entity;
+  std::unique_ptr<BrushEntity> brush_entity;
+  std::unique_ptr<PaintableEntity> paintable_entity;
+  std::unique_ptr<RenderItemsView> render_items_view;
+  std::unique_ptr<PaintedTexturesView> painted_textures_view;
+  std::unique_ptr<TransformUpdatingView> transform_updating_view;
+  std::unique_ptr<GrModelGeometriesView> gr_model_geometries_view;
 };

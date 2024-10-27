@@ -24,20 +24,28 @@
 
 #pragma once
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
+#include "./Component/GrGeometryComponent.h"
+#include "./Component/GrUniformComponent.h"
+#include "./Entity/PaintableEntity.h"
 
-namespace manage_system {
+struct GrModelGeometry {
+  std::reference_wrapper<GrGeometryComponent> gr_geometry_component;
+  std::reference_wrapper<GrUniformComponent> gr_uniform_component;
+};
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
+class GrModelGeometriesView {
+ public:
+  GrModelGeometriesView(
+      std::reference_wrapper<PaintableEntity> paintable_entity) {
+    for (const auto& paintable_part :
+         paintable_entity.get().paintable_part_entities) {
+      gr_model_geometries.push_back(
+          {.gr_geometry_component =
+               std::ref(*paintable_part->gr_geometry_component),
+           .gr_uniform_component =
+               std::ref(*paintable_part->gr_transform_uniform_component)});
+    }
+  }
 
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
-}
-
-}  // namespace manage_system
+  std::vector<GrModelGeometry> gr_model_geometries;
+};

@@ -22,22 +22,22 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "./RootManager.h"
 
-#include "./Component/EventComponent.h"
-#include "./Component/RenderConfigComponent.h"
-#include "./View/PaintedTexturesView.h"
+RootManager::RootManager() {
+  config_entity = std::make_unique<ConfigEntity>();
+  client_input_entity = std::make_unique<ClientInputEntity>();
+  gr_global_entity = std::make_unique<GrGlobalEntity>();
+  camera_entity = std::make_unique<CameraEntity>();
+  brush_entity = std::make_unique<BrushEntity>();
+  paintable_entity = std::make_unique<PaintableEntity>(PaintablePreset::CUBE);
 
-namespace manage_system {
-
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
-
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset;
+  render_items_view = std::make_unique<RenderItemsView>(
+      std::ref(*paintable_entity), std::ref(*camera_entity));
+  painted_textures_view =
+      std::make_unique<PaintedTexturesView>(std::ref(*paintable_entity));
+  transform_updating_view =
+      std::make_unique<TransformUpdatingView>(std::ref(*paintable_entity));
+  gr_model_geometries_view =
+      std::make_unique<GrModelGeometriesView>(std::ref(*paintable_entity));
 }
-
-}  // namespace manage_system

@@ -24,39 +24,17 @@
 
 #pragma once
 
-#include "./Component/BrushComponent.h"
 #include "./Component/CameraComponent.h"
-#include "./Component/GeometryComponent.h"
-#include "./Component/GrFramedTextureComponent.h"
-#include "./Component/GrGeometryComponent.h"
 #include "./Component/GrUniformComponent.h"
 
-class PlayerEntity {
+class CameraEntity {
  public:
-  PlayerEntity() {
+  CameraEntity() {
     camera_component = std::make_unique<CameraComponent>();
-    brush_component = std::make_unique<BrushComponent>();
-
     gr_camera_uniform_component =
         std::make_unique<GrUniformComponent>("CameraBlock");
-    gr_brush_uniform_component =
-        std::make_unique<GrUniformComponent>("BrushBlock");
-    gr_brush_depth_framed_texture_component =
-        std::make_unique<GrFramedTextureComponent>(
-            TextureType::DEPTH, "u_brushDepthTexture", 1024, 1024);
-    brush_quad_geometry_component =
-        std::make_unique<GeometryComponent>(GeometryPreset::QUAD);
-    gr_brush_quad_geometry_component = std::make_unique<GrGeometryComponent>();
   }
 
   std::unique_ptr<CameraComponent> camera_component;
   std::unique_ptr<GrUniformComponent> gr_camera_uniform_component;
-  std::unique_ptr<BrushComponent> brush_component;
-  std::unique_ptr<GrUniformComponent> gr_brush_uniform_component;
-  std::unique_ptr<GrFramedTextureComponent>
-      gr_brush_depth_framed_texture_component;
-
-  // TODO: Integrate to global gr manager
-  std::unique_ptr<GeometryComponent> brush_quad_geometry_component;
-  std::unique_ptr<GrGeometryComponent> gr_brush_quad_geometry_component;
 };
