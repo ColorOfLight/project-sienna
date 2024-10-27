@@ -52,16 +52,16 @@ void adjustViewportSize(
     std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
     std::reference_wrapper<CameraComponent> camera_component) {
-  if (event_component.get().change_canvas_size) {
-    int canvas_width = input_component.get().canvas_size.width;
-    int canvas_height = input_component.get().canvas_size.height;
+  if (event_component.get().update_canvas_size.has_value()) {
+    int canvas_width = event_component.get().update_canvas_size.value().x;
+    int canvas_height = event_component.get().update_canvas_size.value().y;
 
     emscripten_set_canvas_element_size("#canvas", canvas_width, canvas_height);
     glViewport(0, 0, canvas_width, canvas_height);
 
     camera_component.get().needs_update = true;
 
-    event_component.get().change_canvas_size = false;
+    event_component.get().update_canvas_size = std::nullopt;
   }
 }
 

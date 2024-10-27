@@ -23,7 +23,7 @@ const ClientInputComponent = {
 
 const ClientEventComponent = {
   reset: undefined,
-  changeCanvasSize: false,
+  updateCanvasSize: undefined,
 };
 
 window.addEventListener('keydown', (event) => {
@@ -52,12 +52,12 @@ window.addEventListener('pointermove', (event) => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  ClientEventComponent.changeCanvasSize = true;
+  ClientEventComponent.updateCanvasSize = getCanvasSize();
   ClientInputComponent.canvasSize = getCanvasSize();
 });
 
 window.addEventListener('resize', () => {
-  ClientEventComponent.changeCanvasSize = true;
+  ClientEventComponent.updateCanvasSize = getCanvasSize();
   ClientInputComponent.canvasSize = getCanvasSize();
 });
 

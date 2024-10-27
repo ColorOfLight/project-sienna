@@ -24,16 +24,16 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
 #include <optional>
 
 class EventComponent {
  public:
   EventComponent() {
-    change_canvas_size = false;
     reset = std::nullopt;
+    update_canvas_size = std::nullopt;
   }
 
-  bool change_canvas_size;
-
   std::optional<std::monostate> reset;
+  std::optional<glm::ivec2> update_canvas_size;
 };

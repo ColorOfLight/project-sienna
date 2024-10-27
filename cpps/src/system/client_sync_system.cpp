@@ -85,14 +85,18 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
   bool change_canvas_size =
       client_event_component["changeCanvasSize"].as<bool>();
 
-  if (change_canvas_size) {
-    event_component.get().change_canvas_size = true;
-    client_event_component.set("changeCanvasSize", false);
-  }
-
   if (client_event_component["reset"] != emscripten::val::undefined()) {
     event_component.get().reset = std::monostate();
     client_event_component.set("reset", emscripten::val::undefined());
+  }
+
+  if (client_event_component["updateCanvasSize"] !=
+      emscripten::val::undefined()) {
+    event_component.get().update_canvas_size =
+        glm::ivec2(client_event_component["updateCanvasSize"][0].as<int>(),
+                   client_event_component["updateCanvasSize"][1].as<int>());
+    client_event_component.set("updateCanvasSize",
+                               emscripten::val::undefined());
   }
 }
 
