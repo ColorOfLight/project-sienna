@@ -49,12 +49,14 @@ void initContext() {
 }
 
 void adjustViewportSize(
-    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<CameraComponent> camera_component) {
   if (event_component.get().update_canvas_size.has_value()) {
     int canvas_width = event_component.get().update_canvas_size.value().x;
     int canvas_height = event_component.get().update_canvas_size.value().y;
+
+    render_config_component.get().canvas_size = {canvas_width, canvas_height};
 
     emscripten_set_canvas_element_size("#canvas", canvas_width, canvas_height);
     glViewport(0, 0, canvas_width, canvas_height);
@@ -66,14 +68,13 @@ void adjustViewportSize(
 }
 
 void render(
-    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<MaterialComponent> material_component,
     std::reference_wrapper<GrShaderManagerComponent>
         gr_shader_manager_component,
     std::reference_wrapper<RenderItemsView> render_items_view) {
-  glViewport(0, 0, input_component.get().canvas_size.width,
-             input_component.get().canvas_size.height);
+  glViewport(0, 0, render_config_component.get().canvas_size.x,
+             render_config_component.get().canvas_size.y);
 
   const auto& clear_color = render_config_component.get().clear_color;
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);

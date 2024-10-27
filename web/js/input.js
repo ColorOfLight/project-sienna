@@ -13,7 +13,6 @@ const ClientInputComponent = {
   },
   isPointerDown: false,
   pointerPosition: [0, 0],
-  canvasSize: getCanvasSize(),
   brush: {
     nozzleFov: 5,
     airPressure: 1.0,
@@ -53,12 +52,10 @@ window.addEventListener('pointermove', (event) => {
 
 window.addEventListener('DOMContentLoaded', () => {
   ClientEventComponent.updateCanvasSize = getCanvasSize();
-  ClientInputComponent.canvasSize = getCanvasSize();
 });
 
 window.addEventListener('resize', () => {
   ClientEventComponent.updateCanvasSize = getCanvasSize();
-  ClientInputComponent.canvasSize = getCanvasSize();
 });
 
 window.ClientInputComponent = ClientInputComponent;

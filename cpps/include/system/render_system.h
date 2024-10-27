@@ -33,7 +33,6 @@
 #include "./Component/GrShaderManagerComponent.h"
 #include "./Component/GrTextureComponent.h"
 #include "./Component/GrUniformComponent.h"
-#include "./Component/InputComponent.h"
 #include "./Component/MaterialComponent.h"
 #include "./Component/RenderConfigComponent.h"
 #include "./View/RenderItemsView.h"
@@ -43,12 +42,11 @@ namespace render_system {
 void initContext();
 
 void adjustViewportSize(
-    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<CameraComponent> camera_component);
 
 void render(
-    std::reference_wrapper<InputComponent> input_component,
     std::reference_wrapper<RenderConfigComponent> render_config_component,
     std::reference_wrapper<MaterialComponent> material_component,
     std::reference_wrapper<GrShaderManagerComponent>

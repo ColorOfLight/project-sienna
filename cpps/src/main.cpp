@@ -94,8 +94,8 @@ int main() {
         std::ref(*client_input_entity.get().event_component));
 
     render_system::adjustViewportSize(
-        std::ref(*client_input_entity.get().input_component),
         std::ref(*client_input_entity.get().event_component),
+        std::ref(*config_entity.get().render_config_component),
         std::ref(*camera_entity.get().camera_component));
 
     transform_system::transformCamera(
@@ -107,7 +107,7 @@ int main() {
         std::ref(*paintable_entity.get().transform_component));
 
     gr_sync_system::updateCameraUniform(
-        std::ref(*client_input_entity.get().input_component),
+        std::ref(*config_entity.get().render_config_component),
         std::ref(*camera_entity.get().camera_component),
         std::ref(*camera_entity.get().gr_camera_uniform_component));
     gr_sync_system::updateTimeUniform(
@@ -131,6 +131,7 @@ int main() {
       gr_sync_system::updateBrushUniform(
           std::ref(*brush_entity.get().brush_component),
           std::ref(*client_input_entity.get().input_component),
+          std::ref(*config_entity.get().render_config_component),
           std::ref(*camera_entity.get().camera_component),
           std::ref(*brush_entity.get().gr_brush_uniform_component));
 
@@ -162,7 +163,6 @@ int main() {
     gr_sync_system::updateTransformUniforms(transform_updating_view);
 
     render_system::render(
-        std::ref(*client_input_entity.get().input_component),
         std::ref(*config_entity.get().render_config_component),
         std::ref(*paintable_entity.get().material_component),
         std::ref(*gr_global_entity.get().gr_shader_manager_component),

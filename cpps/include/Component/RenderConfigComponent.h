@@ -29,7 +29,10 @@
 class RenderConfigComponent {
  public:
   RenderConfigComponent(const glm::vec4& clear_color)
-      : clear_color(clear_color) {}
+      : clear_color(clear_color) {
+    canvas_size = glm::ivec2(0, 0);
+  }
 
   glm::vec4 clear_color;
+  glm::ivec2 canvas_size;
 };

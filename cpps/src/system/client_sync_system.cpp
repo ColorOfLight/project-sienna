@@ -58,11 +58,6 @@ void syncInput(std::reference_wrapper<InputComponent> input_component) {
   input_component.get().pointer_position.x = pointer_position[0].as<float>();
   input_component.get().pointer_position.y = pointer_position[1].as<float>();
 
-  emscripten::val canvas_size = client_input_component["canvasSize"];
-
-  input_component.get().canvas_size.width = canvas_size[0].as<int>();
-  input_component.get().canvas_size.height = canvas_size[1].as<int>();
-
   emscripten::val brush_input = client_input_component["brush"];
 
   input_component.get().brush_input.air_pressure =
