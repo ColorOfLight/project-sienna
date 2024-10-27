@@ -40,22 +40,35 @@ inline const std::string SHADER_DEFAULT_HEADER = R"(#version 300 es
     precision mediump float;
 )";
 
+inline std::string getStringFromSource(
+    shader_source::ShaderSourceGroup source_group) {
+  std::string source = "";
+
+  for (const auto& block : source_group.blocks) {
+    source += block;
+  }
+
+  source += source_group.source;
+
+  return source;
+}
+
 inline std::string getVertexShaderSource(ShaderType shader_type) {
   std::string shader_source = SHADER_DEFAULT_HEADER;
 
   switch (shader_type) {
     case ShaderType::TEXTURE_TEST:
     case ShaderType::PHONG:
-      shader_source += shader_source::basic_vertex;
+      shader_source += getStringFromSource(shader_source::basic_vertex);
       break;
     case ShaderType::PAINT_BLEND:
-      shader_source += shader_source::texture_quad_vertex;
+      shader_source += getStringFromSource(shader_source::texture_quad_vertex);
       break;
     case ShaderType::BRUSH_DECAL:
-      shader_source += shader_source::brush_decal_vertex;
+      shader_source += getStringFromSource(shader_source::brush_decal_vertex);
       break;
     case ShaderType::BRUSH_DEPTH:
-      shader_source += shader_source::brush_depth_vertex;
+      shader_source += getStringFromSource(shader_source::brush_depth_vertex);
       break;
     default:
       throw std::runtime_error("ERROR::SHADER::VERTEX::INVALID_SHADER_TYPE\n");
@@ -69,19 +82,20 @@ inline std::string getFragmentShaderSource(ShaderType shader_type) {
 
   switch (shader_type) {
     case ShaderType::TEXTURE_TEST:
-      shader_source += shader_source::texture_test_fragment;
+      shader_source +=
+          getStringFromSource(shader_source::texture_test_fragment);
       break;
     case ShaderType::PHONG:
-      shader_source += shader_source::phong_fragment;
+      shader_source += getStringFromSource(shader_source::phong_fragment);
       break;
     case ShaderType::BRUSH_DECAL:
-      shader_source += shader_source::brush_decal_fragment;
+      shader_source += getStringFromSource(shader_source::brush_decal_fragment);
       break;
     case ShaderType::BRUSH_DEPTH:
-      shader_source += shader_source::empty_fragment;
+      shader_source += getStringFromSource(shader_source::empty_fragment);
       break;
     case ShaderType::PAINT_BLEND:
-      shader_source += shader_source::paint_blend_fragment;
+      shader_source += getStringFromSource(shader_source::paint_blend_fragment);
       break;
     default:
       throw std::runtime_error(
