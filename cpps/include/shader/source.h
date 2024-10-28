@@ -155,9 +155,11 @@ inline const ShaderSourceGroup brush_decal_fragment = {
 
         float tanHalfFov = tan(u_brush_nozzleFov / 2.0);
         float distance = length(v_position - u_brush_position);
+        vec3 normal = normalize(v_normal);
 
         float strength_coff = g_intensity_coff * u_brush_airPressure / (tanHalfFov * tanHalfFov * distance * distance);
-        float strength = strength_coff * (1.0 - smoothstep(0.0, 1.0, centerDistance));
+        float normal_coff = max(0.0, dot(normal, normalize(u_brush_position - v_position)));
+        float strength = strength_coff * normal_coff * (1.0 - smoothstep(0.0, 1.0, centerDistance));
 
         float baseIntensity = 2.0 / 1000.0 * u_time_delta_ms;
         float intensity = clamp(strength * baseIntensity, 0.0, 1.0);
