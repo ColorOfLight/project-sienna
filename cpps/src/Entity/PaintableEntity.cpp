@@ -33,38 +33,51 @@ PaintableEntity::PaintableEntity(PaintablePreset preset) {
   if (preset == PaintablePreset::CUBE) {
     // front face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.5f)));
 
     // back face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(180.0f), 0.0f)),
         glm::vec3(0.0f, 0.0f, -0.5f)));
 
     // left face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(-90.0f), 0.0f)),
         glm::vec3(-0.5f, 0.0f, 0.0f)));
 
     // right face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(0.0f, glm::radians(90.0f), 0.0f)),
         glm::vec3(0.5f, 0.0f, 0.0f)));
 
     // top face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f)),
         glm::vec3(0.0f, 0.5f, 0.0f)));
 
     // bottom face
     paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
-        PaintablePartPreset::CUBE_PART, glm::vec3(1.0f, 1.0f, 1.0f),
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f)),
         glm::vec3(0.0f, -0.5f, 0.0f)));
+  } else if (preset == PaintablePreset::PLANE) {
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::quat(glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f)),
+        glm::vec3(0.0f, 0.0f, 0.0f)));
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::quat(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f)),
+        glm::vec3(0.0f, -0.0001f, 0.0f)));
+  } else if (preset == PaintablePreset::SPHERE) {
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::SPHERE, glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.0f)));
   } else {
     throw std::invalid_argument("Invalid paintable preset");
   }

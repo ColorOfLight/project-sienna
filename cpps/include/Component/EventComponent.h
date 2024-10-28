@@ -27,13 +27,21 @@
 #include <glm/glm.hpp>
 #include <optional>
 
+enum class ModelOptions {
+  CUBE = 0,
+  PLANE = 1,
+  SPHERE = 2,
+};
+
 class EventComponent {
  public:
   EventComponent() {
     reset = std::nullopt;
     update_canvas_size = std::nullopt;
+    update_model = std::nullopt;
   }
 
   std::optional<std::monostate> reset;
   std::optional<glm::ivec2> update_canvas_size;
+  std::optional<ModelOptions> update_model;
 };

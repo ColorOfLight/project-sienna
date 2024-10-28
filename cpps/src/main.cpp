@@ -73,9 +73,27 @@ int main() {
 
   auto main_loop = [root_manager = std::ref(*root_manager)](float elapsed_ms,
                                                             float delta_ms) {
-    auto config_entity = std::ref(*root_manager.get().config_entity);
     auto client_input_entity =
         std::ref(*root_manager.get().client_input_entity);
+
+    client_sync_system::syncInput(
+        std::ref(*client_input_entity.get().input_component));
+    client_sync_system::consumeEvent(
+        std::ref(*client_input_entity.get().event_component));
+
+    if (manage_system::isChangeModel(
+            std::ref(*client_input_entity.get().event_component))) {
+      manage_system::resetModel(
+          std::ref(*client_input_entity.get().event_component), root_manager);
+      for (const auto& paintable_part :
+           root_manager.get().paintable_entity->paintable_part_entities) {
+        gr_sync_system::updateGeometry(
+            std::ref(*paintable_part->geometry_component),
+            std::ref(*paintable_part->gr_geometry_component));
+      }
+    }
+
+    auto config_entity = std::ref(*root_manager.get().config_entity);
     auto gr_global_entity = std::ref(*root_manager.get().gr_global_entity);
     auto camera_entity = std::ref(*root_manager.get().camera_entity);
     auto brush_entity = std::ref(*root_manager.get().brush_entity);
@@ -87,11 +105,6 @@ int main() {
         std::ref(*root_manager.get().transform_updating_view);
     auto gr_model_geometries_view =
         std::ref(*root_manager.get().gr_model_geometries_view);
-
-    client_sync_system::syncInput(
-        std::ref(*client_input_entity.get().input_component));
-    client_sync_system::consumeEvent(
-        std::ref(*client_input_entity.get().event_component));
 
     render_system::adjustViewportSize(
         std::ref(*client_input_entity.get().event_component),

@@ -30,7 +30,7 @@
 #include "./Component/TransformComponent.h"
 #include "./PaintablePartEntity.h"
 
-enum class PaintablePreset { CUBE };
+enum class PaintablePreset { CUBE, PLANE, SPHERE };
 
 class PaintableEntity {
  public:

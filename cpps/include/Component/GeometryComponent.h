@@ -33,7 +33,7 @@ struct Vertex {
   glm::vec2 tex_coords;
 };
 
-enum class GeometryPreset { PLANE, QUAD };
+enum class GeometryPreset { PLANE, QUAD, SPHERE };
 
 class GeometryComponent {
  public:

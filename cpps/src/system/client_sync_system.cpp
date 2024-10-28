@@ -93,6 +93,12 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
     client_event_component.set("updateCanvasSize",
                                emscripten::val::undefined());
   }
+
+  if (client_event_component["changeModel"] != emscripten::val::undefined()) {
+    event_component.get().update_model = static_cast<ModelOptions>(
+        client_event_component["changeModel"].as<int>());
+    client_event_component.set("changeModel", emscripten::val::undefined());
+  }
 }
 
 }  // namespace client_sync_system

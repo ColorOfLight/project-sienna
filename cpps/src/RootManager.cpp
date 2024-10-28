@@ -41,3 +41,19 @@ RootManager::RootManager() {
   gr_model_geometries_view =
       std::make_unique<GrModelGeometriesView>(std::ref(*paintable_entity));
 }
+
+void RootManager::resetPaintable(PaintablePreset paintable_preset) {
+  paintable_entity = std::make_unique<PaintableEntity>(paintable_preset);
+  resetPaintableViews();
+}
+
+void RootManager::resetPaintableViews() {
+  render_items_view = std::make_unique<RenderItemsView>(
+      std::ref(*paintable_entity), std::ref(*camera_entity));
+  painted_textures_view =
+      std::make_unique<PaintedTexturesView>(std::ref(*paintable_entity));
+  transform_updating_view =
+      std::make_unique<TransformUpdatingView>(std::ref(*paintable_entity));
+  gr_model_geometries_view =
+      std::make_unique<GrModelGeometriesView>(std::ref(*paintable_entity));
+}

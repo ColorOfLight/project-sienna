@@ -33,7 +33,7 @@
 #include "./Component/GrUniformComponent.h"
 #include "./Component/TransformComponent.h"
 
-enum class PaintablePartPreset { CUBE_PART };
+enum class PaintablePartPreset { PLANE, SPHERE };
 
 class PaintablePartEntity {
  public:

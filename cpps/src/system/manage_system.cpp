@@ -50,4 +50,25 @@ void resetPainted(
   event_component.get().reset = std::nullopt;
 }
 
+void resetModel(std::reference_wrapper<EventComponent> event_component,
+                std::reference_wrapper<RootManager> root_manager) {
+  auto model_preset = event_component.get().update_model.value();
+
+  switch (model_preset) {
+    case ModelOptions::CUBE:
+      root_manager.get().resetPaintable(PaintablePreset::CUBE);
+      break;
+    case ModelOptions::PLANE:
+      root_manager.get().resetPaintable(PaintablePreset::PLANE);
+      break;
+    case ModelOptions::SPHERE:
+      root_manager.get().resetPaintable(PaintablePreset::SPHERE);
+      break;
+    default:
+      std::runtime_error("Invalid model preset");
+  }
+
+  event_component.get().update_model = std::nullopt;
+}
+
 }  // namespace manage_system

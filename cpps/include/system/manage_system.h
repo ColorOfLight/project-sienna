@@ -26,6 +26,7 @@
 
 #include "./Component/EventComponent.h"
 #include "./Component/RenderConfigComponent.h"
+#include "./RootManager.h"
 #include "./View/PaintedTexturesView.h"
 
 namespace manage_system {
@@ -39,5 +40,13 @@ inline bool isResetTrue(
     std::reference_wrapper<EventComponent> event_component) {
   return event_component.get().reset.has_value();
 }
+
+inline bool isChangeModel(
+    std::reference_wrapper<EventComponent> event_component) {
+  return event_component.get().update_model.has_value();
+}
+
+void resetModel(std::reference_wrapper<EventComponent> event_component,
+                std::reference_wrapper<RootManager> root_manager);
 
 }  // namespace manage_system

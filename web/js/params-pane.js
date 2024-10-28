@@ -1,5 +1,5 @@
 import {Pane} from 'tweakpane';
-
+import { modelOptions } from './input';
 
 const pane = new Pane(
   {container: document.getElementById('tweakpane-params'),}
@@ -30,6 +30,19 @@ brushFolder.addBinding(window.ClientInputComponent.brush, 'paintColor', {
   picker: 'inline',
   expanded: true,
 });
+
+const modelFolder = paramsFolder.addFolder({
+  title: 'Model',
+});
+
+modelFolder.addBinding(window.ClientStateComponent, 'model', {
+  options: modelOptions.reduce((acc, value) => ({ ...acc, [value]: value,}), {}),
+}).on('change',
+  (value) => {
+    window.ClientEventComponent.changeModel = modelOptions.indexOf(value.value);
+  }
+);
+
 
 const actionsFolder = paramsFolder.addFolder({
   title: 'Actions'
