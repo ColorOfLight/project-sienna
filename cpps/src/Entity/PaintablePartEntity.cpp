@@ -47,7 +47,7 @@ PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
           TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
           painted_map_height);
 
-  if (preset == PaintablePartPreset::CUBE_PART) {
+  if (preset == PaintablePartPreset::PLANE) {
     geometry_component =
         std::make_unique<GeometryComponent>(GeometryPreset::PLANE);
   } else {
