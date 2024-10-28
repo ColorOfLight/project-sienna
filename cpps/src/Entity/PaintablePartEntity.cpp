@@ -50,6 +50,9 @@ PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
   if (preset == PaintablePartPreset::PLANE) {
     geometry_component =
         std::make_unique<GeometryComponent>(GeometryPreset::PLANE);
+  } else if (preset == PaintablePartPreset::SPHERE) {
+    geometry_component =
+        std::make_unique<GeometryComponent>(GeometryPreset::SPHERE);
   } else {
     throw std::invalid_argument("Invalid paintable part preset");
   }

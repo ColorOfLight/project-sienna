@@ -74,6 +74,10 @@ PaintableEntity::PaintableEntity(PaintablePreset preset) {
         PaintablePartPreset::PLANE, glm::vec3(1.0f, 1.0f, 1.0f),
         glm::quat(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f)),
         glm::vec3(0.0f, -0.0001f, 0.0f)));
+  } else if (preset == PaintablePreset::SPHERE) {
+    paintable_part_entities.push_back(std::make_unique<PaintablePartEntity>(
+        PaintablePartPreset::SPHERE, glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.0f)));
   } else {
     throw std::invalid_argument("Invalid paintable preset");
   }
