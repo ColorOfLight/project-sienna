@@ -122,6 +122,28 @@ int main() {
           painted_textures_view);
     }
 
+    if (manage_system::isChangeModel(
+            std::ref(*client_input_entity.get().event_component))) {
+      manage_system::resetModel(
+          std::ref(*client_input_entity.get().event_component), root_manager);
+      for (const auto& paintable_part :
+           root_manager.get().paintable_entity->paintable_part_entities) {
+        gr_sync_system::updateGeometry(
+            std::ref(*paintable_part->geometry_component),
+            std::ref(*paintable_part->gr_geometry_component));
+      }
+
+      // TODO: remove this code with improving the initial declarations
+      paintable_entity = std::ref(*root_manager.get().paintable_entity);
+      render_items_view = std::ref(*root_manager.get().render_items_view);
+      painted_textures_view =
+          std::ref(*root_manager.get().painted_textures_view);
+      transform_updating_view =
+          std::ref(*root_manager.get().transform_updating_view);
+      gr_model_geometries_view =
+          std::ref(*root_manager.get().gr_model_geometries_view);
+    }
+
     if (input_sync_system::isPointerDown(
             std::ref(*client_input_entity.get().input_component))) {
       input_sync_system::syncBrush(
