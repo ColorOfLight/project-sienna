@@ -40,6 +40,9 @@ class RootManager {
  public:
   RootManager();
 
+  void resetPaintable(PaintablePreset paintable_preset);
+  void resetPaintableViews();
+
   std::unique_ptr<ConfigEntity> config_entity;
   std::unique_ptr<ClientInputEntity> client_input_entity;
   std::unique_ptr<GrGlobalEntity> gr_global_entity;
