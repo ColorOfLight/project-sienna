@@ -20,9 +20,20 @@ const ClientInputComponent = {
   }
 };
 
+export const modelOptions = [
+  'Cube',
+  'Plane',
+  'Sphere',
+];
+
+const ClientStateComponent = {
+  model: modelOptions[0],
+};
+
 const ClientEventComponent = {
   reset: undefined,
   updateCanvasSize: undefined,
+  changeModel: undefined,
 };
 
 window.addEventListener('keydown', (event) => {
@@ -59,4 +70,5 @@ window.addEventListener('resize', () => {
 });
 
 window.ClientInputComponent = ClientInputComponent;
+window.ClientStateComponent = ClientStateComponent;
 window.ClientEventComponent = ClientEventComponent;
