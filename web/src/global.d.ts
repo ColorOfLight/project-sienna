@@ -10,6 +10,9 @@ declare global {
     clientInputComponent: ClientInputComponent;
     clientStateComponent: ClientStateComponent;
     clientEventComponent: ClientEventComponent;
+
+    // Created by Vite config
+    __APP_VERSION__: string;
   }
 }
 

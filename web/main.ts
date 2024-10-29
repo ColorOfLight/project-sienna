@@ -1,4 +1,4 @@
 import "./src/input";
-import "./js/versioning";
+import "./src/versioning";
 import "./js/params-pane";
 import "./js/controls-pane";
