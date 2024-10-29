@@ -22,3 +22,9 @@ export type ClientEventComponent = {
 export type ClientStateComponent = {
   model: ModelOptions;
 };
+
+export type ControlStrings = {
+  [key: string]: {
+    [key: string]: string;
+  };
+};
