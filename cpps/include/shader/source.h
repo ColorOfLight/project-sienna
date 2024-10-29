@@ -188,7 +188,7 @@ inline const ShaderSourceGroup paint_blend_fragment = {.source = R"(
 
         float prevColorIntensity = prevIntensity * (1.0 - paintIntensity);
 
-        float blendFactor = paintIntensity / (prevColorIntensity + paintIntensity);
+        float blendFactor = paintIntensity > 1e-04 ? paintIntensity / (prevColorIntensity + paintIntensity) : 0.0;
 
         vec3 newColor = mix(prevPaintedColor.rgb, paintColor.rgb, blendFactor);
 
