@@ -139,7 +139,7 @@ inline const ShaderSourceGroup brush_decal_fragment = {
         float centerDistance = length(v_projectedPosition.xy);
 
         // Discard fragments outside the unit circle
-        if (centerDistance > 1.0)
+        if (centerDistance - 1e-05 > 1.0)
         {
             discard;
         }
@@ -188,7 +188,7 @@ inline const ShaderSourceGroup paint_blend_fragment = {.source = R"(
 
         float prevColorIntensity = prevIntensity * (1.0 - paintIntensity);
 
-        float blendFactor = paintIntensity > 1e-04 ? paintIntensity / (prevColorIntensity + paintIntensity) : 0.0;
+        float blendFactor = paintIntensity > 1e-05 ? paintIntensity / (prevColorIntensity + paintIntensity) : 0.0;
 
         vec3 newColor = mix(prevPaintedColor.rgb, paintColor.rgb, blendFactor);
 
