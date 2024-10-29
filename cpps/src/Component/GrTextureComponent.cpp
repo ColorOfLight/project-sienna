@@ -39,6 +39,10 @@ GrTextureComponent::GrTextureComponent(TextureType texture_type,
   } else if (texture_type == TextureType::RGBA) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, nullptr);
+  } else if (texture_type == TextureType::RGBA16) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA,
+                 GL_FLOAT, nullptr);
+
   } else if (texture_type == TextureType::DEPTH) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0,
                  GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, nullptr);
