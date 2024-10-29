@@ -117,6 +117,9 @@ void updatePaintedMap(
                     current_framed_texture.get().framebuffer_id);
   glViewport(0, 0, current_framed_texture.get().width,
              current_framed_texture.get().height);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+  glClear(GL_COLOR_BUFFER_BIT);
 
   drawGrComponents(ShaderType::PAINT_BLEND, gr_shader_manager_component,
                    gr_geometry_component, {}, gr_texture_components);

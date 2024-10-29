@@ -43,10 +43,13 @@ std::vector<unsigned int> generateSphereIndices(int width_segments = 64,
 
 GeometryComponent::GeometryComponent(GeometryPreset preset) {
   if (preset == GeometryPreset::PLANE) {
+    int width_segments = 16;
+    int height_segments = 16;
+
     vertices = generatePlaneVertices(glm::vec3(1.0f, 0.0f, 0.0f),
                                      glm::vec3(0.0f, 1.0f, 0.0f), 0.5f, 0.5f,
-                                     0.0f, 1, 1);
-    indices = generatePlaneIndices(1, 1);
+                                     0.0f, width_segments, height_segments);
+    indices = generatePlaneIndices(width_segments, height_segments);
   } else if (preset == GeometryPreset::QUAD) {
     vertices = generatePlaneVertices(glm::vec3(1.0f, 0.0f, 0.0f),
                                      glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 1.0f,

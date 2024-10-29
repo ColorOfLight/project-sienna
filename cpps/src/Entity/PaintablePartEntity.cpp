@@ -40,11 +40,11 @@ PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
 
   gr_paint_framed_texture_component =
       std::make_unique<GrFramedTextureComponent>(
-          TextureType::RGBA, "u_paintMapTexture", painted_map_width,
+          TextureType::RGBA16, "u_paintMapTexture", painted_map_width,
           painted_map_height);
   gr_painted_ping_pong_texture_component =
       std::make_unique<GrPingPongTextureComponent>(
-          TextureType::RGBA, "u_paintedMapTexture", painted_map_width,
+          TextureType::RGBA16, "u_paintedMapTexture", painted_map_width,
           painted_map_height);
 
   if (preset == PaintablePartPreset::PLANE) {
