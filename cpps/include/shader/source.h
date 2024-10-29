@@ -285,12 +285,12 @@ inline const ShaderSourceGroup phong_fragment = {.blocks = {camera_block},
     {
         AmbientLight g_ambient_light;
         g_ambient_light.color = vec3(0.8, 0.8, 0.75); // warm room light
-        g_ambient_light.intensity = 0.3;
+        g_ambient_light.intensity = 0.4;
 
         DirectionalLight g_ceiling_light;
         g_ceiling_light.color = vec3(1.0, 1.0, 0.95); // warm ceiling light
         g_ceiling_light.direction = vec3(0.0, -1.0, 0.0);
-        g_ceiling_light.intensity = 0.8;
+        g_ceiling_light.intensity = 0.9;
 
         PointLight g_fill_light;
         g_fill_light.color = vec3(1.0, 0.85, 0.7); // warm white as from a lamp
