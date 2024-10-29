@@ -1,5 +1,5 @@
 import {Pane} from 'tweakpane';
-import { modelOptions } from './input';
+import { modelOptions } from '../src/input';
 
 const pane = new Pane(
   {container: document.getElementById('tweakpane-params'),}
@@ -13,19 +13,19 @@ const brushFolder = paramsFolder.addFolder({
   title: 'Brush',
 });
 
-brushFolder.addBinding(window.ClientInputComponent.brush, 'airPressure', {
+brushFolder.addBinding(window.clientInputComponent.brush, 'airPressure', {
   step: 0.1,
   min: 1,
   max: 8,
 });
 
-brushFolder.addBinding(window.ClientInputComponent.brush, 'nozzleFov', {
+brushFolder.addBinding(window.clientInputComponent.brush, 'nozzleFov', {
   step: 5,
   min: 5,
   max: 45,
 });
 
-brushFolder.addBinding(window.ClientInputComponent.brush, 'paintColor', {
+brushFolder.addBinding(window.clientInputComponent.brush, 'paintColor', {
   color: {type: 'float'},
   picker: 'inline',
   expanded: true,
@@ -35,11 +35,11 @@ const modelFolder = paramsFolder.addFolder({
   title: 'Model',
 });
 
-modelFolder.addBinding(window.ClientStateComponent, 'model', {
+modelFolder.addBinding(window.clientStateComponent, 'model', {
   options: modelOptions.reduce((acc, value) => ({ ...acc, [value]: value,}), {}),
 }).on('change',
   (value) => {
-    window.ClientEventComponent.changeModel = modelOptions.indexOf(value.value);
+    window.clientEventComponent.changeModel = modelOptions.indexOf(value.value);
   }
 );
 
@@ -54,6 +54,6 @@ const resetPaintButton = actionsFolder.addButton({
 
 resetPaintButton.on('click',
   () => {
-    window.ClientEventComponent.reset = true;
+    window.clientEventComponent.reset = true;
   }
 );
