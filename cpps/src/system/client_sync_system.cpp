@@ -99,6 +99,16 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
         client_event_component["changeModel"].as<int>());
     client_event_component.set("changeModel", emscripten::val::undefined());
   }
+
+  if (client_event_component["resetPaint"] != emscripten::val::undefined()) {
+    event_component.get().reset_paint = std::monostate();
+    client_event_component.set("resetPaint", emscripten::val::undefined());
+  }
+
+  if (client_event_component["resetPosition"] != emscripten::val::undefined()) {
+    event_component.get().reset_position = std::monostate();
+    client_event_component.set("resetPosition", emscripten::val::undefined());
+  }
 }
 
 }  // namespace client_sync_system

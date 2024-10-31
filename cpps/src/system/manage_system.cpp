@@ -47,7 +47,7 @@ void resetPainted(
                  render_config_component.get().clear_color.b, 1.0f);
   }
 
-  event_component.get().reset = std::nullopt;
+  event_component.get().reset_paint = std::nullopt;
 }
 
 void resetModel(std::reference_wrapper<EventComponent> event_component,
@@ -69,6 +69,16 @@ void resetModel(std::reference_wrapper<EventComponent> event_component,
   }
 
   event_component.get().update_model = std::nullopt;
+}
+
+void resetPosition(
+    std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<TransformComponent> transform_component) {
+  camera_component.get().reset();
+  transform_component.get().reset();
+
+  event_component.get().reset_position = std::nullopt;
 }
 
 }  // namespace manage_system
