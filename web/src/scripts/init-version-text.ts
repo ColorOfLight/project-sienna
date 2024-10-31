@@ -7,6 +7,6 @@ export const initVersionText = () => {
   );
 
   if (versionElement != null) {
-    versionElement.innerText = `v${window.__APP_VERSION__}`;
+    versionElement.innerText = `v${__APP_VERSION__}`;
   }
 };
