@@ -10,10 +10,9 @@ declare global {
     clientInputComponent: ClientInputComponent;
     clientStateComponent: ClientStateComponent;
     clientEventComponent: ClientEventComponent;
-
-    // Created by Vite config
-    __APP_VERSION__: string;
   }
+
+  declare const __APP_VERSION__: string;
 }
 
 // This is required to ensure the file is treated as a module
