@@ -59,6 +59,18 @@ button {
   display: block;
 }
 
+.popup-arrow-up {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #666;
+}
+
 #app {
   height: 100%;
 }
@@ -97,4 +109,11 @@ button {
 
 #mobile-warning-popup .popup-container {
   align-self: center;
+}
+
+#initial-info-popup {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
