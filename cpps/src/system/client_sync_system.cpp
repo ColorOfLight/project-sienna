@@ -32,7 +32,7 @@ namespace client_sync_system {
 
 void syncInput(std::reference_wrapper<InputComponent> input_component) {
   emscripten::val client_input_component =
-      emscripten::val::global("ClientInputComponent");
+      emscripten::val::global("clientInputComponent");
 
   emscripten::val pressed_key_map = client_input_component["pressedKeyMap"];
 
@@ -75,7 +75,7 @@ void syncInput(std::reference_wrapper<InputComponent> input_component) {
 
 void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
   emscripten::val client_event_component =
-      emscripten::val::global("ClientEventComponent");
+      emscripten::val::global("clientEventComponent");
 
   bool change_canvas_size =
       client_event_component["changeCanvasSize"].as<bool>();

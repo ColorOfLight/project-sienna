@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2016",
+    // "lib": [],
+
+    /* Modules */
+    "module": "commonjs",
+
+    /* JavaScript Support */
+    "allowJs": true,
+    "checkJs": false,
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
