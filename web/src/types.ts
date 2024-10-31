@@ -25,6 +25,8 @@ export type ClientEventComponent = {
   reset: boolean | undefined;
   updateCanvasSize: number[] | undefined;
   changeModel: ModelOptions | undefined;
+  resetPaint: boolean | undefined;
+  resetPosition: boolean | undefined;
 };
 
 export type ClientStateComponent = {

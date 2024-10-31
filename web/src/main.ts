@@ -37,6 +37,8 @@ const clientEventComponent: ClientEventComponent = {
   reset: undefined,
   updateCanvasSize: undefined,
   changeModel: undefined,
+  resetPaint: undefined,
+  resetPosition: undefined,
 };
 
 // Expose components to the global scope for WASM to access
