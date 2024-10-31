@@ -2,7 +2,7 @@ import {
   ClientInputComponent,
   ClientEventComponent,
   ClientStateComponent,
-  ModelOptions,
+  modelOptionStrings,
 } from "./types";
 
 const canvas = document.getElementById("canvas");
@@ -39,10 +39,8 @@ const clientInputComponent: ClientInputComponent = {
   },
 };
 
-export const modelOptions: ModelOptions[] = ["Cube", "Plane", "Sphere"];
-
 const clientStateComponent: ClientStateComponent = {
-  model: modelOptions[0],
+  model: modelOptionStrings[0],
 };
 
 const clientEventComponent: ClientEventComponent = {

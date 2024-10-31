@@ -1,3 +1,13 @@
+export enum ModelOptions {
+  Cube = 0,
+  Plane = 1,
+  Sphere = 2,
+}
+
+export const modelOptionStrings = Object.keys(ModelOptions).filter((key) =>
+  isNaN(Number(key))
+) as (keyof typeof ModelOptions)[];
+
 export type ClientInputComponent = {
   pressedKeyMap: {
     [key: KeyboardEvent["code"]]: boolean;
@@ -11,8 +21,6 @@ export type ClientInputComponent = {
   };
 };
 
-export type ModelOptions = "Cube" | "Plane" | "Sphere";
-
 export type ClientEventComponent = {
   reset: boolean | undefined;
   updateCanvasSize: number[] | undefined;
@@ -20,7 +28,7 @@ export type ClientEventComponent = {
 };
 
 export type ClientStateComponent = {
-  model: ModelOptions;
+  model: (typeof modelOptionStrings)[number];
 };
 
 export type ControlStrings = {
