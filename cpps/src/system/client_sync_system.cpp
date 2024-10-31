@@ -80,11 +80,6 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
   bool change_canvas_size =
       client_event_component["changeCanvasSize"].as<bool>();
 
-  if (client_event_component["reset"] != emscripten::val::undefined()) {
-    event_component.get().reset = std::monostate();
-    client_event_component.set("reset", emscripten::val::undefined());
-  }
-
   if (client_event_component["updateCanvasSize"] !=
       emscripten::val::undefined()) {
     event_component.get().update_canvas_size =

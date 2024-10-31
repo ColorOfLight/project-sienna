@@ -33,11 +33,6 @@
 
 namespace manage_system {
 
-inline bool isResetTrue(
-    std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset.has_value();
-}
-
 inline bool isResetPaintTrue(
     std::reference_wrapper<EventComponent> event_component) {
   return event_component.get().reset_paint.has_value();
