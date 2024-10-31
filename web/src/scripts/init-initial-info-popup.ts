@@ -15,8 +15,8 @@ export const initInitialInfoPopup = () => {
     "Initial info popup close element"
   );
 
-  if (isPopupSeen()) {
-    infoPopupElement.classList.add("display-none");
+  if (!isPopupSeen()) {
+    infoPopupElement.classList.remove("display-none");
   }
 
   infoPopupCloseElement.addEventListener("click", () => {
