@@ -8,6 +8,8 @@ import { initInputHandlers } from "./scripts/init-input";
 import { initParamsPane } from "./scripts/init-params-pane";
 import { initControlsPane } from "./scripts/init-controls-pane";
 import { initVersionText } from "./scripts/init-version-text";
+import { initMobilePopup } from "./scripts/init-mobile-popup";
+import { initInitialInfoPopup } from "./scripts/init-initial-info-popup";
 
 const clientInputComponent: ClientInputComponent = {
   pressedKeyMap: {
@@ -51,3 +53,5 @@ initParamsPane(
 initControlsPane();
 
 initVersionText();
+initMobilePopup();
+initInitialInfoPopup();

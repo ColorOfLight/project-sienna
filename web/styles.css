@@ -9,14 +9,12 @@ a:visited {
   color: inherit;
 }
 
-#app {
-  height: 100%;
+button {
+  font-family: inherit;
 }
 
-#canvas {
-  width: 100%;
-  height: 100%;
-  position: relative;
+.display-none {
+  display: none !important;
 }
 
 .version-container {
@@ -32,6 +30,57 @@ a:visited {
   gap: 8px;
 }
 
+.popup-container {
+  background-color: #222;
+  color: #ddd;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  border: 2px solid #666;
+}
+
+.popup-button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.popup-button-container > button {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #444;
+  color: #ddd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: right;
+  display: block;
+}
+
+.popup-arrow-up {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #666;
+}
+
+#app {
+  height: 100%;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 /* Tweakpane */
 #tweakpane-params {
   position: absolute;
@@ -45,4 +94,26 @@ a:visited {
   top: 0;
   left: 0;
   margin: 20px;
+}
+
+#mobile-warning-popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+}
+
+#mobile-warning-popup .popup-container {
+  align-self: center;
+}
+
+#initial-info-popup {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
