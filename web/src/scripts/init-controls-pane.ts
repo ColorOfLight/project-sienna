@@ -15,7 +15,6 @@ const controlStrings: ControlStrings = {
   },
   Paint: {
     Paint: "Hold Mouse Click",
-    Reset: "Click Reset Button",
   },
 };
 
