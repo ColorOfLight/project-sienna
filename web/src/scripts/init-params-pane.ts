@@ -76,7 +76,6 @@ export const initParamsPane = (
   });
 
   resetPaintButton.on("click", () => {
-    clientEventComponent.reset = true;
     clientEventComponent.resetPaint = true;
   });
 

@@ -34,7 +34,6 @@ const clientStateComponent: ClientStateComponent = {
 };
 
 const clientEventComponent: ClientEventComponent = {
-  reset: undefined,
   updateCanvasSize: undefined,
   changeModel: undefined,
   resetPaint: undefined,
