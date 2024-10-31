@@ -71,7 +71,15 @@ export const initParamsPane = (
     title: "Reset Paint",
   });
 
+  const resetPositionButton = actionsFolder.addButton({
+    title: "Reset Position",
+  });
+
   resetPaintButton.on("click", () => {
-    clientEventComponent.reset = true;
+    clientEventComponent.resetPaint = true;
+  });
+
+  resetPositionButton.on("click", () => {
+    clientEventComponent.resetPosition = true;
   });
 };

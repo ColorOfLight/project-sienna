@@ -38,6 +38,13 @@ class CameraComponent {
     needs_update = true;
   }
 
+  void reset() {
+    radius = 3.0f;
+    phi = glm::pi<float>() / 3.0f;
+    theta = 0;
+    needs_update = true;
+  }
+
   float radius;
   float phi;    // Angle in radians from the positive Y-axis to positive Z-axis
   float theta;  // Angle in radians from the positive Z-axis to positive X-axis

@@ -36,12 +36,14 @@ enum class ModelOptions {
 class EventComponent {
  public:
   EventComponent() {
-    reset = std::nullopt;
     update_canvas_size = std::nullopt;
     update_model = std::nullopt;
+    reset_paint = std::nullopt;
+    reset_position = std::nullopt;
   }
 
-  std::optional<std::monostate> reset;
   std::optional<glm::ivec2> update_canvas_size;
   std::optional<ModelOptions> update_model;
+  std::optional<std::monostate> reset_paint;
+  std::optional<std::monostate> reset_position;
 };

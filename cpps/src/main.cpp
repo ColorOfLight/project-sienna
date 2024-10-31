@@ -106,6 +106,22 @@ int main() {
     auto gr_model_geometries_view =
         std::ref(*root_manager.get().gr_model_geometries_view);
 
+    if (manage_system::isResetPaintTrue(
+            std::ref(*client_input_entity.get().event_component))) {
+      manage_system::resetPainted(
+          std::ref(*client_input_entity.get().event_component),
+          std::ref(*config_entity.get().render_config_component),
+          painted_textures_view);
+    }
+
+    if (manage_system::isResetPositionTrue(
+            std::ref(*client_input_entity.get().event_component))) {
+      manage_system::resetPosition(
+          std::ref(*client_input_entity.get().event_component),
+          std::ref(*camera_entity.get().camera_component),
+          std::ref(*paintable_entity.get().transform_component));
+    }
+
     render_system::adjustViewportSize(
         std::ref(*client_input_entity.get().event_component),
         std::ref(*config_entity.get().render_config_component),
@@ -127,15 +143,7 @@ int main() {
         elapsed_ms, delta_ms,
         std::ref(*gr_global_entity.get().gr_time_uniform_component));
 
-    if (manage_system::isResetTrue(
-            std::ref(*client_input_entity.get().event_component))) {
-      manage_system::resetPainted(
-          std::ref(*client_input_entity.get().event_component),
-          std::ref(*config_entity.get().render_config_component),
-          painted_textures_view);
-    }
-
-    if (input_sync_system::isPointerDown(
+        if (input_sync_system::isPointerDown(
             std::ref(*client_input_entity.get().input_component))) {
       input_sync_system::syncBrush(
           std::ref(*client_input_entity.get().input_component),

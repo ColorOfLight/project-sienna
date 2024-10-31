@@ -41,6 +41,13 @@ class TransformComponent {
     needs_update = true;
   }
 
+  void reset() {
+    scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+    translation = glm::vec3(0.0f, 0.0f, 0.0f);
+    needs_update = true;
+  }
+
   glm::vec3 scale;
   glm::quat rotation;
   glm::vec3 translation;

@@ -80,11 +80,6 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
   bool change_canvas_size =
       client_event_component["changeCanvasSize"].as<bool>();
 
-  if (client_event_component["reset"] != emscripten::val::undefined()) {
-    event_component.get().reset = std::monostate();
-    client_event_component.set("reset", emscripten::val::undefined());
-  }
-
   if (client_event_component["updateCanvasSize"] !=
       emscripten::val::undefined()) {
     event_component.get().update_canvas_size =
@@ -98,6 +93,16 @@ void consumeEvent(std::reference_wrapper<EventComponent> event_component) {
     event_component.get().update_model = static_cast<ModelOptions>(
         client_event_component["changeModel"].as<int>());
     client_event_component.set("changeModel", emscripten::val::undefined());
+  }
+
+  if (client_event_component["resetPaint"] != emscripten::val::undefined()) {
+    event_component.get().reset_paint = std::monostate();
+    client_event_component.set("resetPaint", emscripten::val::undefined());
+  }
+
+  if (client_event_component["resetPosition"] != emscripten::val::undefined()) {
+    event_component.get().reset_position = std::monostate();
+    client_event_component.set("resetPosition", emscripten::val::undefined());
   }
 }
 

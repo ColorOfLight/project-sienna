@@ -24,21 +24,23 @@
 
 #pragma once
 
+#include "./Component/CameraComponent.h"
 #include "./Component/EventComponent.h"
 #include "./Component/RenderConfigComponent.h"
+#include "./Component/TransformComponent.h"
 #include "./RootManager.h"
 #include "./View/PaintedTexturesView.h"
 
 namespace manage_system {
 
-void resetPainted(
-    std::reference_wrapper<EventComponent> event_component,
-    std::reference_wrapper<RenderConfigComponent> render_config_component,
-    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
-
-inline bool isResetTrue(
+inline bool isResetPaintTrue(
     std::reference_wrapper<EventComponent> event_component) {
-  return event_component.get().reset.has_value();
+  return event_component.get().reset_paint.has_value();
+}
+
+inline bool isResetPositionTrue(
+    std::reference_wrapper<EventComponent> event_component) {
+  return event_component.get().reset_position.has_value();
 }
 
 inline bool isChangeModel(
@@ -46,7 +48,17 @@ inline bool isChangeModel(
   return event_component.get().update_model.has_value();
 }
 
+void resetPainted(
+    std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<RenderConfigComponent> render_config_component,
+    std::reference_wrapper<PaintedTexturesView> painted_textures_view);
+
 void resetModel(std::reference_wrapper<EventComponent> event_component,
                 std::reference_wrapper<RootManager> root_manager);
+
+void resetPosition(
+    std::reference_wrapper<EventComponent> event_component,
+    std::reference_wrapper<CameraComponent> camera_component,
+    std::reference_wrapper<TransformComponent> transform_component);
 
 }  // namespace manage_system
