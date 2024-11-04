@@ -27,8 +27,8 @@
 PaintablePartEntity::PaintablePartEntity(PaintablePartPreset preset,
                                          glm::vec3 scale, glm::quat rotation,
                                          glm::vec3 translation) {
-  int painted_map_width = 400;
-  int painted_map_height = 400;
+  int painted_map_width = 800;
+  int painted_map_height = 800;
 
   gr_geometry_component = std::make_unique<GrGeometryComponent>();
 
